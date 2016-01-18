@@ -14,21 +14,22 @@ public class Servicio {
 		this.descripcion = descripcion;
 	}
 
-	public int getIdServicio() {
+	private int getIdServicio() {
 		return idServicio;
 	}
 
-	public void setIdServicio(int idServicio) {
+	private void setIdServicio(int idServicio) {
 		this.idServicio = idServicio;
 	}
 
-	public String getDescripcion() {
+	private String getDescripcion() {
 		return descripcion;
 	}
 
-	public void setDescripcion(String descripcion) {
+	private void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
+
 	
 	
 }

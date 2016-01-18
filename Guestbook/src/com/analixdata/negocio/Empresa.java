@@ -21,42 +21,66 @@ public Empresa(int idEmpresa, int activo, String nombre, String direccion,String
 	this.contacto = contacto;
 }
 
-public int getIdEmpresa() {
+
+private int getIdEmpresa() {
 	return idEmpresa;
 }
-public void setIdEmpresa(int idEmpresa) {
+
+
+private void setIdEmpresa(int idEmpresa) {
 	this.idEmpresa = idEmpresa;
 }
-public int getActivo() {
+
+
+private int getActivo() {
 	return activo;
 }
-public void setActivo(int activo) {
+
+
+private void setActivo(int activo) {
 	this.activo = activo;
 }
-public String getNombre() {
+
+
+private String getNombre() {
 	return nombre;
 }
-public void setNombre(String nombre) {
+
+
+private void setNombre(String nombre) {
 	this.nombre = nombre;
 }
-public String getDireccion() {
+
+
+private String getDireccion() {
 	return direccion;
 }
-public void setDireccion(String direccion) {
+
+
+private void setDireccion(String direccion) {
 	this.direccion = direccion;
 }
-public String getTelefono() {
+
+
+private String getTelefono() {
 	return telefono;
 }
-public void setTelefono(String telefono) {
+
+
+private void setTelefono(String telefono) {
 	this.telefono = telefono;
 }
-public String getContacto() {
+
+
+private String getContacto() {
 	return contacto;
 }
-public void setContacto(String contacto) {
+
+
+private void setContacto(String contacto) {
 	this.contacto = contacto;
 }
+
 
 
 	
