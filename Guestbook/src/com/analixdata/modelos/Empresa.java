@@ -1,9 +1,9 @@
-package com.analixdata.negocio;
+package com.analixdata.modelos;
 
 public class Empresa {
 
-int idEmpresa,estado;
-String nombre, direccion, telefono, contacto;
+private int idEmpresa,estado;
+private String nombre, direccion, telefono, contacto;
 
 
 public Empresa()

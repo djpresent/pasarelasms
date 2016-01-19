@@ -1,9 +1,9 @@
-package com.analixdata.negocio;
+package com.analixdata.modelos;
 
 public class Transaccion {
 
-	int id;
-	String fecha,hora,codRetorno,descError,celular,mensaje;
+	private int id;
+	private String fecha,hora,codRetorno,descError,celular,mensaje;
 	
 	public Transaccion(){}
 	

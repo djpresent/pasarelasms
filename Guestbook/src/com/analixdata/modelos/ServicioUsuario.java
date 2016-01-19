@@ -1,8 +1,8 @@
-package com.analixdata.negocio;
+package com.analixdata.modelos;
 
 public class ServicioUsuario {
 
-	int idServicio,idEmpresa,idUsuario;
+	private int idServicio,idEmpresa,idUsuario;
 	
 	public ServicioUsuario()
 	{}

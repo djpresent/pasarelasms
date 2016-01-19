@@ -1,9 +1,9 @@
-package com.analixdata.negocio;
+package com.analixdata.modelos;
 
 public class Tipo {
 	
-	int id;
-	String descripcion;
+	private int id;
+	private String descripcion;
 	
 	public Tipo(){}
 	

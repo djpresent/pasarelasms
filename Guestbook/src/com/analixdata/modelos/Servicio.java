@@ -1,9 +1,9 @@
-package com.analixdata.negocio;
+package com.analixdata.modelos;
 
 public class Servicio {
 
-	int idServicio;
-	String descripcion;
+	private int idServicio;
+	private String descripcion;
 	
 	public Servicio()
 	{}

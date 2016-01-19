@@ -1,9 +1,9 @@
-package com.analixdata.negocio;
+package com.analixdata.modelos;
 
 public class ServicioEmpresa {
 
-	int idServicio, idEmpresa,limite,estado;
-	float costoTransaccion;
+	private int idServicio, idEmpresa,limite,estado;
+	private float costoTransaccion;
 	
 	
 	

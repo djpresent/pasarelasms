@@ -1,4 +1,4 @@
-package com.analixdata.servlets;
+package com.analixdata.controladores;
 
 import java.io.*;
 import java.sql.*;
@@ -43,7 +43,10 @@ public class EmpresaServlet extends HttpServlet {
 	        if (nombre == "" || direccion == "" || telefono == "" || contacto == "" || estado == "") {
 	          out.println(
 	              "<html><head></head><body>You are missing either a message or a name! Try again! " +
-	              "Redirecting in 3 seconds...</body></html>");
+	              "Redirecting in 3 seconds...</body></html>"
+	        	  
+	        		  
+	        		  );
 	        } else {
 	          String statement = "INSERT INTO empresa (nombre,direccion,telefono,contacto,estado) VALUES( ? , ? , ? , ? , ? )";
 	          PreparedStatement stmt = conn.prepareStatement(statement);
@@ -69,7 +72,8 @@ public class EmpresaServlet extends HttpServlet {
 	    } catch (SQLException e) {
 	      e.printStackTrace();
 	    }
-	    resp.setHeader("Refresh", "3; url=/empresas.jsp");
+	    //resp.setHeader("Refresh", "3; url=/empresas.jsp");
+	    resp.sendRedirect("/empresas.jsp");
 	  }
 
 }

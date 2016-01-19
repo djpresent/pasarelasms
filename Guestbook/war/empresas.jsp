@@ -4,6 +4,26 @@
 <%@ page import="com.google.appengine.api.utils.SystemProperty" %>
 
 <html>
+<HEAD>
+	<SCRIPT type=text/javascript>
+		function validar(formObj){
+		
+			if (formObj.nombre.value == ""){
+			alert("Datos imcompletos");
+			return false;
+			}else if (formObj.direccion.value == ""){
+				alert("Datos imcompletos");
+				return false;
+				}else if (formObj.telefono.value == ""){
+					alert("Datos imcompletos");
+					return false;
+					}else if (formObj.telefono.value == ""){
+						alert("Datos imcompletos");
+						return false;}else return true;
+			}
+	</SCRIPT> 
+   </HEAD>
+
   <body>
 
 <%
@@ -61,10 +81,10 @@ conn.close();
 </table>
 
 <p><strong>DATOS DE LA EMPRESA</strong></p>
-<form action="/empresa" method="post">
+<form  onsubmit="return validar(this);" action="/empresa" method="post">
     <div>Nombre: <input type="text" name="nombre"></input></div>
     <div>Dirección: <input type="text" name="direccion"></input></div>
-    <div>Teléfono: <input type="text" name="telefono"></input></div>
+    <div>Teléfono: <input type="tel" name="telefono"></input></div>
     <div>Contacto: <input type="text" name="contacto"></input></div>
     <div>Estado:
     	<select name=estado>
@@ -73,8 +93,7 @@ conn.close();
     		</select> 
 	</div>
    
-    <div><input type="submit" value="Guardar" /></div>
-    <input type="hidden" name="guestbookName" />
+    <div><input type="submit" value="Guardar"/></div>
   </form>
   </body>
 </html>

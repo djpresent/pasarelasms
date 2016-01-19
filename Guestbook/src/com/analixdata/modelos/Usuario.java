@@ -1,8 +1,8 @@
-package com.analixdata.negocio;
+package com.analixdata.modelos;
 
 public class Usuario {
-	int id,estado;
-	String cedula,nombres,apellidos,cargo,usuario,password,email;
+	private int id,estado;
+	private String cedula,nombres,apellidos,cargo,usuario,password,email;
 	
 	public Usuario(){}
 	
