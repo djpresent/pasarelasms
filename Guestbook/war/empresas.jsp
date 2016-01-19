@@ -92,7 +92,6 @@ conn.close();
     		<option value=0>Inactivo</option>
     		</select> 
 	</div>
-   
     <div><input type="submit" value="Guardar"/></div>
   </form>
   </body>
