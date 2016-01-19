@@ -2,7 +2,7 @@ package com.analixdata.negocio;
 
 public class ServicioEmpresa {
 
-	int idServicio, idEmpresa,limite,activo;
+	int idServicio, idEmpresa,limite,estado;
 	float costoTransaccion;
 	
 	
@@ -13,12 +13,12 @@ public class ServicioEmpresa {
 
 
 	public ServicioEmpresa(int idServicio, int idEmpresa, int limite,
-			int activo, float costoTransaccion) {
+			int estado, float costoTransaccion) {
 		super();
 		this.idServicio = idServicio;
 		this.idEmpresa = idEmpresa;
 		this.limite = limite;
-		this.activo = activo;
+		this.estado = estado;
 		this.costoTransaccion = costoTransaccion;
 	}
 
@@ -60,14 +60,14 @@ public class ServicioEmpresa {
 
 
 
-	private int getActivo() {
-		return activo;
+	private int getEstado() {
+		return estado;
 	}
 
 
 
-	private void setActivo(int activo) {
-		this.activo = activo;
+	private void setEstado(int estado) {
+		this.estado = estado;
 	}
 
 

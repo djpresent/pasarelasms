@@ -1,13 +1,13 @@
 package com.analixdata.negocio;
 
 public class Usuario {
-	int id;
+	int id,estado;
 	String cedula,nombres,apellidos,cargo,usuario,password,email;
 	
 	public Usuario(){}
 	
 	public Usuario(int id, String cedula, String nombres, String apellidos,
-			String cargo, String usuario, String password, String email) {
+			String cargo, String usuario, String password, String email,int estado) {
 		super();
 		this.id = id;
 		this.cedula = cedula;
@@ -17,6 +17,7 @@ public class Usuario {
 		this.usuario = usuario;
 		this.password = password;
 		this.email = email;
+		this.estado=estado;
 	}
 	
 	private int getId() {
@@ -68,6 +69,15 @@ public class Usuario {
 		this.email = email;
 	}
 
+	private int getEstado() {
+		return estado;
+	}
+
+	private void setEstado(int estado) {
+		this.estado = estado;
+	}
+
+	
 	
 	
 	

@@ -12,7 +12,18 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
         <servlet-name>sign</servlet-name>
         <url-pattern>/sign</url-pattern>
     </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>empresa</servlet-name>
+        <servlet-class>com.analixdata.servlets.EmpresaServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>empresa</servlet-name>
+        <url-pattern>/empresa</url-pattern>
+    </servlet-mapping>
+    
+    
     <welcome-file-list>
-        <welcome-file>guestbook.jsp</welcome-file>
+        <welcome-file>empresas.jsp</welcome-file>
     </welcome-file-list>
 </web-app>

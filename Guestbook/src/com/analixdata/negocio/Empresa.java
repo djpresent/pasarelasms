@@ -2,7 +2,7 @@ package com.analixdata.negocio;
 
 public class Empresa {
 
-int idEmpresa,activo;
+int idEmpresa,estado;
 String nombre, direccion, telefono, contacto;
 
 
@@ -10,11 +10,11 @@ public Empresa()
 {}
 
 
-public Empresa(int idEmpresa, int activo, String nombre, String direccion,String telefono, String contacto) 
+public Empresa(int idEmpresa, int estado, String nombre, String direccion,String telefono, String contacto) 
 {
 	super();
 	this.idEmpresa = idEmpresa;
-	this.activo = activo;
+	this.estado = estado;
 	this.nombre = nombre;
 	this.direccion = direccion;
 	this.telefono = telefono;
@@ -32,13 +32,13 @@ private void setIdEmpresa(int idEmpresa) {
 }
 
 
-private int getActivo() {
-	return activo;
+private int getEstado() {
+	return estado;
 }
 
 
-private void setActivo(int activo) {
-	this.activo = activo;
+private void setEstado(int estado) {
+	this.estado = estado;
 }
 
 
