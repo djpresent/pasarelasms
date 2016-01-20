@@ -7,7 +7,7 @@ import javax.servlet.http.*;
 
 import com.google.appengine.api.utils.SystemProperty;
 
-public class EmpresaServlet extends HttpServlet {
+public class ServicioServlet extends HttpServlet {
 	
 	@Override
 	  public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -36,22 +36,16 @@ public class EmpresaServlet extends HttpServlet {
 	      Connection conn = DriverManager.getConnection(url);
 	      try {
 	    	String id = req.getParameter("identificador");
-	        String nombre = req.getParameter("nombre");
-	        String direccion = req.getParameter("direccion");
-	        String telefono = req.getParameter("telefono");
-	        String contacto = req.getParameter("contacto");
-	        String estado = req.getParameter("estado");
+	        String descripcion = req.getParameter("descripcion");
+
 	        
 	        System.out.println(id);
 	        
 	        if (id == "" || id == null ) {
-	        	String statement = "INSERT INTO empresa (nombre,direccion,telefono,contacto,estado) VALUES( ? , ? , ? , ? , ? )";
+	        	String statement = "INSERT INTO servicio (descripcion) VALUES( ? )";
 		          PreparedStatement stmt = conn.prepareStatement(statement);
-		          stmt.setString(1, nombre);
-		          stmt.setString(2, direccion);
-		          stmt.setString(3, telefono);
-		          stmt.setString(4, contacto);
-		          stmt.setInt(5, Integer.parseInt(estado));
+		          stmt.setString(1, descripcion);
+
 		          int success = 2;
 		          success = stmt.executeUpdate();
 		          if (success == 1) {
@@ -65,14 +59,10 @@ public class EmpresaServlet extends HttpServlet {
 	          
 	        } else {
 	        	
-	        	String statement = "UPDATE empresa SET nombre=?, direccion=?, telefono=? ,contacto=? ,estado=? WHERE idempresa=?";
+	        	String statement = "UPDATE servicio SET descripcion=? where idservicio=?";
 		          PreparedStatement stmt = conn.prepareStatement(statement);
-		          stmt.setString(1, nombre);
-		          stmt.setString(2, direccion);
-		          stmt.setString(3, telefono);
-		          stmt.setString(4, contacto);
-		          stmt.setInt(5, Integer.parseInt(estado));
-		          stmt.setInt(6, Integer.parseInt(id));
+		          stmt.setString(1, descripcion);
+		          stmt.setString(2, id);
 		          int success = 2;
 		          success = stmt.executeUpdate();
 		          if (success == 1) {
@@ -91,7 +81,8 @@ public class EmpresaServlet extends HttpServlet {
 	    } catch (SQLException e) {
 	      e.printStackTrace();
 	    }
-	    resp.sendRedirect("/empresas.jsp");
+	  
+	    resp.sendRedirect("/servicios.jsp");
 	  }
 
 }
