@@ -4,14 +4,6 @@ xmlns="http://java.sun.com/xml/ns/javaee"
 xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
-   <servlet>
-        <servlet-name>sign</servlet-name>
-        <servlet-class>guestbook.GuestbookServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>sign</servlet-name>
-        <url-pattern>/sign</url-pattern>
-    </servlet-mapping>
     
     <servlet>
         <servlet-name>empresa</servlet-name>
@@ -38,6 +30,15 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <servlet-mapping>
         <servlet-name>servicio</servlet-name>
         <url-pattern>/servicio</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
+        <servlet-name>usuario</servlet-name>
+        <servlet-class>com.analixdata.controladores.UsuarioServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>usuario</servlet-name>
+        <url-pattern>/usuario</url-pattern>
     </servlet-mapping>
     
     
