@@ -5,6 +5,8 @@
 
 <html>
 <HEAD>
+
+	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<SCRIPT type=text/javascript>
 		function validar(formObj){
 		
@@ -21,6 +23,23 @@
 						alert("Datos imcompletos");
 						return false;}else return true;
 			}
+		
+		function obtenerDatos(el) {
+			document.getElementById("idEmpresa").value = el.parentNode.parentNode.cells[0].textContent;
+			document.getElementById("nombreEmpresa").value= el.parentNode.parentNode.cells[1].textContent;
+			document.getElementById("direccionEmpresa").value = el.parentNode.parentNode.cells[2].textContent;
+			document.getElementById("telefonoEmpresa").value = el.parentNode.parentNode.cells[3].textContent;
+			document.getElementById("contactoEmpresa").value = el.parentNode.parentNode.cells[4].textContent;
+			
+			if(el.parentNode.parentNode.cells[5].textContent == "Activo")
+			 	document.getElementById("estadoEmpresa").value = 1 ;
+			else
+				document.getElementById("estadoEmpresa").value = 0 ;
+			   
+			   
+			}
+		
+		
 	</SCRIPT> 
    </HEAD>
 
@@ -44,7 +63,7 @@ ResultSet rs = conn.createStatement().executeQuery(
     "SELECT * FROM empresa");
 %>
 
-<table style="border: 1px solid black">
+<table style="border: 1px solid black" id="datosEmpresas">
 <tbody>
 <tr>
 <th width="35%" style="background-color: #CCFFCC; margin: 5px">ID</th>
@@ -63,6 +82,8 @@ while (rs.next()) {
     String telefono = rs.getString("telefono");
     String contacto = rs.getString("contacto");
     int estado = rs.getInt("estado");
+    String est="";
+    if(estado==1){est="Activo";}else{est="Inactivo";};
  %>
 <tr>
 	<td><%= id %></td>
@@ -70,8 +91,8 @@ while (rs.next()) {
 	<td><%= direccion %></td>
 	<td><%= telefono %></td>
 	<td><%= contacto %></td>
-	<td><%= estado %></td>
-	<td><a onclick="obtenerDatos();">Editar</a></td>
+	<td><%= est %></td>
+	<td><button class="btnEditar" type="button" onclick="obtenerDatos(this);" >Editar</button></td>
 </tr>
 <%
 }
@@ -83,17 +104,18 @@ conn.close();
 
 <p><strong>DATOS DE LA EMPRESA</strong></p>
 <form  onsubmit="return validar(this);" action="/empresa" method="post">
-    <div>Nombre: <input type="text" name="nombre"></input></div>
-    <div>Dirección: <input type="text" name="direccion"></input></div>
-    <div>Teléfono: <input type="tel" name="telefono"></input></div>
-    <div>Contacto: <input type="text" name="contacto"></input></div>
+	<div><input type="hidden" name="identificador" id="idEmpresa" ></input></div>
+    <div>Nombre: <input type="text" name="nombre" id="nombreEmpresa" required="required"></input></div>
+    <div>Dirección: <input type="text" name="direccion" id="direccionEmpresa" required="required"></input></div>
+    <div>Teléfono: <input type="tel" name="telefono" id="telefonoEmpresa" required="required"></input></div>
+    <div>Contacto: <input type="text" name="contacto" id="contactoEmpresa" required="required"></input></div>
     <div>Estado:
-    	<select name=estado>
+    	<select name=estado id="estadoEmpresa">
     		<option seleted value=1>Activo</option>
     		<option value=0>Inactivo</option>
     		</select> 
 	</div>
-    <div><input type="submit" value="Guardar"/></div>
+    <div><input type="submit" value="Guardar"/><input type="reset" value="Cancelar"/></div>
   </form>
   </body>
 </html>

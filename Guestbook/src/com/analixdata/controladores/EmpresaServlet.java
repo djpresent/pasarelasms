@@ -35,36 +35,55 @@ public class EmpresaServlet extends HttpServlet {
 	    try {
 	      Connection conn = DriverManager.getConnection(url);
 	      try {
+	    	String id = req.getParameter("identificador");
 	        String nombre = req.getParameter("nombre");
 	        String direccion = req.getParameter("direccion");
 	        String telefono = req.getParameter("telefono");
 	        String contacto = req.getParameter("contacto");
 	        String estado = req.getParameter("estado");
-	        if (nombre == "" || direccion == "" || telefono == "" || contacto == "" || estado == "") {
-	          out.println(
-	              "<html><head></head><body>You are missing either a message or a name! Try again! " +
-	              "Redirecting in 3 seconds...</body></html>"
-	        	  
-	        		  
-	        		  );
+	        
+	        System.out.println(id);
+	        
+	        if (id == "" || id == null ) {
+	        	String statement = "INSERT INTO empresa (nombre,direccion,telefono,contacto,estado) VALUES( ? , ? , ? , ? , ? )";
+		          PreparedStatement stmt = conn.prepareStatement(statement);
+		          stmt.setString(1, nombre);
+		          stmt.setString(2, direccion);
+		          stmt.setString(3, telefono);
+		          stmt.setString(4, contacto);
+		          stmt.setInt(5, Integer.parseInt(estado));
+		          int success = 2;
+		          success = stmt.executeUpdate();
+		          if (success == 1) {
+		            out.println(
+		                "<html><head></head><body>Success! Redirecting in 3 seconds...</body></html>");
+		          } else if (success == 0) {
+		            out.println(
+		                "<html><head></head><body>Failure! Please try again! " +
+		                "Redirecting in 3 seconds...</body></html>");
+		          }
+	          
 	        } else {
-	          String statement = "INSERT INTO empresa (nombre,direccion,telefono,contacto,estado) VALUES( ? , ? , ? , ? , ? )";
-	          PreparedStatement stmt = conn.prepareStatement(statement);
-	          stmt.setString(1, nombre);
-	          stmt.setString(2, direccion);
-	          stmt.setString(3, telefono);
-	          stmt.setString(4, contacto);
-	          stmt.setInt(5, Integer.parseInt(estado));
-	          int success = 2;
-	          success = stmt.executeUpdate();
-	          if (success == 1) {
-	            out.println(
-	                "<html><head></head><body>Success! Redirecting in 3 seconds...</body></html>");
-	          } else if (success == 0) {
-	            out.println(
-	                "<html><head></head><body>Failure! Please try again! " +
-	                "Redirecting in 3 seconds...</body></html>");
-	          }
+	        	
+	        	String statement = "UPDATE empresa SET nombre=?, direccion=?, telefono=? ,contacto=? ,estado=? WHERE idempresa=?";
+		          PreparedStatement stmt = conn.prepareStatement(statement);
+		          stmt.setString(1, nombre);
+		          stmt.setString(2, direccion);
+		          stmt.setString(3, telefono);
+		          stmt.setString(4, contacto);
+		          stmt.setInt(5, Integer.parseInt(estado));
+		          stmt.setInt(6, Integer.parseInt(id));
+		          int success = 2;
+		          success = stmt.executeUpdate();
+		          if (success == 1) {
+		            out.println(
+		                "<html><head></head><body>Success! Redirecting in 3 seconds...</body></html>");
+		          } else if (success == 0) {
+		            out.println(
+		                "<html><head></head><body>Failure! Please try again! " +
+		                "Redirecting in 3 seconds...</body></html>");
+		          }
+	          
 	        }
 	      } finally {
 	        conn.close();
