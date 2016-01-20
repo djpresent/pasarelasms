@@ -71,6 +71,7 @@ while (rs.next()) {
 	<td><%= telefono %></td>
 	<td><%= contacto %></td>
 	<td><%= estado %></td>
+	<td><a onclick="obtenerDatos();">Editar</a></td>
 </tr>
 <%
 }
