@@ -13,21 +13,23 @@ public class Tipo {
 		this.descripcion = descripcion;
 	}
 
-	private int getId() {
+	public int getId() {
 		return id;
 	}
 
-	private void setId(int id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 
-	private String getDescripcion() {
+	public String getDescripcion() {
 		return descripcion;
 	}
 
-	private void setDescripcion(String descripcion) {
+	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
+
+	
 	
 	
 
