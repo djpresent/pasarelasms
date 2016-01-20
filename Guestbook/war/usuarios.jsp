@@ -25,19 +25,14 @@
 			}
 		
 		function obtenerDatos(el) {
-			document.getElementById("idEmpresa").value = el.parentNode.parentNode.cells[0].textContent;
-			document.getElementById("nombreEmpresa").value= el.parentNode.parentNode.cells[1].textContent;
-			document.getElementById("direccionEmpresa").value = el.parentNode.parentNode.cells[2].textContent;
-			document.getElementById("telefonoEmpresa").value = el.parentNode.parentNode.cells[3].textContent;
-			document.getElementById("contactoEmpresa").value = el.parentNode.parentNode.cells[4].textContent;
-			
-			if(el.parentNode.parentNode.cells[5].textContent == "Activo")
-			 	document.getElementById("estadoEmpresa").value = 1 ;
-			else
-				document.getElementById("estadoEmpresa").value = 0 ;
-			   
-			   
-			}
+			document.getElementById("idUsuario").value = el.parentNode.parentNode.cells[0].textContent;
+			document.getElementById("cedulaUsuario").value= el.parentNode.parentNode.cells[1].textContent;
+			document.getElementById("nombresUsuario").value = el.parentNode.parentNode.cells[2].textContent;
+			document.getElementById("apellidosUsuario").value = el.parentNode.parentNode.cells[3].textContent;
+			document.getElementById("cargoUsuario").value = el.parentNode.parentNode.cells[4].textContent;
+			document.getElementById("mailUsuario").value = el.parentNode.parentNode.cells[4].textContent;
+			document.getElementById("passwordUsuario").value = el.parentNode.parentNode.cells[4].textContent;
+		}
 		
 		
 	</SCRIPT> 
@@ -60,38 +55,39 @@ if (SystemProperty.environment.value() ==
 
 Connection conn = DriverManager.getConnection(url);
 ResultSet rs = conn.createStatement().executeQuery(
-    "SELECT * FROM empresa");
+    "SELECT * FROM usuario");
 %>
 
-<table style="border: 1px solid black" id="datosEmpresas">
+<table style="border: 1px solid black" id="datosUsuarios">
 <tbody>
 <tr>
 <th width="35%" style="background-color: #CCFFCC; margin: 5px">ID</th>
-<th style="background-color: #CCFFCC; margin: 5px">Nombre</th>
-<th style="background-color: #CCFFCC; margin: 5px">Direccion</th>
-<th style="background-color: #CCFFCC; margin: 5px">Teléfono</th>
-<th style="background-color: #CCFFCC; margin: 5px">Contácto</th>
-<th style="background-color: #CCFFCC; margin: 5px">Estado</th>
+<th style="background-color: #CCFFCC; margin: 5px">Cédula</th>
+<th style="background-color: #CCFFCC; margin: 5px">Nombres</th>
+<th style="background-color: #CCFFCC; margin: 5px">Apellidos</th>
+<th style="background-color: #CCFFCC; margin: 5px">Cargo</th>
+<th style="background-color: #CCFFCC; margin: 5px">Email</th>
+<th style="background-color: #CCFFCC; margin: 5px">Password</th>
 </tr>
 
 <%
 while (rs.next()) {
-    int id =rs.getInt("idempresa");
-	String nombre = rs.getString("nombre");
-    String direccion = rs.getString("direccion");
-    String telefono = rs.getString("telefono");
-    String contacto = rs.getString("contacto");
-    int estado = rs.getInt("estado");
-    String est="";
-    if(estado==1){est="Activo";}else{est="Inactivo";};
+    int id =rs.getInt("idusuario");
+	String cedula = rs.getString("cedula");
+    String nombres = rs.getString("nombres");
+    String apellidos = rs.getString("apellidos");
+    String cargo = rs.getString("cargo");
+    String email = rs.getString("email");
+    String password = rs.getString("password");
  %>
 <tr>
 	<td><%= id %></td>
-	<td><%= nombre %></td>
-	<td><%= direccion %></td>
-	<td><%= telefono %></td>
-	<td><%= contacto %></td>
-	<td><%= est %></td>
+	<td><%= cedula %></td>
+	<td><%= nombres %></td>
+	<td><%= apellidos %></td>
+	<td><%= cargo %></td>
+	<td><%= email %></td>
+	<td><%= password %></td>
 	<td><button class="btnEditar" type="button" onclick="obtenerDatos(this);" >Editar</button></td>
 </tr>
 <%
@@ -102,19 +98,17 @@ conn.close();
 </tbody>
 </table>
 
-<p><strong>DATOS DE LA EMPRESA</strong></p>
-<form  onsubmit="return validar(this);" action="/empresa" method="post">
-	<div><input type="hidden" name="identificador" id="idEmpresa" ></input></div>
-    <div>Nombre: <input type="text" name="nombre" id="nombreEmpresa" required="required"></input></div>
-    <div>Dirección: <input type="text" name="direccion" id="direccionEmpresa" required="required"></input></div>
-    <div>Teléfono: <input type="tel" name="telefono" id="telefonoEmpresa" required="required"></input></div>
-    <div>Contacto: <input type="text" name="contacto" id="contactoEmpresa" required="required"></input></div>
-    <div>Estado:
-    	<select name=estado id="estadoEmpresa">
-    		<option seleted value=1>Activo</option>
-    		<option value=0>Inactivo</option>
-    		</select> 
-	</div>
+<p><strong>DATOS DEL USUARIO</strong></p>
+<form  onsubmit="return validar(this);" action="/usuario" method="post">
+	<div><input type="hidden" name="identificador" id="idUsuario" ></input></div>
+    <div>Cedula: <input type="text" name="cedula" id="cedulaUsuario" required="required"></input></div>
+    <div>Nombres: <input type="text" name="nombres" id="nombresUsuario" required="required"></input></div>
+    <div>Apellidos: <input type="text" name="apellidos" id="ApellidosUsuario" required="required"></input></div>
+    <div>Cargo: <input type="text" name="cargo" id="cargoUsuario" required="required"></input></div>
+    <div>Email: <input type="text" name="email" id="emailUsuario" required="required"></input></div>
+   	<div>Contraseña: <input type="text" name="password" id="passwordUsuario" required="required"></input></div>
+   	<div>Confirmar Contraseña: <input type="text" name="cpassword" id="cpasswordUsuario" required="required"></input></div>
+   
     <div><input type="submit" value="Guardar"/><input type="reset" value="Cancelar"/></div>
   </form>
   </body>
