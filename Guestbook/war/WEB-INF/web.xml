@@ -15,7 +15,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     
     <servlet>
         <servlet-name>empresa</servlet-name>
-        <servlet-class>com.analixdata.servlets.EmpresaServlet</servlet-class>
+        <servlet-class>com.analixdata.controladores.EmpresaServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>empresa</servlet-name>
@@ -24,6 +24,6 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     
     
     <welcome-file-list>
-        <welcome-file>empresas.jsp</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
     </welcome-file-list>
 </web-app>
