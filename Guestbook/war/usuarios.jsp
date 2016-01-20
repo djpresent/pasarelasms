@@ -24,8 +24,9 @@
 			 	document.getElementById("estadoUsuario").value = 1 ;
 			else
 				document.getElementById("estadoUsuario").value = 0 ;
-			   
-			  
+			
+			document.getElementById("tipoUsuario").value = el.parentNode.parentNode.cells[9].textContent;
+			document.getElementById("empresaUsuario").value = el.parentNode.parentNode.cells[10].textContent; 
 		}
 		
 		
@@ -49,13 +50,13 @@ if (SystemProperty.environment.value() ==
 
 Connection conn = DriverManager.getConnection(url);
 ResultSet rs = conn.createStatement().executeQuery(
-    "SELECT * FROM usuario");
+    "SELECT idusuario,cedula,nombres,apellidos,cargo,email,usuario.telefono,password,descripcion,nombre,usuario.estado FROM pasarelasms.usuario,pasarelasms.tipo,pasarelasms.empresa WHERE usuario.idtipo=tipo.idtipo and usuario.idempresa=empresa.idempresa;");
 %>
 
 <table style="border: 1px solid black" id="datosUsuarios">
 <tbody>
 <tr>
-<th width="35%" style="background-color: #CCFFCC; margin: 5px">ID</th>
+<th style="background-color: #CCFFCC; margin: 5px">ID</th>
 <th style="background-color: #CCFFCC; margin: 5px">Cédula</th>
 <th style="background-color: #CCFFCC; margin: 5px">Nombres</th>
 <th style="background-color: #CCFFCC; margin: 5px">Apellidos</th>
@@ -64,6 +65,8 @@ ResultSet rs = conn.createStatement().executeQuery(
 <th style="background-color: #CCFFCC; margin: 5px">Email</th>
 <th style="background-color: #CCFFCC; margin: 5px">Password</th>
 <th style="background-color: #CCFFCC; margin: 5px">Estado</th>
+<th style="background-color: #CCFFCC; margin: 5px">Tipo</th>
+<th style="background-color: #CCFFCC; margin: 5px">Empresa</th>
 </tr>
 
 <%
@@ -76,10 +79,13 @@ while (rs.next()) {
     String telefono = rs.getString("telefono");
     String email = rs.getString("email");
     String password = rs.getString("password");
-    int estado = rs.getInt("estado");
+    int estado = rs.getInt("estado"); 
     String est="";
-    if(estado==1){est="Activo";}else{est="Inactivo";};
-
+    if(estado==1)est="Activo";else est="Inactivo";
+    
+    String tipo = rs.getString("descripcion");
+    String empresa = rs.getString("nombre");
+   
  %>
 <tr>
 	<td><%= id %></td>
@@ -91,12 +97,14 @@ while (rs.next()) {
 	<td><%= email %></td>
 	<td><%= password %></td>
 	<td><%= est %></td>
+	<td><%= tipo %></td>
+	<td><%= empresa %></td>
 	<td><button class="btnEditar" type="button" onclick="obtenerDatos(this);" >Editar</button></td>
 </tr>
 <%
 }
 
-rs = conn.createStatement().executeQuery("SELECT * FROM empresa");%>
+rs = conn.createStatement().executeQuery("SELECT * FROM tipo");%>
 
 
 
@@ -122,21 +130,25 @@ rs = conn.createStatement().executeQuery("SELECT * FROM empresa");%>
 	</div>
 	<div>Tipo de usuario:
     	<select name=tipo id="tipoUsuario">
-    		<option seleted value="Master">Master</option>
-    		<option value="Admin">Admin</option>
-    		<option value="Standard">Standard</option>
+    		<% 
+	while (rs.next()) {
+	String tipoU = rs.getString("descripcion");%>
+		<option value=<%= tipoU %>><%= tipoU %></option>
+	<%}%>
     		</select> 
 	</div>
+	
+	
+	<%rs = conn.createStatement().executeQuery("SELECT * FROM empresa");%>
+	
 	
 	<div>Empresa:
 	<select name=empresa id="empresaUsuario">
 	<% 
-	int i=0;
 	while (rs.next()) {
 	String empresa = rs.getString("nombre");%>
-		<option seleted value=<%= i %>><%= empresa %></option>
-	<%i++;
-	}%>
+		<option value=<%= empresa %>><%= empresa %></option>
+	<%}%>
 	</select>
 	</div>
 	

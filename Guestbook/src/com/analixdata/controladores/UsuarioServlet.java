@@ -47,21 +47,32 @@ public class UsuarioServlet extends HttpServlet {
 	        String tipo = req.getParameter("tipo");
 	        String empresa = req.getParameter("empresa");
 	        String idtipo=null;
+	        String idempresa=null;
 	        
+	        ResultSet rs = conn.createStatement().executeQuery("SELECT idtipo FROM tipo where descripcion ='"+tipo+"';");
+        	
+        	if(rs.next()){
+        		
+        		 idtipo=Integer.toString(rs.getInt("idtipo"));
+        		 
+        	}
+        	
+            rs = conn.createStatement().executeQuery("SELECT idempresa FROM empresa where nombre ='"+empresa+"';");
+        	
+        	if(rs.next()){
+        		
+        		 idempresa=Integer.toString(rs.getInt("idempresa"));
+        		 
+        	}
+        	
+        	System.out.println(idtipo+" "+idempresa );
 	  
 	        
 	        if (id == "" || id == null ) {
 	        	
-	        	ResultSet rs = conn.createStatement().executeQuery("SELECT idtipo FROM tipo where descripcion ='"+tipo+"'");
 	        	
-	        	if(rs.first()){
-	        		
-	        		 idtipo= rs.getString("idtipo");
-	        	}
 	        	
-	        	System.out.println(idtipo);
-	        	
-	        	String statement = "INSERT INTO usuario (cedula,nombres,apellidos,cargo,telefono,email,password,estado,idtipo) VALUES( ? , ? , ? , ? , ? , ? , ? , ? , ? )";
+	        	String statement = "INSERT INTO usuario (cedula,nombres,apellidos,cargo,telefono,email,password,estado,idtipo,idempresa) VALUES( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? )";
 		          PreparedStatement stmt = conn.prepareStatement(statement);
 		          stmt.setString(1, cedula);
 		          stmt.setString(2, nombres);
@@ -72,6 +83,7 @@ public class UsuarioServlet extends HttpServlet {
 		          stmt.setString(7, password);
 		          stmt.setString(8, estado);
 		          stmt.setString(9, idtipo);
+		          stmt.setString(10, idempresa);
 		          int success = 2;
 		          success = stmt.executeUpdate();
 		          if (success == 1) {
@@ -85,7 +97,7 @@ public class UsuarioServlet extends HttpServlet {
 	          
 	        } else {
 	        	
-	        	String statement = "UPDATE usuario SET cedula=?, nombres=?, apellidos=? ,cargo=? ,telefono=? ,email=? ,password=?, estado=?, idtipo=? WHERE idusuario=? ";
+	        	String statement = "UPDATE usuario SET cedula=?, nombres=?, apellidos=? ,cargo=? ,telefono=? ,email=? ,password=?, estado=?, idtipo=?, idempresa=? WHERE idusuario=? ";
 		          PreparedStatement stmt = conn.prepareStatement(statement);
 		          stmt.setString(1, cedula);
 		          stmt.setString(2, nombres);
@@ -96,7 +108,8 @@ public class UsuarioServlet extends HttpServlet {
 		          stmt.setString(7, password);
 		          stmt.setString(8, estado);
 		          stmt.setString(9, idtipo);
-		          stmt.setString(10, id);
+		          stmt.setString(10, idempresa);
+		          stmt.setString(11, id);
 		          int success = 2;
 		          
 		          System.out.println(cedula+" "+nombres+" "+apellidos+" "+cargo+" "+telefono+" "+email+" "+password+" "+estado+" "+id );
