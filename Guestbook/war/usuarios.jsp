@@ -8,6 +8,36 @@
 
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<SCRIPT type=text/javascript>
+	
+	function validarPass(){
+		
+		var caract_invalido = " ";
+		var caract_longitud = 6;
+		var cla1 = document.datosUsuario.passwordUsuario.value;
+		var cla2 = document.datosUsuario.cpasswordUsuario.value;
+		if (cla1 == '' || cla2 == '') {
+			alert('No ha ingresado la contraseña.');
+			return false;
+		}
+		if (document.datosUsuario.passwordUsuario.value.length < caract_longitud) {
+		alert('Su contraseña debe constar de ' + caract_longitud + ' caracteres.');
+		return false;
+		}
+		if (document.datosUsuario.passwordUsuario.value.indexOf(caract_invalido) > -1) {
+		alert("Las contraseñas no pueden contener espacios.");
+		return false;
+		}
+		else {
+		if (cla1 != cla2) {
+		alert ("Las contraseñas introducidas no coinciden.");
+		return false;
+		}
+		else {
+		return true;
+		      }
+		   }
+		}
+	
 
 		function obtenerDatos(el) {
 			document.getElementById("idUsuario").value = el.parentNode.parentNode.cells[0].textContent;
@@ -112,7 +142,7 @@ rs = conn.createStatement().executeQuery("SELECT * FROM tipo");%>
 </table>
 
 <p><strong>DATOS DEL USUARIO</strong></p>
-<form action="/usuario" method="post">
+<form onSubmit="return validarPass();" action="/usuario" method="post" name="datosUsuario">
 	<div><input type="hidden" name="identificador" id="idUsuario" ></input></div>
     <div>Cedula: <input type="text" name="cedula" id="cedulaUsuario" required="required"></input></div>
     <div>Nombres: <input type="text" name="nombres" id="nombresUsuario" required="required"></input></div>
@@ -157,7 +187,8 @@ rs = conn.createStatement().executeQuery("SELECT * FROM tipo");%>
 	conn.close();
 	%>
 	
-    <div><input type="submit" value="Guardar"/><input type="reset" value="Cancelar"/></div>
+    <div><input type="submit" value="Guardar"/>
+    <input type="reset" value="Cancelar"/></div>
   </form>
   </body>
 </html>
