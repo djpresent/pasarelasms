@@ -1,6 +1,8 @@
 package com.analixdata.modelos;
 
-public class Tipo {
+import java.io.Serializable;
+
+public class Tipo implements Serializable {
 	
 	private int id;
 	private String descripcion;

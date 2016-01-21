@@ -1,6 +1,8 @@
 package com.analixdata.modelos;
 
-public class Empresa {
+import java.io.Serializable;
+
+public class Empresa implements Serializable {
 
 private int idEmpresa,estado;
 private String nombre, direccion, telefono, contacto;
