@@ -1,10 +1,14 @@
 package com.analixdata.controladores;
 import java.io.IOException;
+
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+
+import javax.xml.bind.DatatypeConverter;
 
 import com.analixdata.modelos.DAO;
 import com.analixdata.modelos.Usuario;
@@ -34,6 +38,14 @@ public class ValidarServlet extends HttpServlet {
 		{
 			HttpSession session = req.getSession();
 			session.setAttribute("usuario", u2);
+			
+			
+			String str= "Aladdin:open sesame";
+			
+			String encoded = DatatypeConverter.printBase64Binary(str.getBytes());
+			
+			
+			session.setAttribute("autorizacion", "Basic "+encoded );
 			//req.getRequestDispatcher("index.jsp").forward(req, resp);
 			resp.sendRedirect("index.jsp");
 		}	

@@ -7,5 +7,11 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/httpasyncclient-cache-4.1.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/httpclient-cache-4.5.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/httpmime-4.5.1.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/unirest-java-1.4.7.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/httpcore-4.4.4.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/httpclient-win-4.5.1.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
