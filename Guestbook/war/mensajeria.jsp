@@ -101,20 +101,12 @@
 	             		
 	             	}
 	                	cadenaMensajes+="{\"from\":\""+remitente+"\",\"to\":\""+destino+"\",\"text\":\""+res+"\"}"; 
-	             	
-	                //alert (destino+" "+variable1+" "+variable2);
-	                //alert(res);
-	                //for (var j=0; j<data.length; j++) 
-	                //{
-	                //    tarr.push(data[j]);
-	                //}
-	                //lines.push(tarr);
-	                
+
+	          
+	                	
 	        }
 	        cadenaMensajes+="]}";
 	        document.getElementById("mensaje").value=cadenaMensajes;
-	        
-	        
 	    	//alert(cadenaMensajes);
 	    }
 

@@ -1,5 +1,6 @@
 package com.analixdata.controladores;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
@@ -8,12 +9,12 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.xml.bind.DatatypeConverter;
 
-import org.apache.http.HttpResponse;
-
-import com.analixdata.modelos.DAO;
-import com.analixdata.modelos.Usuario;
+import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+
+
+
 
 
 
@@ -25,37 +26,60 @@ public class EnvioMensajesServlet extends HttpServlet {
 	{
 		resp.setContentType("text/html;charset=UTF-8");
 		
+		
 		String mensaje =req.getParameter("txtmensaje");
 		
-	
-			/*HttpResponse response=null;
-			try {
-				response = (HttpResponse) Unirest.post("https://api.infobip.com/sms/1/text/multi")
-						  .header("authorization", "Basic QWxhZGRpbjpvcGVuIHNlc2FtZQ==")
-						  .header("content-type", "application/json")
-						  .header("accept", "application/json")
-						  .body(mensaje)
-						  .asString();
-			} catch (UnirestException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			System.out.println(response);
-			*/
-	
-
-		
-		String str= "Aladdin:open sesame";
+		String str= "ANALIXDATA:JDL@nd13c";
 		
 		String encoded = DatatypeConverter.printBase64Binary(str.getBytes());
+	
+		HttpResponse<String> response=null;
+	
+			try {
+				response = Unirest.post("https://api.infobip.com/sms/1/text/multi")
+								.header("Access-Control-Allow-Origin", "*")
+							  .header("authorization", "Basic QU5BTElYREFUQTpKRExAbmQxM2M=")
+							  .header("content-type", "application/json")
+							  .header("accept", "application/json")
+							  .body("{\"messages\":[{\"from\":\"InfoSMS\", \"to\":[\"593992845597\", \"593992831273\"], \"text\":\"May the Force be with you!\"}]}")
+							  .asString();
+			} catch (UnirestException e) {
+				// TODO Auto-generated catch block
+				//e.printStackTrace();
+				PrintWriter out = resp.getWriter();
+				out.println("<html><head></head><body>Failure! Please try again! " +
+		                "Redirecting in 3 seconds..."+resp+"</body></html>");
+			}
+		//System.out.println(response);
+			
+		PrintWriter out = resp.getWriter();
+		out.println("<html><head></head><body>Failure! Please try again! " +
+                "Redirecting in 3 seconds..."+resp+"</body></html>");
 		
-		String decoded = new String(DatatypeConverter.parseBase64Binary(encoded));
+			
+
+	/*	protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
+		{ 
+		    // pre-flight request processing
+		 //   resp.setHeader("Access-Control-Allow-Origin", "*");
+		   /// resp.setHeader("Access-Control-Allow-Methods", SUPPORTED_METHODS);
+		    ///resp.setHeader("Access-Control-Allow-Headers", SUPPORTED_HEADERS);
+		}
+*/
+		
+			
+			
+			
+	//	String str= "Aladdin:open sesame";
+		
+		//String encoded = DatatypeConverter.printBase64Binary(str.getBytes());
+		
+		//String decoded = new String(DatatypeConverter.parseBase64Binary(encoded));
        
 		
 		
-		System.out.println(encoded);
-		 System.out.println("decoded value is \t" + decoded);
+		//System.out.println(encoded);
+		 //System.out.println("decoded value is \t" + decoded);
 		
 	}
 	@Override
@@ -67,8 +91,9 @@ public class EnvioMensajesServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		
 		processRequest(req, resp);
+		
 	}
 
 }
