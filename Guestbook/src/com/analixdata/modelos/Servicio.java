@@ -1,6 +1,8 @@
 package com.analixdata.modelos;
 
-public class Servicio {
+import java.io.Serializable;
+
+public class Servicio implements Serializable{
 
 	private int idServicio;
 	private String descripcion;
@@ -14,19 +16,19 @@ public class Servicio {
 		this.descripcion = descripcion;
 	}
 
-	private int getIdServicio() {
+	public int getIdServicio() {
 		return idServicio;
 	}
 
-	private void setIdServicio(int idServicio) {
+	public void setIdServicio(int idServicio) {
 		this.idServicio = idServicio;
 	}
 
-	private String getDescripcion() {
+	public String getDescripcion() {
 		return descripcion;
 	}
 
-	private void setDescripcion(String descripcion) {
+	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
 

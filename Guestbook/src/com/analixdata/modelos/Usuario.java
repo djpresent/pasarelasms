@@ -10,6 +10,16 @@ public class Usuario implements Serializable {
 	
 	public Usuario(){}
 	
+	
+	
+	public Usuario(int id, String nombres) {
+		super();
+		this.id = id;
+		this.nombres = nombres;
+	}
+
+
+
 	public Usuario(String email,String password)
 	{
 		super();
