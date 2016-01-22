@@ -41,6 +41,24 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
         <url-pattern>/usuario</url-pattern>
     </servlet-mapping>
     
+    <servlet>
+        <servlet-name>asignarServicio</servlet-name>
+        <servlet-class>com.analixdata.controladores.ServicioEmpresaServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>asignarServicio</servlet-name>
+        <url-pattern>/asignarServicio</url-pattern>
+    </servlet-mapping>
+    
+        <servlet>
+        <servlet-name>asignarServicioUsuario</servlet-name>
+        <servlet-class>com.analixdata.controladores.ServicioUsuarioServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>asignarServicioUsuario</servlet-name>
+        <url-pattern>/asignarServicioUsuario</url-pattern>
+    </servlet-mapping>
+    
     
     <servlet>
         <servlet-name>cerrarSesion</servlet-name>
