@@ -81,7 +81,7 @@ while (rs.next()) {
 <%
 }
 
-rs = conn.createStatement().executeQuery("SELECT * FROM servicio WHERE estado=1");%>
+rs = conn.createStatement().executeQuery("SELECT * FROM servicio");%>
 
 
 
