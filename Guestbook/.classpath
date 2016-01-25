@@ -7,6 +7,6 @@
 			<attribute name="owner.project.facets" value="java"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="war/WEB-INF/lib/unirest-java-1.4.8-SNAPSHOT-jar-with-dependencies.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/send-sms-1.0-SNAPSHOT-jar-with-dependencies.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

@@ -148,7 +148,7 @@
   				<td><input type="text" name=caracteres id="caracteres" size=4 value="160"></td>
   			</tr>
   	</table>
-  	<form onSubmit="processData()" action="enviarSMS" >
+  	<form onSubmit="processData()" action="/enviarSMS" >
   		<table>
   			<tr>
   				<td><input type="hidden" id="mensaje" name="txtmensaje" ></input></td>

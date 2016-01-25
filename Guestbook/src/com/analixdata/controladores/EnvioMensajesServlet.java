@@ -10,9 +10,9 @@ import javax.servlet.http.HttpSession;
 import javax.xml.bind.DatatypeConverter;
 
 import com.mashape.unirest.http.HttpResponse;
+import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
-
 
 
 
@@ -27,34 +27,28 @@ public class EnvioMensajesServlet extends HttpServlet {
 		resp.setContentType("text/html;charset=UTF-8");
 		
 		
-		String mensaje =req.getParameter("txtmensaje");
+		//String mensaje =req.getParameter("txtmensaje");
 		
-		String str= "ANALIXDATA:JDL@nd13c";
+		//String str= "ANALIXDATA:JDL@nd13c";
 		
-		String encoded = DatatypeConverter.printBase64Binary(str.getBytes());
+		//String encoded = DatatypeConverter.printBase64Binary(str.getBytes());
 	
-		HttpResponse<String> response=null;
-	
-			try {
-				response = Unirest.post("https://api.infobip.com/sms/1/text/multi")
-								.header("Access-Control-Allow-Origin", "*")
-							  .header("authorization", "Basic QU5BTElYREFUQTpKRExAbmQxM2M=")
-							  .header("content-type", "application/json")
-							  .header("accept", "application/json")
-							  .body("{\"messages\":[{\"from\":\"InfoSMS\", \"to\":[\"593992845597\", \"593992831273\"], \"text\":\"May the Force be with you!\"}]}")
-							  .asString();
-			} catch (UnirestException e) {
-				// TODO Auto-generated catch block
-				//e.printStackTrace();
-				PrintWriter out = resp.getWriter();
-				out.println("<html><head></head><body>Failure! Please try again! " +
-		                "Redirecting in 3 seconds..."+resp+"</body></html>");
-			}
-		//System.out.println(response);
+		try {
+			HttpResponse<String> response =
+			        Unirest.post("https://api.infobip.com/sms/1/text/single")
+			        .header("authorization", "Basic QU5BTElYREFUQTpKRExAbmQxM2M==")
+			        .header("content-type", "application/json")
+			        .header("accept", "application/json")
+			        .body("{\"from\":\"Queti\",\"to\":[\"593985149552\"],\"text\":\"Para bailar la bamba\"}")
+			        .asString();
+		} catch (UnirestException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 			
-		PrintWriter out = resp.getWriter();
-		out.println("<html><head></head><body>Failure! Please try again! " +
-                "Redirecting in 3 seconds..."+resp+"</body></html>");
+		//PrintWriter out = resp.getWriter();
+		//out.println("<html><head></head><body>Failure! Please try again! " +
+          ///      "Redirecting in 3 seconds..."+resp+"</body></html>");
 		
 			
 
