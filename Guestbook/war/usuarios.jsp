@@ -7,23 +7,26 @@
 <HEAD>
 
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="js/codificacion.js"></script>
 	<SCRIPT type=text/javascript>
 	
 	function validarPass(){
 		
+		if(document.getElementById('divContrasena').style.display != 'none'){
+		
 		var caract_invalido = " ";
 		var caract_longitud = 6;
-		var cla1 = document.datosUsuario.passwordUsuario.value;
-		var cla2 = document.datosUsuario.cpasswordUsuario.value;
+		var cla1 = document.datosUsuario.password.value;
+		var cla2 = document.datosUsuario.cpassword.value;
 		if (cla1 == '' || cla2 == '') {
 			alert('No ha ingresado la contraseña.');
 			return false;
 		}
-		if (document.datosUsuario.passwordUsuario.value.length < caract_longitud) {
+		if (document.datosUsuario.password.value.length < caract_longitud) {
 		alert('Su contraseña debe constar de ' + caract_longitud + ' caracteres.');
 		return false;
 		}
-		if (document.datosUsuario.passwordUsuario.value.indexOf(caract_invalido) > -1) {
+		if (document.datosUsuario.password.value.indexOf(caract_invalido) > -1) {
 		alert("Las contraseñas no pueden contener espacios.");
 		return false;
 		}
@@ -33,9 +36,16 @@
 		return false;
 		}
 		else {
-		return true;
+			document.getElementById('divContrasena').style.display = 'block';
+			document.getElementById('divContrasenaC').style.display = 'block';
+			document.getElementById('passwordUsuario').value = hex_md5(document.getElementById('password').value);
+			alert(document.getElementById('passwordUsuario').value);
+			return true;
 		      }
 		   }
+		}else{
+			return true;
+		}
 		}
 	
 
@@ -47,16 +57,20 @@
 			document.getElementById("cargoUsuario").value = el.parentNode.parentNode.cells[4].textContent;
 			document.getElementById("telefonoUsuario").value = el.parentNode.parentNode.cells[5].textContent;
 			document.getElementById("emailUsuario").value = el.parentNode.parentNode.cells[6].textContent;
-			document.getElementById("passwordUsuario").value = el.parentNode.parentNode.cells[7].textContent;
-			document.getElementById("cpasswordUsuario").value = el.parentNode.parentNode.cells[7].textContent;
+			//document.getElementById("passwordUsuario").value = el.parentNode.parentNode.cells[7].textContent;
+			//document.getElementById("cpasswordUsuario").value = el.parentNode.parentNode.cells[7].textContent;
 			
-			if(el.parentNode.parentNode.cells[8].textContent == "Activo")
+			if(el.parentNode.parentNode.cells[7].textContent == "Activo")
 			 	document.getElementById("estadoUsuario").value = 1 ;
 			else
 				document.getElementById("estadoUsuario").value = 0 ;
 			
-			document.getElementById("tipoUsuario").value = el.parentNode.parentNode.cells[9].textContent;
-			document.getElementById("empresaUsuario").value = el.parentNode.parentNode.cells[10].textContent; 
+			document.getElementById("tipoUsuario").value = el.parentNode.parentNode.cells[8].textContent;
+			document.getElementById("empresaUsuario").value = el.parentNode.parentNode.cells[9].textContent; 
+		
+			document.getElementById('divContrasena').style.display = 'none';
+			document.getElementById('divContrasenaC').style.display = 'none';
+		
 		}
 		
 		
@@ -93,7 +107,6 @@ ResultSet rs = conn.createStatement().executeQuery(
 <th style="background-color: #CCFFCC; margin: 5px">Cargo</th>
 <th style="background-color: #CCFFCC; margin: 5px">Telefono</th>
 <th style="background-color: #CCFFCC; margin: 5px">Email</th>
-<th style="background-color: #CCFFCC; margin: 5px">Password</th>
 <th style="background-color: #CCFFCC; margin: 5px">Estado</th>
 <th style="background-color: #CCFFCC; margin: 5px">Tipo</th>
 <th style="background-color: #CCFFCC; margin: 5px">Empresa</th>
@@ -125,7 +138,6 @@ while (rs.next()) {
 	<td><%= cargo %></td>
 	<td><%= telefono %></td>
 	<td><%= email %></td>
-	<td><%= password %></td>
 	<td><%= est %></td>
 	<td><%= tipo %></td>
 	<td><%= empresa %></td>
@@ -142,7 +154,7 @@ rs = conn.createStatement().executeQuery("SELECT * FROM tipo");%>
 </table>
 
 <p><strong>DATOS DEL USUARIO</strong></p>
-<form onSubmit="return validarPass();" action="/usuario" method="post" name="datosUsuario">
+<form onSubmit="validarPass();" action="/usuario" method="post" name="datosUsuario">
 	<div><input type="hidden" name="identificador" id="idUsuario" ></input></div>
     <div>Cedula: <input type="text" name="cedula" id="cedulaUsuario" required="required"></input></div>
     <div>Nombres: <input type="text" name="nombres" id="nombresUsuario" required="required"></input></div>
@@ -150,8 +162,9 @@ rs = conn.createStatement().executeQuery("SELECT * FROM tipo");%>
     <div>Cargo: <input type="text" name="cargo" id="cargoUsuario" required="required"></input></div>
     <div>Teléfono: <input type="text" name="telefono" id="telefonoUsuario" required="required"></input></div>
    	<div>Email: <input type="text" name="email" id="emailUsuario" required="required"></input></div>
-   	<div>Contraseña: <input type="password" name="password" id="passwordUsuario" required="required"></input></div>
-   	<div>Confirmar Contraseña: <input type="password" name="cpassword" id="cpasswordUsuario" required="required"></input></div>
+   	<div id="divContrasena">Contraseña:<input type="password" name="password" id="password"></input></div>
+   	<div><input type="hidden" id="passwordUsuario" name="passwordUsuario" ></input></div>
+   	<div id="divContrasenaC">Confirmar Contraseña: <input type="password" name="cpassword" id="cpassword"></input></div>
     <div>Estado:
     	<select name=estado id="estadoUsuario">
     		<option seleted value=1>Activo</option>
@@ -169,7 +182,7 @@ rs = conn.createStatement().executeQuery("SELECT * FROM tipo");%>
 	</div>
 	
 	
-	<%rs = conn.createStatement().executeQuery("SELECT * FROM empresa");%>
+	<%rs = conn.createStatement().executeQuery("SELECT * FROM empresa where estado=1");%>
 	
 	
 	<div>Empresa:
