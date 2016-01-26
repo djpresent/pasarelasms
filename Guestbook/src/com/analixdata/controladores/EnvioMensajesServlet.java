@@ -1,21 +1,17 @@
 package com.analixdata.controladores;
-import java.io.IOException;
-import java.io.PrintWriter;
 
-import javax.servlet.*;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import javax.servlet.http.HttpSession;
-import javax.xml.bind.DatatypeConverter;
-
-import com.mashape.unirest.http.HttpResponse;
-import com.mashape.unirest.http.JsonNode;
-import com.mashape.unirest.http.Unirest;
-import com.mashape.unirest.http.exceptions.UnirestException;
-
-
-
+import org.apache.commons.io.IOUtils;
 
 
 
@@ -26,54 +22,45 @@ public class EnvioMensajesServlet extends HttpServlet {
 	{
 		resp.setContentType("text/html;charset=UTF-8");
 		
-		
-		//String mensaje =req.getParameter("txtmensaje");
-		
-		//String str= "ANALIXDATA:JDL@nd13c";
-		
-		//String encoded = DatatypeConverter.printBase64Binary(str.getBytes());
-	
-		try {
-			HttpResponse<String> response =
-			        Unirest.post("https://api.infobip.com/sms/1/text/single")
-			        .header("authorization", "Basic QU5BTElYREFUQTpKRExAbmQxM2M==")
-			        .header("content-type", "application/json")
-			        .header("accept", "application/json")
-			        .body("{\"from\":\"Queti\",\"to\":[\"593985149552\"],\"text\":\"Para bailar la bamba\"}")
-			        .asString();
-		} catch (UnirestException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-			
-		//PrintWriter out = resp.getWriter();
-		//out.println("<html><head></head><body>Failure! Please try again! " +
-          ///      "Redirecting in 3 seconds..."+resp+"</body></html>");
-		
-			
+		String jsonResponse = null;
+        String postData = "{\"from\":\"Queti\",\"to\":[ \"593991728165\"],\"text\":\"Mensaje de prueba ANALIXDATA\"}";
+        
+        URL myURL = new URL("https://api.infobip.com/sms/1/text/single");
+        HttpURLConnection myURLConnection = (HttpURLConnection)myURL.openConnection();
+       // String userCredentials = "username:password";
+        //String basicAuth = "Basic " + new String(new Base64().encode(userCredentials.getBytes()));
+        myURLConnection.setReadTimeout(60 * 1000);
+        myURLConnection.setConnectTimeout(60 * 1000);
+        myURLConnection.setRequestProperty ("Authorization", "Basic QU5BTElYREFUQTpKRExAbmQxM2M==");
+        myURLConnection.setRequestMethod("POST");
+        //myURLConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+        //myURLConnection.setRequestProperty("Content-Length", "" + Integer.toString(postData.getBytes().length));
+        myURLConnection.setRequestProperty("content-type", "application/json");
+        myURLConnection.setRequestProperty("accept", "application/json");
 
-	/*	protected void doOptions(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException 
-		{ 
-		    // pre-flight request processing
-		 //   resp.setHeader("Access-Control-Allow-Origin", "*");
-		   /// resp.setHeader("Access-Control-Allow-Methods", SUPPORTED_METHODS);
-		    ///resp.setHeader("Access-Control-Allow-Headers", SUPPORTED_HEADERS);
-		}
-*/
-		
-			
-			
-			
-	//	String str= "Aladdin:open sesame";
-		
-		//String encoded = DatatypeConverter.printBase64Binary(str.getBytes());
-		
-		//String decoded = new String(DatatypeConverter.parseBase64Binary(encoded));
-       
-		
-		
-		//System.out.println(encoded);
-		 //System.out.println("decoded value is \t" + decoded);
+        myURLConnection.setUseCaches(false);
+        myURLConnection.setDoInput(true);
+        myURLConnection.setDoOutput(true);
+        
+        OutputStreamWriter writer = new OutputStreamWriter(myURLConnection.getOutputStream());
+            writer.write(postData);
+            writer.close();
+        
+        
+        int responseCode = myURLConnection.getResponseCode();
+        
+        if (responseCode == 200) {
+                InputStream inputStr = myURLConnection.getInputStream();
+                String encoding = myURLConnection.getContentEncoding() == null ? "UTF-8"
+                        : myURLConnection.getContentEncoding();
+                jsonResponse = IOUtils.toString(inputStr, encoding);
+                /************** For getting response from HTTP URL end ***************/
+
+        }
+        
+        HttpSession session=req.getSession(true);
+        session.setAttribute("codigo", jsonResponse); 
+		resp.sendRedirect("mensajeria.jsp");
 		
 	}
 	@Override

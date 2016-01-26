@@ -1,11 +1,13 @@
 package com.analixdata.controladores;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.servlet.http.Cookie;
 
 
 import javax.xml.bind.DatatypeConverter;
@@ -30,23 +32,24 @@ public class ValidarServlet extends HttpServlet {
 		
 		if (u2==null)
 		{
-			HttpSession session = req.getSession();
-			session.setAttribute("usuario", u2);
-			req.getRequestDispatcher("error.jsp").forward(req, resp);
+			//HttpSession session = req.getSession();
+			//session.setAttribute("usuario", u2);
+			//req.getRequestDispatcher("error.jsp").forward(req, resp);
+			 RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.jsp");
+	            PrintWriter out= resp.getWriter();
+	            out.println("<font color=red>Either user name or password is wrong.</font>");
+	            rd.include(req, resp);
+			
 		}
 		else
 		{
 			HttpSession session = req.getSession();
 			session.setAttribute("usuario", u2);
 			
-			
-			String str= "Aladdin:open sesame";
-			
-			String encoded = DatatypeConverter.printBase64Binary(str.getBytes());
-			
-			
-			session.setAttribute("autorizacion", "Basic "+encoded );
-			//req.getRequestDispatcher("index.jsp").forward(req, resp);
+			session.setMaxInactiveInterval(30*60);
+            Cookie userName = new Cookie ("usuario",u2.getNombres()+" "+u2.getApellidos());
+            userName.setMaxAge(30*60);
+            resp.addCookie(userName);			
 			resp.sendRedirect("index.jsp");
 		}	
 		

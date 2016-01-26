@@ -10,18 +10,31 @@
   </head>
 
   <body>
-  
+
   <%
 
-	HttpSession sessionlog = request.getSession();
+	
+  	HttpSession sessionlog = request.getSession();
   	Usuario u = (Usuario)sessionlog.getAttribute("usuario");
   	
   	if (u==null)
   	{
+  		
+  		sessionlog.setAttribute("error", "error");
   		response.sendRedirect("/login.jsp");
   	}
-  	else
-  	{
+	
+	String userName = null;
+	String sessionID = null;
+	Cookie[] cookies = request.getCookies();
+	if(cookies !=null)
+	{
+		for(Cookie cookie : cookies)
+		{
+		    if(cookie.getName().equals("usuario")) userName = cookie.getValue();
+		    if(cookie.getName().equals("JSESSIONID")) sessionID = cookie.getValue();
+		}
+	}
   	%>
   	
   	<nav class="navbar navbar-inverse">
@@ -53,9 +66,7 @@
 	</div>
 	
 
-  	<% 	
-  	}
-	%>
+  	
   
   </body>
 </html>

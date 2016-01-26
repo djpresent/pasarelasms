@@ -23,6 +23,28 @@
 		</form>
 		<a href="#">¿Olvidaste tu contraseña?</a> 
 		</div>
+		<% 
+		
+		if(null == session.getAttribute("name"))
+		{  
+	
+		} 
+		else 
+		{
+			String error=(String)session.getAttribute("error");
+			
+			if(session.getAttribute("error").equals("error"))
+			{
+			%>
+				<div><h4>Usuario y/o contraseña incorrectos</h4></div>
+			<%
+			}
+			
+		}%>
+		
+
+		
+        
 	</div>
 	</div>
 	
