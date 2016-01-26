@@ -42,12 +42,14 @@ public class UsuarioServlet extends HttpServlet {
 	        String cargo = req.getParameter("cargo");
 	        String telefono = req.getParameter("telefono");
 	        String email = req.getParameter("email");
-	        String password = req.getParameter("password");
+	        String password = req.getParameter("passwordUsuario");
 	        String estado = req.getParameter("estado");
 	        String tipo = req.getParameter("tipo");
 	        String empresa = req.getParameter("empresa");
 	        String idtipo=null;
 	        String idempresa=null;
+	        
+	        System.out.println("clave md5 "+password );
 	        
 	        ResultSet rs = conn.createStatement().executeQuery("SELECT idtipo FROM tipo where descripcion ='"+tipo+"';");
         	
@@ -97,7 +99,7 @@ public class UsuarioServlet extends HttpServlet {
 	          
 	        } else {
 	        	
-	        	String statement = "UPDATE usuario SET cedula=?, nombres=?, apellidos=? ,cargo=? ,telefono=? ,email=? ,password=?, estado=?, idtipo=?, idempresa=? WHERE idusuario=? ";
+	        	String statement = "UPDATE usuario SET cedula=?, nombres=?, apellidos=? ,cargo=? ,telefono=? ,email=? , estado=?, idtipo=?, idempresa=? WHERE idusuario=? ";
 		          PreparedStatement stmt = conn.prepareStatement(statement);
 		          stmt.setString(1, cedula);
 		          stmt.setString(2, nombres);
@@ -105,14 +107,13 @@ public class UsuarioServlet extends HttpServlet {
 		          stmt.setString(4, cargo);
 		          stmt.setString(5, telefono);
 		          stmt.setString(6, email);
-		          stmt.setString(7, password);
-		          stmt.setString(8, estado);
-		          stmt.setString(9, idtipo);
-		          stmt.setString(10, idempresa);
-		          stmt.setString(11, id);
+		          stmt.setString(7, estado);
+		          stmt.setString(8, idtipo);
+		          stmt.setString(9, idempresa);
+		          stmt.setString(10, id);
 		          int success = 2;
 		          
-		          System.out.println(cedula+" "+nombres+" "+apellidos+" "+cargo+" "+telefono+" "+email+" "+password+" "+estado+" "+id );
+		          System.out.println(cedula+" "+nombres+" "+apellidos+" "+cargo+" "+telefono+" "+email+" "+estado+" "+id );
 		          System.out.println(statement);
 		          
 		          success = stmt.executeUpdate();
