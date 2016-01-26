@@ -12,7 +12,7 @@
 	
 	function validarPass(){
 		
-		if(document.getElementById('divContrasena').style.display == 'block'){
+		if(document.getElementById('divContrasena').style.display != 'none'){
 		
 		var caract_invalido = " ";
 		var caract_longitud = 6;
@@ -39,6 +39,7 @@
 			document.getElementById('divContrasena').style.display = 'block';
 			document.getElementById('divContrasenaC').style.display = 'block';
 			document.getElementById('passwordUsuario').value = hex_md5(document.getElementById('password').value);
+			alert(document.getElementById('passwordUsuario').value);
 			return true;
 		      }
 		   }
