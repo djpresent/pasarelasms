@@ -7,6 +7,9 @@
 <html>
 <HEAD>
 
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  	<link rel="stylesheet" type="text/css" href="css/estilos.css">
+
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script src="js/codificacion.js"></script>
 	<SCRIPT type=text/javascript>
@@ -122,111 +125,149 @@ ResultSet rs = conn.createStatement().executeQuery(
     "SELECT idusuario,cedula,nombres,apellidos,cargo,email,usuario.telefono,password,descripcion,nombre,usuario.estado FROM pasarelasms.usuario,pasarelasms.tipo,pasarelasms.empresa WHERE usuario.idtipo=tipo.idtipo and usuario.idempresa=empresa.idempresa;");
 %>
 
-<table style="border: 1px solid black" id="datosUsuarios">
-<tbody>
-<tr>
-<th style="background-color: #CCFFCC; margin: 5px">ID</th>
-<th style="background-color: #CCFFCC; margin: 5px">Cédula</th>
-<th style="background-color: #CCFFCC; margin: 5px">Nombres</th>
-<th style="background-color: #CCFFCC; margin: 5px">Apellidos</th>
-<th style="background-color: #CCFFCC; margin: 5px">Cargo</th>
-<th style="background-color: #CCFFCC; margin: 5px">Telefono</th>
-<th style="background-color: #CCFFCC; margin: 5px">Email</th>
-<th style="background-color: #CCFFCC; margin: 5px">Estado</th>
-<th style="background-color: #CCFFCC; margin: 5px">Tipo</th>
-<th style="background-color: #CCFFCC; margin: 5px">Empresa</th>
-</tr>
-
-<%
-while (rs.next()) {
-    int id =rs.getInt("idusuario");
-	String cedula = rs.getString("cedula");
-    String nombres = rs.getString("nombres");
-    String apellidos = rs.getString("apellidos");
-    String cargo = rs.getString("cargo");
-    String telefono = rs.getString("telefono");
-    String email = rs.getString("email");
-    String password = rs.getString("password");
-    int estado = rs.getInt("estado"); 
-    String est="";
-    if(estado==1)est="Activo";else est="Inactivo";
-    
-    String tipo = rs.getString("descripcion");
-    String empresa = rs.getString("nombre");
-   
- %>
-<tr>
-	<td><%= id %></td>
-	<td><%= cedula %></td>
-	<td><%= nombres %></td>
-	<td><%= apellidos %></td>
-	<td><%= cargo %></td>
-	<td><%= telefono %></td>
-	<td><%= email %></td>
-	<td><%= est %></td>
-	<td><%= tipo %></td>
-	<td><%= empresa %></td>
-	<td><button class="btnEditar" type="button" onclick="obtenerDatos(this);" >Editar</button></td>
-</tr>
-<%
-}
-
-rs = conn.createStatement().executeQuery("SELECT * FROM tipo");%>
 
 
-
-</tbody>
-</table>
-
-<p><strong>DATOS DEL USUARIO</strong></p>
-<form onSubmit="validarPass();" action="/usuario" method="post" name="datosUsuario">
-	<div><input type="hidden" name="identificador" id="idUsuario" ></input></div>
-    <div>Cedula: <input type="text" name="cedula" id="cedulaUsuario" required="required"></input></div>
-    <div>Nombres: <input type="text" name="nombres" id="nombresUsuario" required="required"></input></div>
-    <div>Apellidos: <input type="text" name="apellidos" id="apellidosUsuario" required="required"></input></div>
-    <div>Cargo: <input type="text" name="cargo" id="cargoUsuario" required="required"></input></div>
-    <div>Teléfono: <input type="text" name="telefono" id="telefonoUsuario" required="required"></input></div>
-   	<div>Email: <input type="text" name="email" id="emailUsuario" required="required"></input></div>
-   	<div id="divContrasena">Contraseña:<input type="password" name="password" id="password"></input></div>
-   	<div><input type="hidden" id="passwordUsuario" name="passwordUsuario" ></input></div>
-   	<div id="divContrasenaC">Confirmar Contraseña: <input type="password" name="cpassword" id="cpassword"></input></div>
-    <div>Estado:
-    	<select name=estado id="estadoUsuario">
-    		<option seleted value=1>Activo</option>
-    		<option value=0>Inactivo</option>
-    		</select> 
+<nav class="navbar" >
+  	<div class="container-fluid">
+		<div class="navbar-header">
+			<a href="index.jsp"><img class="logo" src="imagenes/logo-analix-data.png"/></a>
+		</div>  
+		
+		<div class="navbar-nav navbar-right">
+			<a href="/cerrarSesion"><button type="button" class="btn btn-lg btn-default cerrarsesion">Cerrar sesión <span class="glyphicon glyphicon-log-out"></span></button></a>
+		</div>
+		<div class="navbar-nav navbar-right ">
+			<h4 class="msgbienvenida">Bienvenido usuario <%= userName %></h4>
+		</div>
+		
+	</div>	
+  	</nav>
+  	<div class="container-fluid">
+	  	<div class="row">
+			  	<div class="col-sm-3 col-md-2 sidebar"> 
+				    <ul class="nav nav-sidebar">
+						<li><a href="empresas.jsp">Empresas.</a></li>
+						<li ><a href="servicios.jsp">Servicios.</a></li>
+						<li><a href="usuarios.jsp">Usuarios.</a></li>
+						<li><a href="mensajeria.jsp">Mensajería.</a></li>
+						<li><a href="mensajeria.jsp">Reportes.</a></li>
+						<li><a href="/cerrarSesion">Cerrar Sesión.</a></li>
+				
+					</ul>
+				</div>
+		
+			<div class="col-sm-9 col-md-9 main">
+				<h1 class="page-header">Usuarios</h1>
+				<table style="border: 1px solid black" id="datosUsuarios">
+				<tbody>
+				<tr>
+				<th style="background-color: #CCFFCC; margin: 5px">ID</th>
+				<th style="background-color: #CCFFCC; margin: 5px">Cédula</th>
+				<th style="background-color: #CCFFCC; margin: 5px">Nombres</th>
+				<th style="background-color: #CCFFCC; margin: 5px">Apellidos</th>
+				<th style="background-color: #CCFFCC; margin: 5px">Cargo</th>
+				<th style="background-color: #CCFFCC; margin: 5px">Telefono</th>
+				<th style="background-color: #CCFFCC; margin: 5px">Email</th>
+				<th style="background-color: #CCFFCC; margin: 5px">Estado</th>
+				<th style="background-color: #CCFFCC; margin: 5px">Tipo</th>
+				<th style="background-color: #CCFFCC; margin: 5px">Empresa</th>
+				</tr>
+				
+				<%
+				while (rs.next()) {
+				    int id =rs.getInt("idusuario");
+					String cedula = rs.getString("cedula");
+				    String nombres = rs.getString("nombres");
+				    String apellidos = rs.getString("apellidos");
+				    String cargo = rs.getString("cargo");
+				    String telefono = rs.getString("telefono");
+				    String email = rs.getString("email");
+				    String password = rs.getString("password");
+				    int estado = rs.getInt("estado"); 
+				    String est="";
+				    if(estado==1)est="Activo";else est="Inactivo";
+				    
+				    String tipo = rs.getString("descripcion");
+				    String empresa = rs.getString("nombre");
+				   
+				 %>
+				<tr>
+					<td><%= id %></td>
+					<td><%= cedula %></td>
+					<td><%= nombres %></td>
+					<td><%= apellidos %></td>
+					<td><%= cargo %></td>
+					<td><%= telefono %></td>
+					<td><%= email %></td>
+					<td><%= est %></td>
+					<td><%= tipo %></td>
+					<td><%= empresa %></td>
+					<td><button class="btnEditar" type="button" onclick="obtenerDatos(this);" >Editar</button></td>
+				</tr>
+				<%
+				}
+				
+				rs = conn.createStatement().executeQuery("SELECT * FROM tipo");%>
+				
+				
+				
+				</tbody>
+				</table>
+				
+				<p><strong>DATOS DEL USUARIO</strong></p>
+				<form onSubmit="validarPass();" action="/usuario" method="post" name="datosUsuario">
+					<div><input type="hidden" name="identificador" id="idUsuario" ></input></div>
+				    <div>Cedula: <input type="text" name="cedula" id="cedulaUsuario" required="required"></input></div>
+				    <div>Nombres: <input type="text" name="nombres" id="nombresUsuario" required="required"></input></div>
+				    <div>Apellidos: <input type="text" name="apellidos" id="apellidosUsuario" required="required"></input></div>
+				    <div>Cargo: <input type="text" name="cargo" id="cargoUsuario" required="required"></input></div>
+				    <div>Teléfono: <input type="text" name="telefono" id="telefonoUsuario" required="required"></input></div>
+				   	<div>Email: <input type="text" name="email" id="emailUsuario" required="required"></input></div>
+				   	<div id="divContrasena">Contraseña:<input type="password" name="password" id="password"></input></div>
+				   	<div><input type="hidden" id="passwordUsuario" name="passwordUsuario" ></input></div>
+				   	<div id="divContrasenaC">Confirmar Contraseña: <input type="password" name="cpassword" id="cpassword"></input></div>
+				    <div>Estado:
+				    	<select name=estado id="estadoUsuario">
+				    		<option seleted value=1>Activo</option>
+				    		<option value=0>Inactivo</option>
+				    		</select> 
+					</div>
+					<div>Tipo de usuario:
+				    	<select name=tipo id="tipoUsuario">
+				    		<% 
+					while (rs.next()) {
+					String tipoU = rs.getString("descripcion");%>
+						<option value=<%= tipoU %>><%= tipoU %></option>
+					<%}%>
+				    		</select> 
+					</div>
+					
+					
+					<%rs = conn.createStatement().executeQuery("SELECT * FROM empresa where estado=1");%>
+					
+					
+					<div>Empresa:
+					<select name=empresa id="empresaUsuario">
+					<% 
+					while (rs.next()) {
+					String empresa = rs.getString("nombre");%>
+						<option value=<%= empresa %>><%= empresa %></option>
+					<%}%>
+					</select>
+					</div>
+					
+				    
+					<%
+					conn.close();
+					%>
+					
+				    <div><input type="submit" value="Guardar"/>
+				    <input type="reset" value="Cancelar"/></div>
+				  </form>
+			</div>	
+	
+		</div>
 	</div>
-	<div>Tipo de usuario:
-    	<select name=tipo id="tipoUsuario">
-    		<% 
-	while (rs.next()) {
-	String tipoU = rs.getString("descripcion");%>
-		<option value=<%= tipoU %>><%= tipoU %></option>
-	<%}%>
-    		</select> 
-	</div>
-	
-	
-	<%rs = conn.createStatement().executeQuery("SELECT * FROM empresa where estado=1");%>
-	
-	
-	<div>Empresa:
-	<select name=empresa id="empresaUsuario">
-	<% 
-	while (rs.next()) {
-	String empresa = rs.getString("nombre");%>
-		<option value=<%= empresa %>><%= empresa %></option>
-	<%}%>
-	</select>
-	</div>
-	
-    
-	<%
-	conn.close();
-	%>
-	
-    <div><input type="submit" value="Guardar"/>
-    <input type="reset" value="Cancelar"/></div>
-  </form>
+
   </body>
 </html>

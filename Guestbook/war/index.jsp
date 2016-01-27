@@ -42,11 +42,11 @@
   	<nav class="navbar" >
   	<div class="container-fluid">
 		<div class="navbar-header">
-			<img class="logo" src="imagenes/logo-analix-data.png"/>
+			<a href="index.jsp"><img class="logo" src="imagenes/logo-analix-data.png"/></a>
 		</div>  
 		
 		<div class="navbar-nav navbar-right">
-			<button type="button" class="btn btn-lg btn-default cerrarsesion">Cerrar sesión <span class="glyphicon glyphicon-log-out"></span></button>
+			<a href="/cerrarSesion"><button type="button" class="btn btn-lg btn-default cerrarsesion">Cerrar sesión <span class="glyphicon glyphicon-log-out"></span></button></a>
 		</div>
 		<div class="navbar-nav navbar-right ">
 			<h4 class="msgbienvenida">Bienvenido usuario <%= userName %></h4>

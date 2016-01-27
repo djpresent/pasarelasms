@@ -6,6 +6,9 @@
 
 <html>
 <HEAD>
+	
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  	<link rel="stylesheet" type="text/css" href="css/estilos.css">
 
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<SCRIPT type=text/javascript>
@@ -60,39 +63,77 @@ ResultSet rs = conn.createStatement().executeQuery(
     "SELECT * FROM servicio");
 %>
 
-<table style="border: 1px solid black" id="datosSeervicios">
-<tbody>
-<tr>
-<th width="35%" style="background-color: #CCFFCC; margin: 5px">ID</th>
-<th style="background-color: #CCFFCC; margin: 5px">Descripcion</th>
 
-</tr>
+  	<nav class="navbar" >
+  	<div class="container-fluid">
+		<div class="navbar-header">
+			<a href="index.jsp"><img class="logo" src="imagenes/logo-analix-data.png"/></a>
+		</div>  
+		
+		<div class="navbar-nav navbar-right">
+			<a href="/cerrarSesion"><button type="button" class="btn btn-lg btn-default cerrarsesion">Cerrar sesión <span class="glyphicon glyphicon-log-out"></span></button></a>
+		</div>
+		<div class="navbar-nav navbar-right ">
+			<h4 class="msgbienvenida">Bienvenido usuario <%= userName %></h4>
+		</div>
+		
+	</div>	
+  	</nav>
+  	<div class="container-fluid">
+	  	<div class="row">
+			  	<div class="col-sm-3 col-md-2 sidebar"> 
+				    <ul class="nav nav-sidebar">
+						<li><a href="empresas.jsp">Empresas.</a></li>
+						<li ><a href="servicios.jsp">Servicios.</a></li>
+						<li><a href="usuarios.jsp">Usuarios.</a></li>
+						<li><a href="mensajeria.jsp">Mensajería.</a></li>
+						<li><a href="mensajeria.jsp">Reportes.</a></li>
+						<li><a href="/cerrarSesion">Cerrar Sesión.</a></li>
+				
+					</ul>
+				</div>
+		
+			<div class="col-sm-9 col-md-9 main">
+				<h1 class="page-header">Servicios</h1>
+				
+					<table style="border: 1px solid black" id="datosSeervicios">
+					<tbody>
+					<tr>
+					<th width="35%" style="background-color: #CCFFCC; margin: 5px">ID</th>
+					<th style="background-color: #CCFFCC; margin: 5px">Descripcion</th>
+					
+					</tr>
+					
+					<%
+					while (rs.next()) {
+					    int id =rs.getInt("idservicio");
+						String descripcion = rs.getString("descripcion");
+					
+					 %>
+					<tr>
+						<td><%= id %></td>
+						<td><%= descripcion %></td>
+						<td><button class="btnEditar" type="button" onclick="obtenerDatos(this);" >Editar</button></td>
+					</tr>
+					<%
+					}
+					conn.close();
+					%>
+					
+					</tbody>
+					</table>
+					
+					<p><strong>DATOS DEL SERVICIO</strong></p>
+					<form  action="/servicio" method="post">
+						<div><input type="hidden" name="identificador" id="idServicio" ></input></div>
+					    <div>Descripción: <input type="text" name="descripcion" id="descServicio" required="required"></input></div>
+					
+					    <div><input type="submit" value="Guardar"/><input type="reset" value="Cancelar"/></div>
+					  </form>
+								</div>	
+						
+							</div>
+						</div>
 
-<%
-while (rs.next()) {
-    int id =rs.getInt("idservicio");
-	String descripcion = rs.getString("descripcion");
-
- %>
-<tr>
-	<td><%= id %></td>
-	<td><%= descripcion %></td>
-	<td><button class="btnEditar" type="button" onclick="obtenerDatos(this);" >Editar</button></td>
-</tr>
-<%
-}
-conn.close();
-%>
-
-</tbody>
-</table>
-
-<p><strong>DATOS DEL SERVICIO</strong></p>
-<form  action="/servicio" method="post">
-	<div><input type="hidden" name="identificador" id="idServicio" ></input></div>
-    <div>Descripción: <input type="text" name="descripcion" id="descServicio" required="required"></input></div>
-
-    <div><input type="submit" value="Guardar"/><input type="reset" value="Cancelar"/></div>
-  </form>
   </body>
 </html>
