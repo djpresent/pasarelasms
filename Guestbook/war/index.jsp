@@ -35,6 +35,7 @@
 		{
 		    if(cookie.getName().equals("usuario")) userName = cookie.getValue();
 		    if(cookie.getName().equals("JSESSIONID")) sessionID = cookie.getValue();
+		
 		}
 	}
   	%>

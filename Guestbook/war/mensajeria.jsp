@@ -1,16 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.analixdata.modelos.Usuario" %>
 
-
-
-
-
 <html>
   <head>
-  
-  	
 
-	
 	<script type=text/javascript>
 	
 	var csv;
@@ -58,7 +51,7 @@
 	    function processData() 
 	    {
 	    	var cadenaMensajes="{\"messages\":[";
-	    	var remitente="1234567890";
+	    	var remitente="InfoSMS";
 	    	var mensaje= document.getElementById("idTexto").value;
 	        var allTextLines = csv.split(/\r\n|\n/);
 	      //  var lines = [];
@@ -107,7 +100,7 @@
 	        }
 	        cadenaMensajes+="]}";
 	        document.getElementById("mensaje").value=cadenaMensajes;
-	    	//alert(cadenaMensajes);
+	    	alert(cadenaMensajes);
 	    }
 
 	    function agregarV(variable)
@@ -172,7 +165,7 @@ for(Cookie cookie : cookies){
   				<td><input type="text" name=caracteres id="caracteres" size=4 value="160"></td>
   			</tr>
   	</table>
-  	<form  action="enviarSMS" method="post" >
+  	<form onSubmit="processData()" action="enviarSMS" method="post" >
   		<table>
   			<tr>
   				<td><input type="hidden" id="mensaje" name="txtmensaje" ></input></td>
@@ -185,12 +178,14 @@ for(Cookie cookie : cookies){
 		if(!(session.getAttribute("codigo") == null)){
 			
 		String cod= session.getAttribute("codigo").toString();
+		String sms=session.getAttribute("sms").toString();
 		
 	%>
 		
                 
                 <div>
                     <h2><%= cod %></h2>
+                    <h4><%= sms %></h4>
     		</div>
 			
 	<% 	

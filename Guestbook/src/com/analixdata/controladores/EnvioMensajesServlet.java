@@ -2,15 +2,21 @@ package com.analixdata.controladores;
 
 
 import java.io.IOException;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+
 import javax.servlet.http.HttpSession;
+
 import org.apache.commons.io.IOUtils;
 
 
@@ -25,10 +31,15 @@ public class EnvioMensajesServlet extends HttpServlet {
 		String jsonResponse = null;
         String postData = "{\"from\":\"Queti\",\"to\":[ \"593992831273\"],\"text\":\"Mensaje de prueba ANALIXDATA\"}";
         
-        URL myURL = new URL("https://api.infobip.com/sms/1/text/single");
+        String mensaje = req.getParameter("txtmensaje");
+        
+        
+
+        
+        
+        //URL myURL = new URL("https://api.infobip.com/sms/1/text/single");
+        URL myURL = new URL("https://api.infobip.com/sms/1/text/multi");
         HttpURLConnection myURLConnection = (HttpURLConnection)myURL.openConnection();
-       // String userCredentials = "username:password";
-        //String basicAuth = "Basic " + new String(new Base64().encode(userCredentials.getBytes()));
         myURLConnection.setReadTimeout(60 * 1000);
         myURLConnection.setConnectTimeout(60 * 1000);
         myURLConnection.setRequestProperty ("Authorization", "Basic QU5BTElYREFUQTpKRExAbmQxM2M==");
@@ -43,7 +54,7 @@ public class EnvioMensajesServlet extends HttpServlet {
         myURLConnection.setDoOutput(true);
         
         OutputStreamWriter writer = new OutputStreamWriter(myURLConnection.getOutputStream());
-            writer.write(postData);
+            writer.write("{\"messages\":[{\"from\":\"ANALIXDATA\", \"to\":\"593992831273\", \"text\":\"Prueba Ali.\"}, {\"from\":\"ANALIXDATA\", \"to\":\"593995732333\", \"text\":\"Prueba Daniela.\"}]}");
             writer.close();
         
         
@@ -60,6 +71,7 @@ public class EnvioMensajesServlet extends HttpServlet {
         
         HttpSession session=req.getSession(true);
         session.setAttribute("codigo", jsonResponse); 
+        session.setAttribute("sms", mensaje);
 		resp.sendRedirect("mensajeria.jsp");
 		
 	}
