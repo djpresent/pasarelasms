@@ -5,6 +5,7 @@
 <html>
 <head>
   	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  	<link rel="stylesheet" type="text/css" href="css/estilos.css">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <title>Analixdata Servicios en Línea</title>
   </head>
@@ -24,6 +25,7 @@
   		response.sendRedirect("/login.jsp");
   	}
 	
+  	
 	String userName = null;
 	String sessionID = null;
 	Cookie[] cookies = request.getCookies();
@@ -37,11 +39,19 @@
 	}
   	%>
   	
-  	<nav class="navbar navbar-inverse">
+  	<nav class="navbar" >
   	<div class="container-fluid">
 		<div class="navbar-header">
-			<img src="imagenes/logo.png"/>
+			<img class="logo" src="imagenes/logo-analix-data.png"/>
 		</div>  
+		
+		<div class="navbar-nav navbar-right">
+			<button type="button" class="btn btn-lg btn-default cerrarsesion">Cerrar sesión <span class="glyphicon glyphicon-log-out"></span></button>
+		</div>
+		<div class="navbar-nav navbar-right ">
+			<h4 class="msgbienvenida">Bienvenido usuario <%= userName %></h4>
+		</div>
+		
 	</div>	
   	</nav>
   	<div class="container-fluid">

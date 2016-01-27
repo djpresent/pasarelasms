@@ -1,11 +1,33 @@
-.menu{
+.navbar{
 	
-	width:20%;
-	float:left;
+	background-color: gainsboro;
+	margin-bottom: 0px;
 }
 
-.cuerpo{
+.logo{
+
+    height: 13%;
+}
+
+.glyphicon-log-out{
+	padding-left:4px;
+}
+
+.msgbienvenida {
+    padding-right: 45px;
+    margin-top: 11.5%;
+}
+
+.cerrarsesion {
+    margin-left: -13%;
+    margin-top: 8%;
+}
+
+.col-sm-3.col-md-2.sidebar {
+    background-color: bisque;
+}
+
+.sidebar{
+	height: 100%;
 	
-	width:80%;
-	float:left;
 }
