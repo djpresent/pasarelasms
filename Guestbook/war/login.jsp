@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.analixdata.modelos.Usuario" %>
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
@@ -12,6 +13,21 @@
   </head>
 
   <body>
+  <%
+  
+//allow access only if session exists
+
+session = request.getSession();
+	Usuario u = (Usuario)session.getAttribute("usuario");
+	
+	if (u!=null)
+	{	
+		response.sendRedirect("/index.jsp");
+	}
+
+  
+  %>
+  
   <div class="container-fluid">
 	<div class="row">
 		<div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4">
