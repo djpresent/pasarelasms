@@ -2,6 +2,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="com.google.appengine.api.utils.SystemProperty" %>
+<%@ page import="com.analixdata.modelos.Usuario" %>
 
 <html>
 <HEAD>
@@ -44,8 +45,33 @@
    </HEAD>
 
   <body>
+  
 
 <%
+
+//allow access only if session exists
+
+session = request.getSession();
+	Usuario u = (Usuario)session.getAttribute("usuario");
+	
+	if (u==null)
+	{
+		
+		session.setAttribute("error", "error");
+		response.sendRedirect("/login.jsp");
+	}
+String userName = null;
+String sessionID = null;
+Cookie[] cookies = request.getCookies();
+if(cookies !=null){
+for(Cookie cookie : cookies){
+  if(cookie.getName().equals("usuario")) 
+  	userName = cookie.getValue();
+}
+}
+
+
+
 String url = null;
 if (SystemProperty.environment.value() ==
     SystemProperty.Environment.Value.Production) {

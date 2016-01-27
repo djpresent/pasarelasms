@@ -23,7 +23,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 		resp.setContentType("text/html;charset=UTF-8");
 		
 		String jsonResponse = null;
-        String postData = "{\"from\":\"Queti\",\"to\":[ \"593991728165\"],\"text\":\"Mensaje de prueba ANALIXDATA\"}";
+        String postData = "{\"from\":\"Queti\",\"to\":[ \"593992831273\"],\"text\":\"Mensaje de prueba ANALIXDATA\"}";
         
         URL myURL = new URL("https://api.infobip.com/sms/1/text/single");
         HttpURLConnection myURLConnection = (HttpURLConnection)myURL.openConnection();

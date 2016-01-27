@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-
+<%@ page import="com.analixdata.modelos.Usuario" %>
 
 
 
@@ -125,6 +125,30 @@
   </head>
 
   <body>
+  
+  <%
+//allow access only if session exists
+
+session = request.getSession();
+  	Usuario u = (Usuario)session.getAttribute("usuario");
+  	
+  	if (u==null)
+  	{
+  		
+  		session.setAttribute("error", "error");
+  		response.sendRedirect("/login.jsp");
+  	}
+String userName = null;
+String sessionID = null;
+Cookie[] cookies = request.getCookies();
+if(cookies !=null){
+for(Cookie cookie : cookies){
+    if(cookie.getName().equals("usuario")) 
+    	userName = cookie.getValue();
+}
+}
+%>
+  
   	<table>
   		<tr>
   			<td>Opción 1:</td>
@@ -148,7 +172,7 @@
   				<td><input type="text" name=caracteres id="caracteres" size=4 value="160"></td>
   			</tr>
   	</table>
-  	<form  action="/enviarSMS" method="post" >
+  	<form  action="enviarSMS" method="post" >
   		<table>
   			<tr>
   				<td><input type="hidden" id="mensaje" name="txtmensaje" ></input></td>

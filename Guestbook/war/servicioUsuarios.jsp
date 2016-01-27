@@ -26,6 +26,29 @@
   <body>
 
 <%
+
+//allow access only if session exists
+
+session = request.getSession();
+	Usuario us = (Usuario)session.getAttribute("usuario");
+	
+	if (us==null)
+	{
+		
+		session.setAttribute("error", "error");
+		response.sendRedirect("/login.jsp");
+	}
+String userName = null;
+String sessionID = null;
+Cookie[] cookies = request.getCookies();
+if(cookies !=null){
+for(Cookie cookie : cookies){
+if(cookie.getName().equals("usuario")) 
+	userName = cookie.getValue();
+}
+}
+
+
 String url = null;
 if (SystemProperty.environment.value() ==
     SystemProperty.Environment.Value.Production) {
