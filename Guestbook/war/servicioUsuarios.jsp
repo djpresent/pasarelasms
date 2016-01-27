@@ -8,6 +8,8 @@
 <html>
 <HEAD>
 
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  	<link rel="stylesheet" type="text/css" href="css/estilos.css">
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<SCRIPT type=text/javascript>
 	
@@ -67,93 +69,133 @@ ResultSet rs = conn.createStatement().executeQuery(
 %>
 
 
-<form  action="/asignarServicioUsuario">
+<nav class="navbar" >
+  	<div class="container-fluid">
+		<div class="navbar-header">
+			<a href="index.jsp"><img class="logo" src="imagenes/logo-analix-data.png"/></a>
+		</div>  
+		
+		<div class="navbar-nav navbar-right">
+			<a href="/cerrarSesion"><button type="button" class="btn btn-lg btn-default cerrarsesion">Cerrar sesión <span class="glyphicon glyphicon-log-out"></span></button></a>
+		</div>
+		<div class="navbar-nav navbar-right ">
+			<h4 class="msgbienvenida">Bienvenido usuario <%= userName %></h4>
+		</div>
+		
+	</div>	
+  	</nav>
+  	<div class="container-fluid">
+	  	<div class="row">
+			  	<div class="col-sm-3 col-md-2 sidebar"> 
+				    <ul class="nav nav-sidebar">
+						<li><a href="empresas.jsp">Empresas.</a></li>
+						<li ><a href="servicios.jsp">Servicios.</a></li>
+						<li><a href="usuarios.jsp">Usuarios.</a></li>
+						<li><a href="mensajeria.jsp">Mensajería.</a></li>
+						<li><a href="mensajeria.jsp">Reportes.</a></li>
+						<li><a href="/cerrarSesion">Cerrar Sesión.</a></li>
+				
+					</ul>
+				</div>
+		
+			<div class="col-sm-9 col-md-9 main">
+				<h1 class="page-header">Asignación de Servicios a Usuarios</h1>
+				<form  action="/asignarServicioUsuario">
 
-<div>Seleccione una empresa:
-	<select name=empresa id="empresa" > 
-	<% 
-	while (rs.next()) {
-	String empresa = rs.getString("nombre");
+				<div>Seleccione una empresa:
+					<select name=empresa id="empresa" > 
+					<% 
+					while (rs.next()) {
+					String empresa = rs.getString("nombre");
+					
+					if(!(session.getAttribute("empresa") == null)){
+							
+							if(empresa.equals(session.getAttribute("empresa"))){%>
+								<option value=<%= empresa %> selected ><%= empresa %></option>
+							<%}else{%>
+							<option value=<%= empresa %>><%= empresa %></option>
+					<%	
+							}
+						}else{%>
+						<option value=<%= empresa %>><%= empresa %></option>
+					<%}}
+					%>
+					</select><input type="submit" value="Continuar" name="btnContinuar" id="btnContinuar"/>
+					</div>
+				
+					<%
+						
+					
+						if(!(session.getAttribute("listaUsuarios") == null)){
+							
+						List<Usuario> lista= (List<Usuario>)session.getAttribute("listaUsuarios");
+						
+					%>
+							<div>Seleccione un usuario:
+							<select name=usuario id="usuario">
+								<% 
+								for( Usuario u:lista) {
+								%>
+									<option value=<%= u.getId() %>><%= u.getNombres() %></option>
+								<%
+									}
+								%>
+				    		</select> 
+							
+					<% 	
+						}
+					%>	
+					</div>
+					
+					<%
+						if(!(session.getAttribute("listaServicios") == null)){
+							
+						List<Servicio> listaS= (List<Servicio>)session.getAttribute("listaServicios");
+						
+					%>
+							<div>Seleccione un servicio:
+							<select name=servicio id="servicio">
+								<% 
+								for( Servicio ser:listaS) {
+								%>
+									<option value=<%= ser.getIdServicio() %>><%= ser.getDescripcion() %></option>
+								<%
+									}
+								%>
+				    		</select> 
+							
+					<% 	
+						}
+					%>	
+					</div>
+				    
+				    
+				
+				<div><input type="submit" value="Guardar" name="btnGuardar"/> </div>
+					<%
+				
+						conn.close();
+						
+						if(!(session.getAttribute("confirmacion") == null)){
+							if(session.getAttribute("confirmacion") == "1"){
+							%>
+								<div><h3>Servicio asignado exitosamente.</h3></div>
+							<%
+							}
+							}
+					
+					%>
+				
+				
+				  </form>
+			</div>	
 	
-	if(!(session.getAttribute("empresa") == null)){
-			
-			if(empresa.equals(session.getAttribute("empresa"))){%>
-				<option value=<%= empresa %> selected ><%= empresa %></option>
-			<%}else{%>
-			<option value=<%= empresa %>><%= empresa %></option>
-	<%	
-			}
-		}else{%>
-		<option value=<%= empresa %>><%= empresa %></option>
-	<%}}
-	%>
-	</select><input type="submit" value="Continuar" name="btnContinuar" id="btnContinuar"/>
+		</div>
 	</div>
-
-	<%
-		
 	
-		if(!(session.getAttribute("listaUsuarios") == null)){
-			
-		List<Usuario> lista= (List<Usuario>)session.getAttribute("listaUsuarios");
-		
-	%>
-			<div>Seleccione un usuario:
-			<select name=usuario id="usuario">
-				<% 
-				for( Usuario u:lista) {
-				%>
-					<option value=<%= u.getId() %>><%= u.getNombres() %></option>
-				<%
-					}
-				%>
-    		</select> 
-			
-	<% 	
-		}
-	%>	
-	</div>
-	
-	<%
-		if(!(session.getAttribute("listaServicios") == null)){
-			
-		List<Servicio> listaS= (List<Servicio>)session.getAttribute("listaServicios");
-		
-	%>
-			<div>Seleccione un servicio:
-			<select name=servicio id="servicio">
-				<% 
-				for( Servicio ser:listaS) {
-				%>
-					<option value=<%= ser.getIdServicio() %>><%= ser.getDescripcion() %></option>
-				<%
-					}
-				%>
-    		</select> 
-			
-	<% 	
-		}
-	%>	
-	</div>
-    
-    
-
-<div><input type="submit" value="Guardar" name="btnGuardar"/> </div>
-	<%
-
-		conn.close();
-		
-		if(!(session.getAttribute("confirmacion") == null)){
-			if(session.getAttribute("confirmacion") == "1"){
-			%>
-				<div><h3>Servicio asignado exitosamente.</h3></div>
-			<%
-			}
-			}
-	
-	%>
 
 
-  </form>
+
+
   </body>
 </html>
