@@ -3,6 +3,10 @@
 
 <html>
   <head>
+  
+  	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  	<link rel="stylesheet" type="text/css" href="css/estilos.css">
+   
 
 	<script type=text/javascript>
 	
@@ -141,56 +145,93 @@ for(Cookie cookie : cookies){
 }
 }
 %>
+
+<nav class="navbar" >
+  	<div class="container-fluid">
+		<div class="navbar-header">
+			<a href="index.jsp"><img class="logo" src="imagenes/logo-analix-data.png"/></a>
+		</div>  
+		
+		<div class="navbar-nav navbar-right">
+			<a href="/cerrarSesion"><button type="button" class="btn btn-lg btn-default cerrarsesion">Cerrar sesión <span class="glyphicon glyphicon-log-out"></span></button></a>
+		</div>
+		<div class="navbar-nav navbar-right ">
+			<h4 class="msgbienvenida">Bienvenido usuario <%= userName %></h4>
+		</div>
+		
+	</div>	
+  	</nav>
+  	<div class="container-fluid">
+	  	<div class="row">
+			  	<div class="col-sm-3 col-md-2 sidebar"> 
+				    <ul class="nav nav-sidebar">
+						<li><a href="empresas.jsp">Empresas.</a></li>
+						<li ><a href="servicios.jsp">Servicios.</a></li>
+						<li><a href="usuarios.jsp">Usuarios.</a></li>
+						<li><a href="mensajeria.jsp">Mensajería.</a></li>
+						<li><a href="mensajeria.jsp">Reportes.</a></li>
+						<li><a href="/cerrarSesion">Cerrar Sesión.</a></li>
+				
+					</ul>
+				</div>
+		
+			<div class="col-sm-9 col-md-9 main">
+				<h1 class="page-header">Servicio de Mensajería SMS</h1>
+				<table>
+			  		<tr>
+			  			<td>Opción 1:</td>
+						<td><input type="text" name="nombreArchivo" required="required" /></td>
+			  			<td><input type="file" name="archivo" onchange="handleFiles(this.files)" accept=".csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain" required="required"  /></td>
+					</tr>
+					<tr>
+			  				<td>Mensaje:</td>
+			  				<td>
+			  					<textarea cols="40" rows="5" name="mensaje" id="idTexto" required="required" onKeyDown="cuenta()" onKeyUp="cuenta()"></textarea>
+			  				</td>
+			  				<td>
+			  					<input type="button" onclick="agregarV(' [VARIABLE1] ')" value="Variable 1"></input></br>
+					  			<input type="button" onclick="agregarV(' [VARIABLE2] ')" value="Variable 2"></input></br>
+					  			<input type="button" onclick="agregarV(' [VARIABLE3] ')" value="Variable 3"></input></br>
+					  			<input type="button" onclick="agregarV(' [VARIABLE4] ')" value="Variable 4"></input></br>
+			  				</td>
+			  			</tr>
+			  			<tr>
+			  				<td>Caracteres:</td>
+			  				<td><input type="text" name=caracteres id="caracteres" size=4 value="160"></td>
+			  			</tr>
+			  	</table>
+			  	<form onSubmit="processData()" action="enviarSMS" method="post" >
+			  		<table>
+			  			<tr>
+			  				<td><input type="hidden" id="mensaje" name="txtmensaje" ></input></td>
+			  				<td><input type="submit" value="Enviar" /></td>
+			  			</tr>
+			  		</table>
+			  	</form>
+			  	
+			  	<%
+					if(!(session.getAttribute("codigo") == null)){
+						
+					String cod= session.getAttribute("codigo").toString();
+					String sms=session.getAttribute("sms").toString();
+					
+				%>
+					
+			                
+			                <div>
+			                    <h2><%= cod %></h2>
+			                    <h4><%= sms %></h4>
+			    		</div>
+						
+				<% 	
+					}
+				%>
+			</div>	
+	
+		</div>
+	</div>
   
-  	<table>
-  		<tr>
-  			<td>Opción 1:</td>
-			<td><input type="text" name="nombreArchivo" required="required" /></td>
-  			<td><input type="file" name="archivo" onchange="handleFiles(this.files)" accept=".csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain" required="required"  /></td>
-		</tr>
-		<tr>
-  				<td>Mensaje:</td>
-  				<td>
-  					<textarea cols="40" rows="5" name="mensaje" id="idTexto" required="required" onKeyDown="cuenta()" onKeyUp="cuenta()"></textarea>
-  				</td>
-  				<td>
-  					<input type="button" onclick="agregarV(' [VARIABLE1] ')" value="Variable 1"></input></br>
-		  			<input type="button" onclick="agregarV(' [VARIABLE2] ')" value="Variable 2"></input></br>
-		  			<input type="button" onclick="agregarV(' [VARIABLE3] ')" value="Variable 3"></input></br>
-		  			<input type="button" onclick="agregarV(' [VARIABLE4] ')" value="Variable 4"></input></br>
-  				</td>
-  			</tr>
-  			<tr>
-  				<td>Caracteres:</td>
-  				<td><input type="text" name=caracteres id="caracteres" size=4 value="160"></td>
-  			</tr>
-  	</table>
-  	<form onSubmit="processData()" action="enviarSMS" method="post" >
-  		<table>
-  			<tr>
-  				<td><input type="hidden" id="mensaje" name="txtmensaje" ></input></td>
-  				<td><input type="submit" value="Enviar" /></td>
-  			</tr>
-  		</table>
-  	</form>
   	
-  	<%
-		if(!(session.getAttribute("codigo") == null)){
-			
-		String cod= session.getAttribute("codigo").toString();
-		String sms=session.getAttribute("sms").toString();
-		
-	%>
-		
-                
-                <div>
-                    <h2><%= cod %></h2>
-                    <h4><%= sms %></h4>
-    		</div>
-			
-	<% 	
-		}
-	%>
   	
   </body>
 </html>
