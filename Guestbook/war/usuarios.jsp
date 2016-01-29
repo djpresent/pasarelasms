@@ -146,10 +146,6 @@ ResultSet rs = conn.createStatement().executeQuery(
 	  	<div class="row">
 			  	<div class="col-sm-3 col-md-2 sidebar"> 
 				    <ul class="nav nav-sidebar">
-						<li><a href="empresas.jsp">Empresas</a></li>
-						<li ><a href="servicios.jsp">Servicios</a></li>
-						<li><a href="usuarios.jsp">Usuarios</a></li>
-						
 						<%  
 							if(u != null){
 								
@@ -157,18 +153,31 @@ ResultSet rs = conn.createStatement().executeQuery(
 								
 								if(tipo == 1){ 
 								%>
+									<li><a href="empresas.jsp">Empresas</a></li>
+									<li ><a href="servicios.jsp">Servicios</a></li>
+									<li><a href="usuarios.jsp">Usuarios</a></li>
 									<li ><a href="servicioEmpresa.jsp">Servcios a empresas</a></li>
 									<li><a href="servicioUsuarios.jsp">Servicios a Usuarios</a></li>
 								<%}
 								
 								if(tipo == 2){ 
 									%>
+										<li><a href="empresas.jsp">Empresa</a></li>
+										<li ><a href="servicios.jsp">Servicios</a></li>
+										<li><a href="usuarios.jsp">Usuarios</a></li>
 										<li><a href="servicioUsuarios.jsp">Servicios a Usuarios</a></li>
+									<%}
+								
+								if(tipo == 3){ 
+									%>
+										<li><a href="empresas.jsp">Empresa</a></li>
+										<li ><a href="servicios.jsp">Servicios</a></li>
+										<li><a href="usuarios.jsp">Usuario</a></li>
+								
 									<%}
 								
 							}
 						%>
-						
 						<li><a href="mensajeria.jsp">Mensajería</a></li>
 						<li><a href="mensajeria.jsp">Reportes</a></li>
 						<li><a href="/cerrarSesion">Cerrar Sesión</a></li>

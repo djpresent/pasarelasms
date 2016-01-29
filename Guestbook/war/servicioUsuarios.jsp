@@ -99,13 +99,27 @@ ResultSet rs = conn.createStatement().executeQuery(
 								
 								if(tipo == 1){ 
 								%>
+									<li><a href="empresas.jsp">Empresas</a></li>
+									<li ><a href="servicios.jsp">Servicios</a></li>
+									<li><a href="usuarios.jsp">Usuarios</a></li>
 									<li ><a href="servicioEmpresa.jsp">Servcios a empresas</a></li>
 									<li><a href="servicioUsuarios.jsp">Servicios a Usuarios</a></li>
 								<%}
 								
 								if(tipo == 2){ 
 									%>
+										<li><a href="empresas.jsp">Empresa</a></li>
+										<li ><a href="servicios.jsp">Servicios</a></li>
+										<li><a href="usuarios.jsp">Usuarios</a></li>
 										<li><a href="servicioUsuarios.jsp">Servicios a Usuarios</a></li>
+									<%}
+								
+								if(tipo == 3){ 
+									%>
+										<li><a href="empresas.jsp">Empresa</a></li>
+										<li ><a href="servicios.jsp">Servicios</a></li>
+										<li><a href="usuarios.jsp">Usuario</a></li>
+								
 									<%}
 								
 							}
