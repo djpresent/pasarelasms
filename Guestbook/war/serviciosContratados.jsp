@@ -3,23 +3,26 @@
 <%@ page import="java.sql.*" %>
 <%@ page import="com.google.appengine.api.utils.SystemProperty" %>
 <%@ page import="com.analixdata.modelos.Usuario" %>
-<%@ page import="com.analixdata.modelos.Servicio" %>
 
 <html>
 <HEAD>
-
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
   	<link rel="stylesheet" type="text/css" href="css/estilos.css">
+
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<SCRIPT type=text/javascript>
 	
-	
-	$(function() {
-	    $('#empresa').on('change', function(event) {
-	    	document.getElementById("btnContinuar").click();
-	    });
-	});
-	
+			function obtenerDatos(el) {
+				document.getElementById("idServicio").value= el.parentNode.parentNode.cells[0].textContent;
+			document.getElementById("servicio").value= el.parentNode.parentNode.cells[1].textContent;
+			document.getElementById("limite").value = el.parentNode.parentNode.cells[3].textContent;
+			document.getElementById("costo").value = el.parentNode.parentNode.cells[4].textContent;
+
+			if(el.parentNode.parentNode.cells[8].textContent == "Activo")
+			 	document.getElementById("estado").value = 1 ;
+			else
+				document.getElementById("estado").value = 0 ;
+			}
 		
 		
 	</SCRIPT> 
@@ -45,11 +48,10 @@ String sessionID = null;
 Cookie[] cookies = request.getCookies();
 if(cookies !=null){
 for(Cookie cookie : cookies){
-if(cookie.getName().equals("usuario")) 
-	userName = cookie.getValue();
+  if(cookie.getName().equals("usuario")) 
+  	userName = cookie.getValue();
 }
 }
-
 
 String url = null;
 if (SystemProperty.environment.value() ==
@@ -65,7 +67,7 @@ if (SystemProperty.environment.value() ==
 
 Connection conn = DriverManager.getConnection(url);
 ResultSet rs = conn.createStatement().executeQuery(
-    "SELECT * FROM empresa WHERE estado=1");
+    "SELECT servicio_empresa.idservicio,descripcion,nombre,limite,costotransaccion,servicio_empresa.estado FROM pasarelasms.servicio_empresa,pasarelasms.servicio,pasarelasms.empresa WHERE servicio_empresa.idservicio=servicio.idservicio and servicio_empresa.idempresa=empresa.idempresa and empresa.estado=1;");
 %>
 
 
@@ -88,9 +90,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 	  	<div class="row">
 			  	<div class="col-sm-3 col-md-2 sidebar"> 
 				    <ul class="nav nav-sidebar">
-			
-						
-						<%  
+											<%  
 							if(u != null){
 								
 								int tipo=u.getTipo().getId();
@@ -122,111 +122,59 @@ ResultSet rs = conn.createStatement().executeQuery(
 								
 							}
 						%>
-						
-						<li><a href="mensajeria.jsp">Mensajería.</a></li>
-						<li><a href="mensajeria.jsp">Reportes.</a></li>
-						<li><a href="/cerrarSesion">Cerrar Sesión.</a></li>
+						<li><a href="mensajeria.jsp">Mensajería</a></li>
+						<li><a href="mensajeria.jsp">Reportes</a></li>
+						<li><a href="/cerrarSesion">Cerrar Sesión</a></li>
 				
 					</ul>
 				</div>
 		
 			<div class="col-sm-9 col-md-9 main">
-				<h1 class="page-header">Asignación de Servicios a Usuarios</h1>
-				<form  action="/asignarServicioUsuario">
+				<h1 class="page-header">Servicios Contratados</h1>
+				<table style="border: 1px solid black" id="datosServiciosC">
+				<tbody>
+				<tr>
+				<th style="background-color: #CCFFCC; margin: 5px">ID Servicio</th>
+				<th style="background-color: #CCFFCC; margin: 5px">Descripción</th>
+				<th style="background-color: #CCFFCC; margin: 5px">Límite mensual</th>
+				<th style="background-color: #CCFFCC; margin: 5px">Costo / Transacción</th>
+				<th style="background-color: #CCFFCC; margin: 5px">Estado</th>
+				</tr>
+				
+				<%
+				while (rs.next()) {
+				    int id =rs.getInt("idservicio");
+					String servicio = rs.getString("descripcion");
+				    int limite = rs.getInt("limite");
+				    float costo = rs.getFloat("costotransaccion");
+				    int estado = rs.getInt("estado"); 
+				    String est="";
+				    if(estado==1)est="Activo";else est="Inactivo";
+				   
+				 %>
+				<tr>
+					<td><%= id %></td>
+					<td><%= servicio %></td>
+					<td><%= limite %></td>
+					<td><%= costo %></td>
+					<td><%= est %></td>
+				</tr>
+				<%
+				}
+					conn.close();
+					%>
 
-				<div>Seleccione una empresa:
-					<select name=empresa id="empresa" > 
-					<% 
-					while (rs.next()) {
-					String empresa = rs.getString("nombre");
+				
+				</tbody>
+				</table>
+				
+				
 					
-					if(!(session.getAttribute("empresa") == null)){
-							
-							if(empresa.equals(session.getAttribute("empresa"))){%>
-								<option value=<%= empresa %> selected ><%= empresa %></option>
-							<%}else{%>
-							<option value=<%= empresa %>><%= empresa %></option>
-					<%	
-							}
-						}else{%>
-						<option value=<%= empresa %>><%= empresa %></option>
-					<%}}
-					%>
-					</select><input type="submit" value="Continuar" name="btnContinuar" id="btnContinuar"/>
-					</div>
-				
-					<%
-						
-					
-						if(!(session.getAttribute("listaUsuarios") == null)){
-							
-						List<Usuario> lista= (List<Usuario>)session.getAttribute("listaUsuarios");
-						
-					%>
-							<div>Seleccione un usuario:
-							<select name=usuario id="usuario">
-								<% 
-								for( Usuario usuario:lista) {
-								%>
-									<option value=<%= usuario.getId() %>><%= usuario.getNombres() %></option>
-								<%
-									}
-								%>
-				    		</select> 
-							
-					<% 	
-						}
-					%>	
-					</div>
-					
-					<%
-						if(!(session.getAttribute("listaServicios") == null)){
-							
-						List<Servicio> listaS= (List<Servicio>)session.getAttribute("listaServicios");
-						
-					%>
-							<div>Seleccione un servicio:
-							<select name=servicio id="servicio">
-								<% 
-								for( Servicio ser:listaS) {
-								%>
-									<option value=<%= ser.getIdServicio() %>><%= ser.getDescripcion() %></option>
-								<%
-									}
-								%>
-				    		</select> 
-							
-					<% 	
-						}
-					%>	
-					</div>
-				    
-				    
-				
-				<div><input type="submit" value="Guardar" name="btnGuardar"/> </div>
-					<%
-				
-						conn.close();
-						
-						if(!(session.getAttribute("confirmacion") == null)){
-							if(session.getAttribute("confirmacion") == "1"){
-							%>
-								<div><h3>Servicio asignado exitosamente.</h3></div>
-							<%
-							}
-							}
-					
-					%>
-				
-				
-				  </form>
+
 			</div>	
 	
 		</div>
 	</div>
-	
-
-
 
 
   </body>

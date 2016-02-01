@@ -29,6 +29,9 @@
 		function habilitar(){
 			
 			document.getElementById("formEmpresa").style.display="block";
+			document.getElementById("dirEmpresa").value=document.getElementById("valorDireccion").innerHTML;
+			document.getElementById("telEmpresa").value=document.getElementById("valorTelefono").innerHTML;
+			document.getElementById("conEmpresa").value=document.getElementById("valorContacto").innerHTML;
 
 		}
 	
@@ -119,7 +122,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 								if(tipo == 2){ 
 									%>
 										<li><a href="empresa.jsp">Empresa</a></li>
-										<li ><a href="servicios.jsp">Servicios</a></li>
+										<li ><a href="serviciosContratados.jsp">Servicios</a></li>
 										<li><a href="usuarios.jsp">Usuarios</a></li>
 										<li><a href="servicioUsuarios.jsp">Servicios a Usuarios</a></li>
 									<%}
@@ -127,7 +130,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 								if(tipo == 3){ 
 									%>
 										<li><a href="empresa.jsp">Empresa</a></li>
-										<li ><a href="servicios.jsp">Servicios</a></li>
+										<li ><a href="serviciosContratados.jsp">Servicios</a></li>
 										<li><a href="usuarios.jsp">Usuario</a></li>
 								
 									<%}
@@ -147,9 +150,9 @@ ResultSet rs = conn.createStatement().executeQuery(
 				
 				<div class="datosEmpresa">
 				<div><h4>Nombre: </h4> <h5><%= u.getEmpresa().getNombre() %></h5></div>
-				<div><h4>Dirección: </h4> <h5><%= u.getEmpresa().getDireccion() %></h5></div>
-				<div><h4>Teléfono: </h4> <h5><%= u.getEmpresa().getTelefono() %></h5></div>
-				<div><h4>Contacto: </h4> <h5><%= u.getEmpresa().getContacto() %></h5></div>
+				<div><h4>Dirección: </h4> <h5 id="valorDireccion"><%= u.getEmpresa().getDireccion() %></h5></div>
+				<div><h4>Teléfono: </h4> <h5 id="valorTelefono"><%= u.getEmpresa().getTelefono() %></h5></div>
+				<div><h4>Contacto: </h4> <h5 id="valorContacto"><%= u.getEmpresa().getContacto() %></h5></div>
 				
 			<% 
 			int estado=u.getEmpresa().getEstado();
@@ -164,9 +167,9 @@ ResultSet rs = conn.createStatement().executeQuery(
 
 						<form  onsubmit="return validar(this);" action="/empresa" method="post" style="display:none" id="formEmpresa">
 							
-						    <div>Dirección: <input type="text" name="direccion" id="direccionEmpresa" required="required"></input></div>
-						    <div>Teléfono: <input type="tel" name="telefono" id="telefonoEmpresa" required="required"></input></div>
-						    <div>Contacto: <input type="text" name="contacto" id="contactoEmpresa" required="required"></input></div>
+						    <div>Dirección: <input type="text" name="direccion" id="dirEmpresa" required="required"></input></div>
+						    <div>Teléfono: <input type="tel" name="telefono" id="telEmpresa" required="required"></input></div>
+						    <div>Contacto: <input type="text" name="contacto" id="conEmpresa" required="required"></input></div>
 						    <div><input type="submit" value="Guardar"/><input type="reset" value="Cancelar"/></div>
 						  </form>
 						  
