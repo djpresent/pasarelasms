@@ -168,9 +168,9 @@ ResultSet rs = conn.createStatement().executeQuery(
 							<div>Seleccione un usuario:
 							<select name=usuario id="usuario">
 								<% 
-								for( Usuario u:lista) {
+								for( Usuario usuario:lista) {
 								%>
-									<option value=<%= u.getId() %>><%= u.getNombres() %></option>
+									<option value=<%= usuario.getId() %>><%= usuario.getNombres() %></option>
 								<%
 									}
 								%>
