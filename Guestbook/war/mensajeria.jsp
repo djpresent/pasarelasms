@@ -220,7 +220,7 @@ for(Cookie cookie : cookies){
 			  				<td><input type="text" name=caracteres id="caracteres" size=4 value="160"></td>
 			  			</tr>
 			  	</table>
-			  	<form onSubmit="processData()" action="enviarSMS" method="post" >
+			  	<form  action="enviarSMS" method="get" >
 			  		<table>
 			  			<tr>
 			  				<td><input type="hidden" id="mensaje" name="txtmensaje" ></input></td>
@@ -233,14 +233,14 @@ for(Cookie cookie : cookies){
 					if(!(session.getAttribute("codigo") == null)){
 						
 					String cod= session.getAttribute("codigo").toString();
-					String sms=session.getAttribute("sms").toString();
+					
 					
 				%>
 					
 			                
 			                <div>
 			                    <h2><%= cod %></h2>
-			                    <h4><%= sms %></h4>
+			                   
 			    		</div>
 						
 				<% 	
