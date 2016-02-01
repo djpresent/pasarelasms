@@ -31,8 +31,11 @@ session = request.getSession();
   <div class="container-fluid">
 	<div class="row">
 		<div class="col-xs-6 col-md-4 col-xs-offset-3 col-md-offset-4">
+		
+		<img class="logoInicio" src="imagenes/logo-analix-data.png"/>
+		
+		<h2 class="form-signin-heading">Bienvenido, por favor inicie sesión</h2>
 	    <form action="/validar" method="post" class="form-signin" onsubmit="document.getElementById('txtPassword').value = hex_md5(document.getElementById('txtPasswordT').value)">
-	    	<h2 class="form-signin-heading">Bienvenido, por favor inicie sesión</h2>
 	    	<label for="txtEmail" class="sr-only">E-mail</label>
 			<input type="email" class="form-control" id="txtEmail" name="txtEmail" placeholder="E-mail" required="required" autofocus/>
 			<label for="txtPassword" class="sr-only">Contraseña</label>
