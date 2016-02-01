@@ -7,7 +7,7 @@ import javax.servlet.http.*;
 
 import com.google.appengine.api.utils.SystemProperty;
 
-public class EmpresaServlet extends HttpServlet {
+public class EmpresasServlet extends HttpServlet {
 	
 	@Override
 	  public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -91,7 +91,7 @@ public class EmpresaServlet extends HttpServlet {
 	    } catch (SQLException e) {
 	      e.printStackTrace();
 	    }
-	    resp.sendRedirect("/empresa.jsp");
+	    resp.sendRedirect("/empresas.jsp");
 	  }
 
 }

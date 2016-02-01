@@ -173,7 +173,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 						    }
 						 %>
 						
-						<form  onsubmit="return validar(this);" action="/empresa" method="post">
+						<form  onsubmit="return validar(this);" action="/empresas" method="post">
 							<div><input type="hidden" name="identificador" id="idEmpresa" ></input></div>
 						    <div>Nombre: <input type="text" name="nombre" id="nombreEmpresa" required="required"></input></div>
 						    <div>Dirección: <input type="text" name="direccion" id="direccionEmpresa" required="required"></input></div>

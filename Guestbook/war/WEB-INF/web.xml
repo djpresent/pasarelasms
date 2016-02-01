@@ -6,6 +6,15 @@ xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
 http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     
     <servlet>
+        <servlet-name>empresas</servlet-name>
+        <servlet-class>com.analixdata.controladores.EmpresasServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>empresas</servlet-name>
+        <url-pattern>/empresas</url-pattern>
+    </servlet-mapping>
+    
+    <servlet>
         <servlet-name>empresa</servlet-name>
         <servlet-class>com.analixdata.controladores.EmpresaServlet</servlet-class>
     </servlet>
