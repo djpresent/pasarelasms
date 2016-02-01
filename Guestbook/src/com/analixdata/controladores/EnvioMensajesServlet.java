@@ -2,17 +2,16 @@ package com.analixdata.controladores;
 
 import java.io.IOException;
 
-import javax.servlet.RequestDispatcher;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.BufferedReader;
-import java.io.InputStream;
+
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
+
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -101,9 +100,9 @@ public class EnvioMensajesServlet extends HttpServlet {
 		
 		String charset = "UTF-8";
 		String numero="593992845597";
-        //String mensaje = URLEncoder.encode("Mensaje para geo,mensaje para alina", charset);
+        String mensaje = URLEncoder.encode("Mensaje de prueba para Geovanny by ANALIXDATA", charset);
      
-        String urlEnvio = "http://envia-movil.com/Api/Envios?mensaje=Este es un mensaje de preuba&numero="+numero;
+        String urlEnvio = "http://envia-movil.com/Api/Envios?mensaje="+mensaje+"&numero="+numero;
 		
 		URL obj = new URL(urlEnvio);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -136,7 +135,7 @@ public class EnvioMensajesServlet extends HttpServlet {
     		Usuario u = (Usuario)session.getAttribute("usuario");
     		
     		//print result
-    		System.out.println(response.toString());
+    		//System.out.println(response.toString());
 
     		///En caso de estar todo bien.. almacena en la basee
     		
@@ -161,13 +160,13 @@ public class EnvioMensajesServlet extends HttpServlet {
     	      return;
     	    }
 
-    	   /* try {
+    	    try {
 				Connection conn = DriverManager.getConnection(url);
 				
 				String statement = "INSERT INTO transaccion (fecha,hora,codigoretorno,celular,mensaje,idservicio,idusuario,idempresa) VALUES( ? , ? , ? , ? , ? , ? , ? , ? )";
 		          PreparedStatement stmt = conn.prepareStatement(statement);
-		          stmt.setString(1, new SimpleDateFormat("dd-MM-yyyy").format(Calendar.getInstance().getTime()));
-		          stmt.setString(2, new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()) );
+		          stmt.setString(1, new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()).toString());
+		          stmt.setString(2, new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()).toString() );
 		          stmt.setString(3, "1");
 		          stmt.setString(4, numero);
 		          stmt.setString(5, mensaje);
@@ -176,8 +175,9 @@ public class EnvioMensajesServlet extends HttpServlet {
 		          stmt.setInt(8, u.getEmpresa().getIdEmpresa());
 		          
 		          int success = 2;
-		          
+		          System.out.println(stmt);
 		          success = stmt.executeUpdate();
+		         
 		          
 		          
 				
@@ -185,7 +185,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-    	    */
+    	    
     	    session.setAttribute("codigo", inputLine); 
     		resp.sendRedirect("mensajeria.jsp");
     	    

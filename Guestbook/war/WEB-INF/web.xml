@@ -99,6 +99,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
         <url-pattern>/EnvioSms</url-pattern>
     </servlet-mapping>
     
+        <servlet>
+        <servlet-name>reporteTransacciones</servlet-name>
+        <servlet-class>com.analixdata.controladores.ReportesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>reporteTransacciones</servlet-name>
+        <url-pattern>/reporteTransacciones</url-pattern>
+    </servlet-mapping>
+    
+    
     
     <welcome-file-list>
         <welcome-file>login.jsp</welcome-file>
