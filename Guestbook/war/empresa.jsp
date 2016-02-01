@@ -14,34 +14,24 @@
 	<SCRIPT type=text/javascript>
 		function validar(formObj){
 		
-			if (formObj.nombre.value == ""){
-			alert("Datos imcompletos");
-			return false;
-			}else if (formObj.direccion.value == ""){
+			if (formObj.direccion.value == ""){
 				alert("Datos imcompletos");
 				return false;
 				}else if (formObj.telefono.value == ""){
 					alert("Datos imcompletos");
 					return false;
-					}else if (formObj.telefono.value == ""){
+					}else if (formObj.contacto.value == ""){
 						alert("Datos imcompletos");
 						return false;}else return true;
 			}
 		
-		function obtenerDatos(el) {
-			document.getElementById("idEmpresa").value = el.parentNode.parentNode.cells[0].textContent;
-			document.getElementById("nombreEmpresa").value= el.parentNode.parentNode.cells[1].textContent;
-			document.getElementById("direccionEmpresa").value = el.parentNode.parentNode.cells[2].textContent;
-			document.getElementById("telefonoEmpresa").value = el.parentNode.parentNode.cells[3].textContent;
-			document.getElementById("contactoEmpresa").value = el.parentNode.parentNode.cells[4].textContent;
+		
+		function habilitar(){
 			
-			if(el.parentNode.parentNode.cells[5].textContent == "Activo")
-			 	document.getElementById("estadoEmpresa").value = 1 ;
-			else
-				document.getElementById("estadoEmpresa").value = 0 ;
-			   
-			   
-			}
+			document.getElementById("formEmpresa").style.display="block";
+
+		}
+	
 		
 		
 	</SCRIPT> 
@@ -128,7 +118,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 								
 								if(tipo == 2){ 
 									%>
-										<li><a href="empresas.jsp">Empresa</a></li>
+										<li><a href="empresa.jsp">Empresa</a></li>
 										<li ><a href="servicios.jsp">Servicios</a></li>
 										<li><a href="usuarios.jsp">Usuarios</a></li>
 										<li><a href="servicioUsuarios.jsp">Servicios a Usuarios</a></li>
@@ -136,13 +126,13 @@ ResultSet rs = conn.createStatement().executeQuery(
 								
 								if(tipo == 3){ 
 									%>
-										<li><a href="empresas.jsp">Empresa</a></li>
+										<li><a href="empresa.jsp">Empresa</a></li>
 										<li ><a href="servicios.jsp">Servicios</a></li>
 										<li><a href="usuarios.jsp">Usuario</a></li>
 								
 									<%}
 								
-							}
+							
 						%>
 						
 						<li><a href="mensajeria.jsp">Mensajería</a></li>
@@ -155,44 +145,38 @@ ResultSet rs = conn.createStatement().executeQuery(
 			<div class="col-sm-9 col-md-9 main">
 				<h1 class="page-header">Datos Empresariales</h1>
 				
-				<div><h4>Nombre: </h4> <%= u.getEmpresa().getNombre() %></div>
-				<div><h4>Dirección: </h4> <%= u.getEmpresa().getNombre() %></div>
-				<div><h4>Teléfono: </h4> <%= u.getEmpresa().getNombre() %></div>
-				<div><h4>Contacto: </h4> <%= u.getEmpresa().getNombre() %></div>
+				<div class="datosEmpresa">
+				<div><h4>Nombre: </h4> <h5><%= u.getEmpresa().getNombre() %></h5></div>
+				<div><h4>Dirección: </h4> <h5><%= u.getEmpresa().getDireccion() %></h5></div>
+				<div><h4>Teléfono: </h4> <h5><%= u.getEmpresa().getTelefono() %></h5></div>
+				<div><h4>Contacto: </h4> <h5><%= u.getEmpresa().getContacto() %></h5></div>
 				
-						<%
-						while (rs.next()) {
-						    int id =rs.getInt("idempresa");
-							String nombre = rs.getString("nombre");
-						    String direccion = rs.getString("direccion");
-						    String telefono = rs.getString("telefono");
-						    String contacto = rs.getString("contacto");
-						    int estado = rs.getInt("estado");
-						    String est="";
-						    if(estado==1){est="Activo";}else{est="Inactivo";}
-						    }
-						 %>
+			<% 
+			int estado=u.getEmpresa().getEstado();
+			String est="";
+		    if(estado==1){est="Activo";}else{est="Inactivo";}
+			%>
+				<div><h4>Estado: </h4><h5> <%= est %></h5></div>
+				</div>
 						
-						<form  onsubmit="return validar(this);" action="/empresas" method="post">
-							<div><input type="hidden" name="identificador" id="idEmpresa" ></input></div>
-						    <div>Nombre: <input type="text" name="nombre" id="nombreEmpresa" required="required"></input></div>
+			<% if(u.getTipo().getId() == 2){ %>	
+				<button value="Editar" onclick="habilitar()">Editar</button>
+
+						<form  onsubmit="return validar(this);" action="/empresa" method="post" style="display:none" id="formEmpresa">
+							
 						    <div>Dirección: <input type="text" name="direccion" id="direccionEmpresa" required="required"></input></div>
 						    <div>Teléfono: <input type="tel" name="telefono" id="telefonoEmpresa" required="required"></input></div>
 						    <div>Contacto: <input type="text" name="contacto" id="contactoEmpresa" required="required"></input></div>
-						    <div>Estado:
-						    	<select name=estado id="estadoEmpresa">
-						    		<option seleted value=1>Activo</option>
-						    		<option value=0>Inactivo</option>
-						    		</select> 
-							</div>
 						    <div><input type="submit" value="Guardar"/><input type="reset" value="Cancelar"/></div>
 						  </form>
+						  
+			 <% } %>
 			</div>	
 	
 		</div>
 	</div>
 
-
+<%} %>
 
   </body>
 </html>

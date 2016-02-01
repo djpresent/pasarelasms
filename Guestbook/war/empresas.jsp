@@ -128,7 +128,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 								
 								if(tipo == 2){ 
 									%>
-										<li><a href="empresas.jsp">Empresa</a></li>
+										<li><a href="empresa.jsp">Empresa</a></li>
 										<li ><a href="servicios.jsp">Servicios</a></li>
 										<li><a href="usuarios.jsp">Usuarios</a></li>
 										<li><a href="servicioUsuarios.jsp">Servicios a Usuarios</a></li>
@@ -136,7 +136,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 								
 								if(tipo == 3){ 
 									%>
-										<li><a href="empresas.jsp">Empresa</a></li>
+										<li><a href="empresa.jsp">Empresa</a></li>
 										<li ><a href="servicios.jsp">Servicios</a></li>
 										<li><a href="usuarios.jsp">Usuario</a></li>
 								
@@ -194,7 +194,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 						</table>
 						
 						<p><strong>DATOS DE LA EMPRESA</strong></p>
-						<form  onsubmit="return validar(this);" action="/empresa" method="post">
+						<form  onsubmit="return validar(this);" action="/empresas" method="post">
 							<div><input type="hidden" name="identificador" id="idEmpresa" ></input></div>
 						    <div>Nombre: <input type="text" name="nombre" id="nombreEmpresa" required="required"></input></div>
 						    <div>Dirección: <input type="text" name="direccion" id="direccionEmpresa" required="required"></input></div>

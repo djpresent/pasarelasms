@@ -75,7 +75,7 @@
 								
 								if(tipo == 2){ 
 									%>
-										<li><a href="empresas.jsp">Empresa</a></li>
+										<li><a href="empresa.jsp">Empresa</a></li>
 										<li ><a href="servicios.jsp">Servicios</a></li>
 										<li><a href="usuarios.jsp">Usuarios</a></li>
 										<li><a href="servicioUsuarios.jsp">Servicios a Usuarios</a></li>
@@ -83,7 +83,7 @@
 								
 								if(tipo == 3){ 
 									%>
-										<li><a href="empresas.jsp">Empresa</a></li>
+										<li><a href="empresa.jsp">Empresa</a></li>
 										<li ><a href="servicios.jsp">Servicios</a></li>
 										<li><a href="usuarios.jsp">Usuario</a></li>
 								
