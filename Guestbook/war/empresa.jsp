@@ -156,6 +156,9 @@ ResultSet rs = conn.createStatement().executeQuery(
 				<h1 class="page-header">Datos Empresariales</h1>
 				
 				<div><h4>Nombre: </h4> <%= u.getEmpresa().getNombre() %></div>
+				<div><h4>Dirección: </h4> <%= u.getEmpresa().getNombre() %></div>
+				<div><h4>Teléfono: </h4> <%= u.getEmpresa().getNombre() %></div>
+				<div><h4>Contacto: </h4> <%= u.getEmpresa().getNombre() %></div>
 				
 						<%
 						while (rs.next()) {

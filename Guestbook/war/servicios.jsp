@@ -83,10 +83,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 	  	<div class="row">
 			  	<div class="col-sm-3 col-md-2 sidebar"> 
 				    <ul class="nav nav-sidebar">
-						<li><a href="empresas.jsp">Empresas</a></li>
-						<li ><a href="servicios.jsp">Servicios</a></li>
-						<li><a href="usuarios.jsp">Usuarios</a></li>
-						
+				
 											<%  
 							if(u != null){
 								

@@ -32,9 +32,9 @@
 //allow access only if session exists
 
 session = request.getSession();
-	Usuario us = (Usuario)session.getAttribute("usuario");
+	Usuario u = (Usuario)session.getAttribute("usuario");
 	
-	if (us==null)
+	if (u==null)
 	{
 		
 		session.setAttribute("error", "error");
