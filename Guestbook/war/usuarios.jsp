@@ -43,7 +43,7 @@
 			document.getElementById('divContrasena').style.display = 'block';
 			document.getElementById('divContrasenaC').style.display = 'block';
 			document.getElementById('passwordUsuario').value = hex_md5(document.getElementById('password').value);
-			alert(document.getElementById('passwordUsuario').value);
+			
 			return true;
 		      }
 		   }
@@ -121,10 +121,23 @@ if (SystemProperty.environment.value() ==
 }
 
 Connection conn = DriverManager.getConnection(url);
-ResultSet rs = conn.createStatement().executeQuery(
-    "SELECT idusuario,cedula,nombres,apellidos,cargo,email,usuario.telefono,password,descripcion,nombre,usuario.estado FROM pasarelasms.usuario,pasarelasms.tipo,pasarelasms.empresa WHERE usuario.idtipo=tipo.idtipo and usuario.idempresa=empresa.idempresa;");
-%>
+ResultSet rs = null;
 
+if(u.getTipo().getId() == 1){
+	rs=conn.createStatement().executeQuery(
+    "SELECT idusuario,cedula,nombres,apellidos,cargo,email,usuario.telefono,password,descripcion,nombre,usuario.estado FROM pasarelasms.usuario,pasarelasms.tipo,pasarelasms.empresa WHERE usuario.idtipo=tipo.idtipo and usuario.idempresa=empresa.idempresa and usuario.idtipo >= "+u.getTipo().getId()+";");
+}
+
+
+
+if(u.getTipo().getId() == 2){
+	int idempresa = u.getEmpresa().getIdEmpresa();
+	rs=conn.createStatement().executeQuery(
+    "SELECT idusuario,cedula,nombres,apellidos,cargo,email,usuario.telefono,password,descripcion,nombre,usuario.estado FROM pasarelasms.usuario,pasarelasms.tipo,pasarelasms.empresa WHERE usuario.idtipo=tipo.idtipo and usuario.idempresa=empresa.idempresa and usuario.idempresa="+idempresa+" and usuario.idtipo >= "+u.getTipo().getId()+";");
+}
+
+
+%>
 
 
 <nav class="navbar" >
@@ -265,31 +278,42 @@ ResultSet rs = conn.createStatement().executeQuery(
 				    	<select name=tipo id="tipoUsuario">
 				    		<% 
 					while (rs.next()) {
+						
+					int idtipo = rs.getInt("idtipo");	
+					if(idtipo >= u.getTipo().getId()){
 					String tipoU = rs.getString("descripcion");%>
 						<option value=<%= tipoU %>><%= tipoU %></option>
-					<%}%>
+					<%}}%>
 				    		</select> 
 					</div>
 					
+					<div>
+					<%
 					
-					<%rs = conn.createStatement().executeQuery("SELECT * FROM empresa where estado=1");%>
+					rs = conn.createStatement().executeQuery("SELECT * FROM empresa where estado=1");
+					if(u.getTipo().getId() == 1){
+					%>
 					
+					Empresa:
 					
-					<div>Empresa:
 					<select name=empresa id="empresaUsuario">
 					<% 
 					while (rs.next()) {
 					String empresa = rs.getString("nombre");%>
 						<option value=<%= empresa %>><%= empresa %></option>
-					<%}%>
+					<%}	%>
 					</select>
-					</div>
+					
 					
 				    
 					<%
+					}else{%>
+						<input name="empresa" type="hidden" value="<%= u.getEmpresa().getNombre() %>"/>
+						
+					<%}
 					conn.close();
 					%>
-					
+					</div>
 				    <div><input type="submit" value="Guardar"/>
 				    <input type="reset" value="Cancelar"/></div>
 				  </form>

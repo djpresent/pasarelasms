@@ -6,29 +6,42 @@
 
 <html>
 <HEAD>
-	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
-  	<link rel="stylesheet" type="text/css" href="css/estilos.css">
 
+ 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+  	<link rel="stylesheet" type="text/css" href="css/estilos.css">
+  	
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<SCRIPT type=text/javascript>
-	
-			function obtenerDatos(el) {
-				document.getElementById("idServicio").value= el.parentNode.parentNode.cells[0].textContent;
-			document.getElementById("servicio").value= el.parentNode.parentNode.cells[1].textContent;
-			document.getElementById("limite").value = el.parentNode.parentNode.cells[3].textContent;
-			document.getElementById("costo").value = el.parentNode.parentNode.cells[4].textContent;
-
-			if(el.parentNode.parentNode.cells[8].textContent == "Activo")
-			 	document.getElementById("estado").value = 1 ;
-			else
-				document.getElementById("estado").value = 0 ;
+		function validar(formObj){
+		
+			if (formObj.direccion.value == ""){
+				alert("Datos imcompletos");
+				return false;
+				}else if (formObj.telefono.value == ""){
+					alert("Datos imcompletos");
+					return false;
+					}else if (formObj.contacto.value == ""){
+						alert("Datos imcompletos");
+						return false;}else return true;
 			}
+		
+		
+		function habilitar(){
+			
+			document.getElementById("formUsuario").style.display="block";
+			document.getElementById("dirEmpresa").value=document.getElementById("valorDireccion").innerHTML;
+			document.getElementById("telEmpresa").value=document.getElementById("valorTelefono").innerHTML;
+			document.getElementById("conEmpresa").value=document.getElementById("valorContacto").innerHTML;
+
+		}
+	
 		
 		
 	</SCRIPT> 
    </HEAD>
 
   <body>
+  
 
 <%
 
@@ -53,6 +66,8 @@ for(Cookie cookie : cookies){
 }
 }
 
+
+
 String url = null;
 if (SystemProperty.environment.value() ==
     SystemProperty.Environment.Value.Production) {
@@ -65,10 +80,9 @@ if (SystemProperty.environment.value() ==
   url = "jdbc:mysql://localhost:3306/pasarelasms?user=geo";
 }
 
-int idempresa=u.getEmpresa().getIdEmpresa();
 Connection conn = DriverManager.getConnection(url);
 ResultSet rs = conn.createStatement().executeQuery(
-    "SELECT servicio_empresa.idservicio,descripcion,limite,costotransaccion,servicio_empresa.estado FROM pasarelasms.servicio_empresa,pasarelasms.servicio WHERE servicio_empresa.idservicio=servicio.idservicio and servicio_empresa.idempresa ="+idempresa+";");
+    "SELECT * FROM empresa");
 %>
 
 
@@ -91,7 +105,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 	  	<div class="row">
 			  	<div class="col-sm-3 col-md-2 sidebar"> 
 				    <ul class="nav nav-sidebar">
-											<%  
+								<%  
 							if(u != null){
 								
 								int tipo=u.getTipo().getId();
@@ -121,8 +135,9 @@ ResultSet rs = conn.createStatement().executeQuery(
 								
 									<%}
 								
-							}
+							
 						%>
+						
 						<li><a href="mensajeria.jsp">Mensajería</a></li>
 						<li><a href="mensajeria.jsp">Reportes</a></li>
 						<li><a href="/cerrarSesion">Cerrar Sesión</a></li>
@@ -131,52 +146,40 @@ ResultSet rs = conn.createStatement().executeQuery(
 				</div>
 		
 			<div class="col-sm-9 col-md-9 main">
-				<h1 class="page-header">Servicios Contratados</h1>
-				<table style="border: 1px solid black" id="datosServiciosC">
-				<tbody>
-				<tr>
-				<th style="background-color: #CCFFCC; margin: 5px">ID Servicio</th>
-				<th style="background-color: #CCFFCC; margin: 5px">Descripción</th>
-				<th style="background-color: #CCFFCC; margin: 5px">Límite mensual</th>
-				<th style="background-color: #CCFFCC; margin: 5px">Costo / Transacción</th>
-				<th style="background-color: #CCFFCC; margin: 5px">Estado</th>
-				</tr>
+				<h1 class="page-header">Datos Empresariales</h1>
 				
-				<%
-				while (rs.next()) {
-				    int id =rs.getInt("idservicio");
-					String servicio = rs.getString("descripcion");
-				    int limite = rs.getInt("limite");
-				    float costo = rs.getFloat("costotransaccion");
-				    int estado = rs.getInt("estado"); 
-				    String est="";
-				    if(estado==1)est="Activo";else est="Inactivo";
-				   
-				 %>
-				<tr>
-					<td><%= id %></td>
-					<td><%= servicio %></td>
-					<td><%= limite %></td>
-					<td><%= costo %></td>
-					<td><%= est %></td>
-				</tr>
-				<%
-				}
-					conn.close();
-					%>
+				<div class="datosEmpresa">
+				<div><h4>Nombre: </h4> <h5><%= u.getEmpresa().getNombre() %></h5></div>
+				<div><h4>Dirección: </h4> <h5 id="valorDireccion"><%= u.getEmpresa().getDireccion() %></h5></div>
+				<div><h4>Teléfono: </h4> <h5 id="valorTelefono"><%= u.getEmpresa().getTelefono() %></h5></div>
+				<div><h4>Contacto: </h4> <h5 id="valorContacto"><%= u.getEmpresa().getContacto() %></h5></div>
+				
+			<% 
+			int estado=u.getEmpresa().getEstado();
+			String est="";
+		    if(estado==1){est="Activo";}else{est="Inactivo";}
+			%>
+				<div><h4>Estado: </h4><h5> <%= est %></h5></div>
+				</div>
+						
+			<% if(u.getTipo().getId() == 2){ %>	
+				<button value="Editar" onclick="habilitar()">Editar</button>
 
-				
-				</tbody>
-				</table>
-				
-				
-					
-
+						<form  onsubmit="return validar(this);" action="/empresa" method="post" style="display:none" id="formEmpresa">
+							
+						    <div>Dirección: <input type="text" name="direccion" id="dirEmpresa" required="required"></input></div>
+						    <div>Teléfono: <input type="tel" name="telefono" id="telEmpresa" required="required"></input></div>
+						    <div>Contacto: <input type="text" name="contacto" id="conEmpresa" required="required"></input></div>
+						    <div><input type="submit" value="Guardar"/><input type="reset" value="Cancelar"/></div>
+						  </form>
+						  
+			 <% } %>
 			</div>	
 	
 		</div>
 	</div>
 
+<%} %>
 
   </body>
 </html>
