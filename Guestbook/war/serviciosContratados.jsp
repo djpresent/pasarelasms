@@ -101,7 +101,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 									<li><a href="empresas.jsp">Empresas</a></li>
 									<li ><a href="servicios.jsp">Servicios</a></li>
 									<li><a href="usuarios.jsp">Usuarios</a></li>
-									<li ><a href="servicioEmpresa.jsp">Servcios a empresas</a></li>
+									<li ><a href="servicioEmpresa.jsp">Servicios a empresas</a></li>
 									<li><a href="servicioUsuarios.jsp">Servicios a Usuarios</a></li>
 								<%}
 								
@@ -117,14 +117,14 @@ ResultSet rs = conn.createStatement().executeQuery(
 									%>
 										<li><a href="empresa.jsp">Empresa</a></li>
 										<li ><a href="serviciosContratados.jsp">Servicios</a></li>
-										<li><a href="usuarios.jsp">Usuario</a></li>
+										<li><a href="usuario.jsp">Usuario</a></li>
 								
 									<%}
 								
 							}
 						%>
 						<li><a href="mensajeria.jsp">Mensajería</a></li>
-						<li><a href="mensajeria.jsp">Reportes</a></li>
+						<li><a href="reportes.jsp">Reportes</a></li>
 						<li><a href="/cerrarSesion">Cerrar Sesión</a></li>
 				
 					</ul>

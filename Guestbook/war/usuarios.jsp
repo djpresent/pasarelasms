@@ -61,8 +61,6 @@
 			document.getElementById("cargoUsuario").value = el.parentNode.parentNode.cells[4].textContent;
 			document.getElementById("telefonoUsuario").value = el.parentNode.parentNode.cells[5].textContent;
 			document.getElementById("emailUsuario").value = el.parentNode.parentNode.cells[6].textContent;
-			//document.getElementById("passwordUsuario").value = el.parentNode.parentNode.cells[7].textContent;
-			//document.getElementById("cpasswordUsuario").value = el.parentNode.parentNode.cells[7].textContent;
 			
 			if(el.parentNode.parentNode.cells[7].textContent == "Activo")
 			 	document.getElementById("estadoUsuario").value = 1 ;
@@ -125,7 +123,7 @@ ResultSet rs = null;
 
 if(u.getTipo().getId() == 1){
 	rs=conn.createStatement().executeQuery(
-    "SELECT idusuario,cedula,nombres,apellidos,cargo,email,usuario.telefono,password,descripcion,nombre,usuario.estado FROM pasarelasms.usuario,pasarelasms.tipo,pasarelasms.empresa WHERE usuario.idtipo=tipo.idtipo and usuario.idempresa=empresa.idempresa and usuario.idtipo >= "+u.getTipo().getId()+";");
+    "SELECT idusuario,cedula,nombres,apellidos,cargo,email,usuario.telefono,password,descripcion,nombre,usuario.estado FROM pasarelasms.usuario,pasarelasms.tipo,pasarelasms.empresa WHERE usuario.idtipo=tipo.idtipo and usuario.idempresa=empresa.idempresa and usuario.idtipo >= "+u.getTipo().getId()+" and empresa.estado=1;");
 }
 
 
@@ -169,7 +167,7 @@ if(u.getTipo().getId() == 2){
 									<li><a href="empresas.jsp">Empresas</a></li>
 									<li ><a href="servicios.jsp">Servicios</a></li>
 									<li><a href="usuarios.jsp">Usuarios</a></li>
-									<li ><a href="servicioEmpresa.jsp">Servcios a empresas</a></li>
+									<li ><a href="servicioEmpresa.jsp">Servicios a empresas</a></li>
 									<li><a href="servicioUsuarios.jsp">Servicios a Usuarios</a></li>
 								<%}
 								
@@ -185,14 +183,14 @@ if(u.getTipo().getId() == 2){
 									%>
 										<li><a href="empresa.jsp">Empresa</a></li>
 										<li ><a href="serviciosContratados.jsp">Servicios</a></li>
-										<li><a href="usuarios.jsp">Usuario</a></li>
+										<li><a href="usuario.jsp">Usuario</a></li>
 								
 									<%}
 								
 							}
 						%>
 						<li><a href="mensajeria.jsp">Mensajería</a></li>
-						<li><a href="mensajeria.jsp">Reportes</a></li>
+						<li><a href="reportes.jsp">Reportes</a></li>
 						<li><a href="/cerrarSesion">Cerrar Sesión</a></li>
 				
 					</ul>

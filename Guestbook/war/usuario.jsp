@@ -10,32 +10,50 @@
  	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
   	<link rel="stylesheet" type="text/css" href="css/estilos.css">
   	
+    <script src="js/codificacion.js"></script>
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<SCRIPT type=text/javascript>
-		function validar(formObj){
+		function validar(){
 		
-			if (formObj.direccion.value == ""){
-				alert("Datos imcompletos");
-				return false;
-				}else if (formObj.telefono.value == ""){
-					alert("Datos imcompletos");
+	
+				var caract_invalido = " ";
+				var caract_longitud = 6;
+				var cla1 = document.formActDatos.newpass.value;
+				var cla2 = document.formActDatos.confpass.value;
+				if (cla1 == '' || cla2 == '') {
+					alert('No ha ingresado la contraseña.');
 					return false;
-					}else if (formObj.contacto.value == ""){
-						alert("Datos imcompletos");
-						return false;}else return true;
+				}
+				if (document.formActDatos.newpass.value.length < caract_longitud) {
+				alert('Su contraseña debe constar de ' + caract_longitud + ' caracteres.');
+				return false;
+				}
+				if (document.formActDatos.newpass.value.indexOf(caract_invalido) > -1) {
+				alert("Las contraseñas no pueden contener espacios.");
+				return false;
+				}
+				else {
+				if (cla1 != cla2) {
+				alert ("Las contraseñas introducidas no coinciden.");
+				return false;
+				}
+				else {
+					document.getElementById('oldcod').value = hex_md5(document.getElementById('oldpass').value);
+					document.getElementById('newcod').value = hex_md5(document.getElementById('newpass').value);
+				
+					
+					return true;
+				      }
+				   }
+			
 			}
 		
-		
+			
 		function habilitar(){
 			
-			document.getElementById("formUsuario").style.display="block";
-			document.getElementById("dirEmpresa").value=document.getElementById("valorDireccion").innerHTML;
-			document.getElementById("telEmpresa").value=document.getElementById("valorTelefono").innerHTML;
-			document.getElementById("conEmpresa").value=document.getElementById("valorContacto").innerHTML;
+			document.getElementById("formActDatos").style.display="block";
 
 		}
-	
-		
 		
 	</SCRIPT> 
    </HEAD>
@@ -131,7 +149,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 									%>
 										<li><a href="empresa.jsp">Empresa</a></li>
 										<li ><a href="serviciosContratados.jsp">Servicios</a></li>
-										<li><a href="usuarios.jsp">Usuario</a></li>
+										<li><a href="usuario.jsp">Usuario</a></li>
 								
 									<%}
 								
@@ -139,41 +157,48 @@ ResultSet rs = conn.createStatement().executeQuery(
 						%>
 						
 						<li><a href="mensajeria.jsp">Mensajería</a></li>
-						<li><a href="mensajeria.jsp">Reportes</a></li>
+						<li><a href="reportes.jsp">Reportes</a></li>
 						<li><a href="/cerrarSesion">Cerrar Sesión</a></li>
 				
 					</ul>
 				</div>
 		
 			<div class="col-sm-9 col-md-9 main">
-				<h1 class="page-header">Datos Empresariales</h1>
+				<h1 class="page-header">Mis Datos</h1>
 				
-				<div class="datosEmpresa">
-				<div><h4>Nombre: </h4> <h5><%= u.getEmpresa().getNombre() %></h5></div>
-				<div><h4>Dirección: </h4> <h5 id="valorDireccion"><%= u.getEmpresa().getDireccion() %></h5></div>
-				<div><h4>Teléfono: </h4> <h5 id="valorTelefono"><%= u.getEmpresa().getTelefono() %></h5></div>
-				<div><h4>Contacto: </h4> <h5 id="valorContacto"><%= u.getEmpresa().getContacto() %></h5></div>
-				
+				<div class="datosU">
+				<div><h4>Cédula: </h4> <h5><%= u.getCedula()%> </h5></div>
+				<div><h4>Nombres: </h4> <h5><%= u.getNombres()%> <%= u.getApellidos()%>  </h5></div>
+				<div><h4>Apellidos: </h4> <h5><%= u.getApellidos() %></h5></div>
+				<div><h4>Cargo: </h4> <h5><%= u.getCargo() %></h5></div>
+				<div><h4>Email: </h4> <h5><%= u.getEmail() %></h5></div>
+				<div><h4>Teléfono: </h4> <h5><%= u.getTelefono() %></h5></div>
+				<div><h4>Tipo de usuario: </h4> <h5><%= u.getTipo().getDescripcion() %></h5></div>
+			
 			<% 
-			int estado=u.getEmpresa().getEstado();
+			int estado=u.getEstado();
 			String est="";
 		    if(estado==1){est="Activo";}else{est="Inactivo";}
 			%>
 				<div><h4>Estado: </h4><h5> <%= est %></h5></div>
 				</div>
 						
-			<% if(u.getTipo().getId() == 2){ %>	
-				<button value="Editar" onclick="habilitar()">Editar</button>
+		
+				<button value="CambiarContrasena" onclick="habilitar()">Cambiar contraseña</button>
 
-						<form  onsubmit="return validar(this);" action="/empresa" method="post" style="display:none" id="formEmpresa">
+						<form  onsubmit="return validar();" action="/actContrasena" method="post" style="display:none" id="formActDatos">
 							
-						    <div>Dirección: <input type="text" name="direccion" id="dirEmpresa" required="required"></input></div>
-						    <div>Teléfono: <input type="tel" name="telefono" id="telEmpresa" required="required"></input></div>
-						    <div>Contacto: <input type="text" name="contacto" id="conEmpresa" required="required"></input></div>
-						    <div><input type="submit" value="Guardar"/><input type="reset" value="Cancelar"/></div>
+						    <div>Ingrese su contraseña actual: <input type="password" name="oldpass" id="oldpass" required="required"></input></div>
+						    <div>Nueva contraseña: <input type="password" name="newpass" id="newpass" required="required"></input></div>
+						    <div>Confirmar contrseña: <input type="password" name="confpass" id="confpass" required="required"></input></div>
+						    
+						    <input type="hidden" id="oldcod" name="oldcod"/>
+						    <input type="hidden" id="newcod" name="newcod"/>
+						
+						    
+						    <div><input type="submit" value="Aceptar"/><input type="reset" value="Cancelar"/></div>
 						  </form>
 						  
-			 <% } %>
 			</div>	
 	
 		</div>
