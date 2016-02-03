@@ -120,11 +120,19 @@ ResultSet rs = conn.createStatement().executeQuery(
 								
 									<%}
 								
+								if(tipo == 1 || u.tieneServicio(1)){%>
+								<li><a href="mensajeria.jsp">Mensajería</a></li>
+								<li><a href="reportes.jsp">Reportes</a></li>
+								
+							<%}
+								
 							}
+						
+						
+						
 						%>
 						
-						<li><a href="mensajeria.jsp">Mensajería.</a></li>
-						<li><a href="reportes.jsp">Reportes.</a></li>
+					
 						<li><a href="/cerrarSesion">Cerrar Sesión.</a></li>
 				
 					</ul>

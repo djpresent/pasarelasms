@@ -39,6 +39,8 @@ public class ActualizarContrasena extends HttpServlet {
 	      e.printStackTrace();
 	      return;
 	    }
+	    
+	    
 
 	    PrintWriter out = resp.getWriter();
 	    try {
@@ -55,7 +57,11 @@ public class ActualizarContrasena extends HttpServlet {
 	        
 	        if (u != null ) {
 	        	
+	        	System.out.println("contrasena antigua "+oldpass);
+	        	
 	        	if(oldpass.equals(u.getPassword())){
+	        		
+	        		System.out.println("contrasena antigua "+oldpass);
 	        		        	
 	        	String statement = "UPDATE usuario SET password=? WHERE idusuario=?";
 		          PreparedStatement stmt = conn.prepareStatement(statement);
@@ -64,6 +70,9 @@ public class ActualizarContrasena extends HttpServlet {
 		          stmt.setInt(2, u.getId());
 		          
 		          int success = 2;
+		          
+		          System.out.println(statement);
+		          
 		          success = stmt.executeUpdate();
 		          if (success == 1) {
 		        	  

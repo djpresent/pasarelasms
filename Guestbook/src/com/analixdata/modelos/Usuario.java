@@ -1,12 +1,16 @@
 package com.analixdata.modelos;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Usuario implements Serializable {
 	private int id,estado;
 	private String cedula,nombres,apellidos,cargo,password,email,telefono;
 	Empresa empresa;
 	Tipo tipo;
+	
+	List<Servicio> servicios;
 	
 	public Usuario(){}
 	
@@ -41,7 +45,12 @@ public class Usuario implements Serializable {
 		this.telefono=telefono;
 		this.empresa= empresa;
 		this.tipo=tipo;
+		this.servicios=new ArrayList();
 	}
+
+
+
+
 
 	public int getId() {
 		return id;
@@ -130,8 +139,30 @@ public class Usuario implements Serializable {
 	public void setTipo(Tipo tipo) {
 		this.tipo = tipo;
 	}
+
+
+
+	public List<Servicio> getServicios() {
+		return servicios;
+	}
+
+
+
+	public void setServicios(List<Servicio> servicios) {
+		this.servicios = servicios;
+	}
 	
 	
+	public boolean tieneServicio(int id) {
+		
+		for(int i=0;i<servicios.size();i++){
+			if(servicios.get(i).getIdServicio() == id)
+				return true;
+
+		}
+		
+		return false;
+	}
 	
 	
 	

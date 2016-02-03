@@ -1,7 +1,10 @@
 package com.analixdata.modelos;
 
 import com.google.appengine.api.utils.SystemProperty;
+
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DAO {
 	
@@ -36,9 +39,15 @@ public class DAO {
 		    	{
 		    	ResultSet rs1 = conn.createStatement().executeQuery("SELECT * FROM empresa WHERE idempresa='"+rs.getInt("idempresa")+"';");
 		    	ResultSet rs2 = conn.createStatement().executeQuery("SELECT * FROM tipo WHERE idtipo='"+rs.getInt("idtipo")+"';");
+		    	ResultSet rs3 = conn.createStatement().executeQuery("SELECT servicio_usuario.idservicio,descripcion FROM pasarelasms.servicio_usuario,pasarelasms.servicio WHERE servicio_usuario.idservicio=servicio.idservicio and servicio_usuario.idusuario='"+rs.getInt("idusuario")+"';");
+		    	
+		    	
 		    	
 		    	Tipo tipo=new Tipo();
 		    	Empresa empresa = new Empresa();
+		    	Servicio servicio = new Servicio();
+		    	
+		    	List<Servicio> listaServicio=new ArrayList();
 		    	
 		    	while (rs2.next())
 		    	{
@@ -56,8 +65,19 @@ public class DAO {
 		    		empresa.setEstado(rs1.getInt("estado"));
 		    	}
 		    	
+		    	while (rs3.next())
+		    	{
+
+		    		listaServicio.add(new Servicio(rs3.getInt("idservicio"),rs3.getString("descripcion")));
+		    	}
 		    	
-		    	return new Usuario (rs.getInt("idusuario"),rs.getString("cedula"),rs.getString("nombres"),rs.getString("apellidos"),rs.getString("cargo"),rs.getString("email"),rs.getString("telefono"),rs.getString("password"),rs.getInt("estado"),empresa,tipo);
+		    	Usuario usuario = new Usuario (rs.getInt("idusuario"),rs.getString("cedula"),rs.getString("nombres"),rs.getString("apellidos"),rs.getString("cargo"),rs.getString("email"),rs.getString("telefono"),rs.getString("password"),rs.getInt("estado"),empresa,tipo);
+		    	
+		    	if(listaServicio.size()>0){
+		    		usuario.setServicios(listaServicio);
+		    	}
+		    	
+		    	return usuario;
 		    
 		    	}
 		    }

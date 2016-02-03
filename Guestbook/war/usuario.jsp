@@ -18,17 +18,17 @@
 	
 				var caract_invalido = " ";
 				var caract_longitud = 6;
-				var cla1 = document.formActDatos.newpass.value;
-				var cla2 = document.formActDatos.confpass.value;
+				var cla1 = document.getElementById("newpass").value;
+				var cla2 = document.getElementById("confpass").value;
 				if (cla1 == '' || cla2 == '') {
 					alert('No ha ingresado la contraseña.');
 					return false;
 				}
-				if (document.formActDatos.newpass.value.length < caract_longitud) {
+				if (cla1 < caract_longitud) {
 				alert('Su contraseña debe constar de ' + caract_longitud + ' caracteres.');
 				return false;
 				}
-				if (document.formActDatos.newpass.value.indexOf(caract_invalido) > -1) {
+				if (cla1.indexOf(caract_invalido) > -1) {
 				alert("Las contraseñas no pueden contener espacios.");
 				return false;
 				}
@@ -153,11 +153,16 @@ ResultSet rs = conn.createStatement().executeQuery(
 								
 									<%}
 								
+								if(tipo == 1 || u.tieneServicio(1)){%>
+								<li><a href="mensajeria.jsp">Mensajería</a></li>
+								<li><a href="reportes.jsp">Reportes</a></li>
+								
+							<%}
+								
 							
 						%>
 						
-						<li><a href="mensajeria.jsp">Mensajería</a></li>
-						<li><a href="reportes.jsp">Reportes</a></li>
+					
 						<li><a href="/cerrarSesion">Cerrar Sesión</a></li>
 				
 					</ul>

@@ -67,8 +67,23 @@ if (SystemProperty.environment.value() ==
 
 int idempresa=u.getEmpresa().getIdEmpresa();
 Connection conn = DriverManager.getConnection(url);
-ResultSet rs = conn.createStatement().executeQuery(
-    "SELECT servicio_empresa.idservicio,descripcion,limite,costotransaccion,servicio_empresa.estado FROM pasarelasms.servicio_empresa,pasarelasms.servicio WHERE servicio_empresa.idservicio=servicio.idservicio and servicio_empresa.idempresa ="+idempresa+";");
+
+ResultSet rs = null;
+
+if(u.getTipo().getId() == 2){
+	rs = conn.createStatement().executeQuery(
+		    "SELECT servicio_empresa.idservicio,descripcion,limite,costotransaccion,servicio_empresa.estado FROM pasarelasms.servicio_empresa,pasarelasms.servicio WHERE servicio_empresa.idservicio=servicio.idservicio and servicio_empresa.idempresa ="+idempresa+";");
+}
+
+
+
+if(u.getTipo().getId() == 3){
+	int idusuario = u.getId();
+	rs = conn.createStatement().executeQuery(
+		    "SELECT servicio_usuario.idservicio,descripcion,limite,servicio_empresa.estado FROM pasarelasms.servicio_usuario,pasarelasms.servicio_empresa,pasarelasms.servicio WHERE servicio_usuario.idservicio=servicio_empresa.idservicio and servicio_usuario.idservicio=servicio.idservicio and servicio_usuario.idusuario ="+idusuario+";");
+}
+
+
 %>
 
 
@@ -138,7 +153,13 @@ ResultSet rs = conn.createStatement().executeQuery(
 				<th style="background-color: #CCFFCC; margin: 5px">ID Servicio</th>
 				<th style="background-color: #CCFFCC; margin: 5px">Descripción</th>
 				<th style="background-color: #CCFFCC; margin: 5px">Límite mensual</th>
+				
+				<%if (u.getTipo().getId()<3){ %>
+				
 				<th style="background-color: #CCFFCC; margin: 5px">Costo / Transacción</th>
+				
+				<% }%>
+				
 				<th style="background-color: #CCFFCC; margin: 5px">Estado</th>
 				</tr>
 				
@@ -147,7 +168,11 @@ ResultSet rs = conn.createStatement().executeQuery(
 				    int id =rs.getInt("idservicio");
 					String servicio = rs.getString("descripcion");
 				    int limite = rs.getInt("limite");
-				    float costo = rs.getFloat("costotransaccion");
+				    float costo=0;
+				    if(u.getTipo().getId() <3){
+				    costo = rs.getFloat("costotransaccion");
+				    }
+				    
 				    int estado = rs.getInt("estado"); 
 				    String est="";
 				    if(estado==1)est="Activo";else est="Inactivo";
@@ -157,7 +182,10 @@ ResultSet rs = conn.createStatement().executeQuery(
 					<td><%= id %></td>
 					<td><%= servicio %></td>
 					<td><%= limite %></td>
+					
+					<%if (u.getTipo().getId() < 3){ %>
 					<td><%= costo %></td>
+					<%} %>
 					<td><%= est %></td>
 				</tr>
 				<%
