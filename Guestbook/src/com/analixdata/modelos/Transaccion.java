@@ -1,66 +1,153 @@
 package com.analixdata.modelos;
 
-public class Transaccion {
+import java.io.Serializable;
+
+public class Transaccion implements Serializable {
 
 	private int id;
-	private String fecha,hora,codRetorno,descError,celular,mensaje;
+	private String fecha,hora,codRetorno,descError,celular,mensaje, nombreEmpresa, nombreUsuario, nombreServicio;
 	
 	public Transaccion(){}
 	
+
+	
 	public Transaccion(int id, String fecha, String hora, String codRetorno,
-			String descError, String celular, String mensaje) {
+			 String celular, String mensaje, String nombreServicio ,String nombreUsuario,String nombreEmpresa) {
 		super();
 		this.id = id;
 		this.fecha = fecha;
 		this.hora = hora;
 		this.codRetorno = codRetorno;
-		this.descError = descError;
+		
 		this.celular = celular;
 		this.mensaje = mensaje;
+		this.nombreEmpresa = nombreEmpresa;
+		this.nombreUsuario = nombreUsuario;
+		this.nombreServicio = nombreServicio;
 	}
-	
-	private int getId() {
+
+
+
+	public int getId() {
 		return id;
 	}
-	private void setId(int id) {
+
+
+
+	public void setId(int id) {
 		this.id = id;
 	}
-	private String getFecha() {
+
+
+
+	public String getFecha() {
 		return fecha;
 	}
-	private void setFecha(String fecha) {
+
+
+
+	public void setFecha(String fecha) {
 		this.fecha = fecha;
 	}
-	private String getHora() {
+
+
+
+	public String getHora() {
 		return hora;
 	}
-	private void setHora(String hora) {
+
+
+
+	public void setHora(String hora) {
 		this.hora = hora;
 	}
-	private String getCodRetorno() {
+
+
+
+	public String getCodRetorno() {
 		return codRetorno;
 	}
-	private void setCodRetorno(String codRetorno) {
+
+
+
+	public void setCodRetorno(String codRetorno) {
 		this.codRetorno = codRetorno;
 	}
-	private String getDescError() {
+
+
+
+	public String getDescError() {
 		return descError;
 	}
-	private void setDescError(String descError) {
+
+
+
+	public void setDescError(String descError) {
 		this.descError = descError;
 	}
-	private String getCelular() {
+
+
+
+	public String getCelular() {
 		return celular;
 	}
-	private void setCelular(String celular) {
+
+
+
+	public void setCelular(String celular) {
 		this.celular = celular;
 	}
-	private String getMensaje() {
+
+
+
+	public String getMensaje() {
 		return mensaje;
 	}
-	private void setMensaje(String mensaje) {
+
+
+
+	public void setMensaje(String mensaje) {
 		this.mensaje = mensaje;
 	}
+
+
+
+	public String getNombreEmpresa() {
+		return nombreEmpresa;
+	}
+
+
+
+	public void setNombreEmpresa(String nombreEmpresa) {
+		this.nombreEmpresa = nombreEmpresa;
+	}
+
+
+
+	public String getNombreUsuario() {
+		return nombreUsuario;
+	}
+
+
+
+	public void setNombreUsuario(String nombreUsuario) {
+		this.nombreUsuario = nombreUsuario;
+	}
+
+
+
+	public String getNombreServicio() {
+		return nombreServicio;
+	}
+
+
+
+	public void setNombreServicio(String nombreServicio) {
+		this.nombreServicio = nombreServicio;
+	}
+
+
+
 	
 	
 	
