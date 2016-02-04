@@ -55,6 +55,12 @@
 
 		}
 		
+		function deshabilitar(){
+			
+			document.getElementById("formActDatos").style.display="none";
+
+		}
+		
 	</SCRIPT> 
    </HEAD>
 
@@ -201,7 +207,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 						    <input type="hidden" id="newcod" name="newcod"/>
 						
 						    
-						    <div><input type="submit" value="Aceptar"/><input type="reset" value="Cancelar"/></div>
+						    <div><input type="submit" value="Aceptar"/><input type="reset" value="Cancelar" onclick="deshabilitar()"/></div>
 						  </form>
 						  
 			</div>	

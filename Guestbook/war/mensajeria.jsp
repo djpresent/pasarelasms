@@ -1,5 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.analixdata.modelos.Usuario" %>
+<%@ page import="com.google.appengine.api.utils.SystemProperty" %>
+<%@ page import="java.sql.*" %>
 
 <html>
   <head>
@@ -54,10 +56,17 @@
 
 	    function processData() 
 	    {
+	    	
+	    
 	    	var cadenaMensajes="{\"messages\":[";
 	    	var remitente="InfoSMS";
 	    	var mensaje= document.getElementById("idTexto").value;
 	        var allTextLines = csv.split(/\r\n|\n/);
+	        if(document.getElementById("cantDisponibles").value>=allTextLines.length){
+	        	
+	        	document.getElementById("cantSMS").value=allTextLines.length;
+	        
+	        
 	      //  var lines = [];
 	        for (var i=0; i<allTextLines.length; i++)
 	        {
@@ -105,6 +114,11 @@
 	        cadenaMensajes+="]}";
 	        document.getElementById("mensaje").value=cadenaMensajes;
 	    	alert(cadenaMensajes);
+	    	
+	    	}else{
+	    		
+	    		alert("No hay suficientes mensajes disponibles en su cuenta.");
+	    	}
 	    }
 
 	    function agregarV(variable)
@@ -144,6 +158,29 @@ for(Cookie cookie : cookies){
     	userName = cookie.getValue();
 }
 }
+
+
+String url = null;
+if (SystemProperty.environment.value() ==
+    SystemProperty.Environment.Value.Production) {
+  // Load the class that provides the new "jdbc:google:mysql://" prefix.
+  Class.forName("com.mysql.jdbc.GoogleDriver");
+  url = "jdbc:google:mysql://pasarelasms-1190:analixdata/pasarelasms?user=root&password=1234";
+} else {
+  // Local MySQL instance to use during development.
+  Class.forName("com.mysql.jdbc.Driver");
+  url = "jdbc:mysql://localhost:3306/pasarelasms?user=geo";
+}
+
+Connection conn = DriverManager.getConnection(url);
+ResultSet rs = conn.createStatement().executeQuery(
+    "SELECT disponible FROM servicio_empresa where idservicio=1 and idempresa="+u.getEmpresa().getIdEmpresa()+";");
+ 
+String disponible="N/D";
+
+if(rs.next()){
+ disponible=Integer.toString(rs.getInt("disponible"));
+}
 %>
 
 <nav class="navbar" >
@@ -165,10 +202,7 @@ for(Cookie cookie : cookies){
 	  	<div class="row">
 			  	<div class="col-sm-3 col-md-2 sidebar"> 
 				    <ul class="nav nav-sidebar">
-						<li><a href="empresas.jsp">Empresas</a></li>
-						<li ><a href="servicios.jsp">Servicios</a></li>
-						<li><a href="usuarios.jsp">Usuarios</a></li>
-						
+										
 						<%  
 							if(u != null){
 								
@@ -215,10 +249,11 @@ for(Cookie cookie : cookies){
 		
 			<div class="col-sm-9 col-md-9 main">
 				<h1 class="page-header">Servicio de Mensajería SMS</h1>
+				<h4>SMS disponibles: <%= disponible %></h4>
 				<table>
 			  		<tr>
-			  			<td>Opción 1:</td>
-						<td><input type="text" name="nombreArchivo" required="required" /></td>
+			  			<td>Archivo:</td>
+						
 			  			<td><input type="file" name="archivo" onchange="handleFiles(this.files)" accept=".csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain" required="required"  /></td>
 					</tr>
 					<tr>
@@ -241,8 +276,12 @@ for(Cookie cookie : cookies){
 			  	<form  action="enviarSMS" method="get" >
 			  		<table>
 			  			<tr>
+			  				
 			  				<td><input type="hidden" id="mensaje" name="txtmensaje" ></input></td>
-			  				<td><input type="submit" value="Enviar" /></td>
+			  				<td>
+			  				<input type="hidden" id="cantDisponibles" value="<%= disponible %>"/>
+			  				<input type="hidden" id="cantSMS" />
+			  				<input type="submit" value="Enviar" /></td>
 			  			</tr>
 			  		</table>
 			  	</form>

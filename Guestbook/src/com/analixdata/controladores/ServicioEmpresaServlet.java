@@ -65,13 +65,14 @@ public class ServicioEmpresaServlet extends HttpServlet {
 	        	
 	        
 	        	
-	        	String statement = "INSERT INTO servicio_empresa (idservicio,idempresa,limite,costotransaccion,estado) VALUES( ? , ? , ? , ? , ? )";
+	        	String statement = "INSERT INTO servicio_empresa (idservicio,idempresa,limite,costotransaccion,estado,disponible) VALUES( ? , ? , ? , ? , ? ,?)";
 		          PreparedStatement stmt = conn.prepareStatement(statement);
 		          stmt.setString(1, idServicio);
 		          stmt.setString(2, idEmpresa);
 		          stmt.setString(3, limite);
 		          stmt.setString(4, costo);
 		          stmt.setString(5, estado);
+		          stmt.setString(6, limite);
 		          int success = 2;
 		          success = stmt.executeUpdate();
 		          if (success == 1) {
@@ -84,15 +85,45 @@ public class ServicioEmpresaServlet extends HttpServlet {
 		          }
 	          
 	        } else {
+	        	
+	        	rs = conn.createStatement().executeQuery("SELECT limite,disponible FROM servicio_empresa where idservicio ="+idServicio+";");
+	        	
+	        	int limiteact=0;
+	        	
+	        	int disponible=0;
+	        	
+	        	if(rs.next()){
+	        		
+	        		 limiteact=rs.getInt("limite");
+	        		 disponible=rs.getInt("dispponible");
+	        		 
+	        	}
+	        	
+	        	if(Integer.parseInt(limite)>limiteact){
+	        		
+	        		disponible=(Integer.parseInt(limite)-limiteact)+disponible;
+	        	}
+	        	
+	        	if(Integer.parseInt(limite)<limiteact){
+	        		if(Integer.parseInt(limite)>disponible){
+	        			disponible=(limiteact-Integer.parseInt(limite))+disponible;
+	        			
+	        		}else{
+
+	        			disponible=Integer.parseInt(limite);
+	        		}
+	        		
+	        	}
 
 	        	
-	        	String statement = "UPDATE servicio_empresa SET idservicio=?, idempresa=?, limite=? ,costotransaccion=? ,estado=? ";
+	        	String statement = "UPDATE servicio_empresa SET idservicio=?, idempresa=?, limite=? ,costotransaccion=? ,estado=?, disponible=? ";
 		          PreparedStatement stmt = conn.prepareStatement(statement);
 		          stmt.setString(1, idServicio);
 		          stmt.setString(2, idEmpresa);
 		          stmt.setString(3, limite);
 		          stmt.setString(4, costo);
 		          stmt.setString(5, estado);
+		          stmt.setInt(6, disponible);
 		          int success = 2;
 		          
 		         

@@ -68,13 +68,21 @@
 				document.getElementById("estadoUsuario").value = 0 ;
 			
 			document.getElementById("tipoUsuario").value = el.parentNode.parentNode.cells[8].textContent;
-			document.getElementById("empresaUsuario").value = el.parentNode.parentNode.cells[9].textContent; 
-		
+			
 			document.getElementById('divContrasena').style.display = 'none';
 			document.getElementById('divContrasenaC').style.display = 'none';
+			
+			document.getElementById("empresaUsuario").value = el.parentNode.parentNode.cells[9].textContent; 
+			
+			
 		
 		}
 		
+		function habilitarC(){
+			
+			document.getElementById('divContrasena').style.display = 'block';
+			document.getElementById('divContrasenaC').style.display = 'block';
+		}
 		
 	</SCRIPT> 
    </HEAD>
@@ -318,7 +326,7 @@ if(u.getTipo().getId() == 2){
 					%>
 					</div>
 				    <div><input type="submit" value="Guardar"/>
-				    <input type="reset" value="Cancelar"/></div>
+				    <input type="reset" value="Cancelar" onclick="habilitarC()"/></div>
 				  </form>
 			</div>	
 	

@@ -34,6 +34,13 @@
 			document.getElementById("conEmpresa").value=document.getElementById("valorContacto").innerHTML;
 
 		}
+		
+		function deshabilitar(){
+			
+			document.getElementById("formEmpresa").style.display="none";
+	
+
+		}
 	
 		
 		
@@ -175,7 +182,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 						    <div>Dirección: <input type="text" name="direccion" id="dirEmpresa" required="required"></input></div>
 						    <div>Teléfono: <input type="tel" name="telefono" id="telEmpresa" required="required"></input></div>
 						    <div>Contacto: <input type="text" name="contacto" id="conEmpresa" required="required"></input></div>
-						    <div><input type="submit" value="Guardar"/><input type="reset" value="Cancelar"/></div>
+						    <div><input type="submit" value="Guardar"/><input type="reset" value="Cancelar" onclick="deshabilitar()"/></div>
 						  </form>
 						  
 			 <% } %>

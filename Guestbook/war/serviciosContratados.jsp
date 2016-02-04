@@ -72,7 +72,7 @@ ResultSet rs = null;
 
 if(u.getTipo().getId() == 2){
 	rs = conn.createStatement().executeQuery(
-		    "SELECT servicio_empresa.idservicio,descripcion,limite,costotransaccion,servicio_empresa.estado FROM pasarelasms.servicio_empresa,pasarelasms.servicio WHERE servicio_empresa.idservicio=servicio.idservicio and servicio_empresa.idempresa ="+idempresa+";");
+		    "SELECT servicio_empresa.idservicio,descripcion,limite,disponible,costotransaccion,servicio_empresa.estado FROM pasarelasms.servicio_empresa,pasarelasms.servicio WHERE servicio_empresa.idservicio=servicio.idservicio and servicio_empresa.idempresa ="+idempresa+";");
 }
 
 
@@ -80,7 +80,7 @@ if(u.getTipo().getId() == 2){
 if(u.getTipo().getId() == 3){
 	int idusuario = u.getId();
 	rs = conn.createStatement().executeQuery(
-		    "SELECT servicio_usuario.idservicio,descripcion,limite,servicio_empresa.estado FROM pasarelasms.servicio_usuario,pasarelasms.servicio_empresa,pasarelasms.servicio WHERE servicio_usuario.idservicio=servicio_empresa.idservicio and servicio_usuario.idservicio=servicio.idservicio and servicio_usuario.idusuario ="+idusuario+";");
+		    "SELECT servicio_usuario.idservicio,descripcion,limite,disponible,servicio_empresa.estado FROM pasarelasms.servicio_usuario,pasarelasms.servicio_empresa,pasarelasms.servicio WHERE servicio_usuario.idservicio=servicio_empresa.idservicio and servicio_usuario.idservicio=servicio.idservicio and servicio_usuario.idusuario ="+idusuario+" and servicio_empresa.idempresa ="+idempresa+";");
 }
 
 
@@ -158,6 +158,7 @@ if(u.getTipo().getId() == 3){
 				<th style="background-color: #CCFFCC; margin: 5px">ID Servicio</th>
 				<th style="background-color: #CCFFCC; margin: 5px">Descripción</th>
 				<th style="background-color: #CCFFCC; margin: 5px">Límite mensual</th>
+				<th style="background-color: #CCFFCC; margin: 5px">Disponible</th>
 				
 				<%if (u.getTipo().getId()<3){ %>
 				
@@ -173,6 +174,8 @@ if(u.getTipo().getId() == 3){
 				    int id =rs.getInt("idservicio");
 					String servicio = rs.getString("descripcion");
 				    int limite = rs.getInt("limite");
+				    int disponible = rs.getInt("disponible");
+				    
 				    float costo=0;
 				    if(u.getTipo().getId() <3){
 				    costo = rs.getFloat("costotransaccion");
@@ -187,6 +190,7 @@ if(u.getTipo().getId() == 3){
 					<td><%= id %></td>
 					<td><%= servicio %></td>
 					<td><%= limite %></td>
+					<td><%= disponible %></td>
 					
 					<%if (u.getTipo().getId() < 3){ %>
 					<td><%= costo %></td>
