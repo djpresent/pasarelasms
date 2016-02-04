@@ -78,8 +78,11 @@ public class ServicioUsuarioServlet extends HttpServlet {
 	 
 		        	}
 			        
-			        rs = conn.createStatement().executeQuery("SELECT servicio_empresa.idservicio,descripcion FROM pasarelasms.servicio_empresa,pasarelasms.empresa,pasarelasms.servicio WHERE nombre='"+empresa+"' and servicio_empresa.idservicio=servicio.idservicio and servicio_empresa.idempresa=empresa.idempresa;");
+			       // rs = conn.createStatement().executeQuery("SELECT servicio_empresa.idservicio,descripcion FROM pasarelasms.servicio_empresa,pasarelasms.empresa,pasarelasms.servicio WHERE nombre='"+empresa+"' and servicio_empresa.idservicio=servicio.idservicio and servicio_empresa.idempresa=empresa.idempresa;");
 		        	
+			        rs = conn.createStatement().executeQuery("Select A.idservicio,descripcion,idusuario from (SELECT servicio_empresa.idservicio,descripcion FROM pasarelasms.servicio_empresa,pasarelasms.empresa,pasarelasms.servicio WHERE nombre='geovannito' and servicio_empresa.idservicio=servicio.idservicio and servicio_empresa.idempresa=empresa.idempresa) A left join (SELECT idservicio,idusuario   FROM pasarelasms.servicio_usuario WHERE idusuario=17) B on A.idservicio=B.idservicio;");
+			        
+			        
 			        List<Servicio> listaServicios=new ArrayList();
 			        
 			        while (rs.next()) {
@@ -123,6 +126,9 @@ public class ServicioUsuarioServlet extends HttpServlet {
 			          HttpSession session=req.getSession(true);
 			          if (success == 1) {
 			        	  confirmacion="1";
+			        	  session.setAttribute("listaUsuarios", null);
+				          session.setAttribute("listaServicios", null);
+				          session.setAttribute("empresa",null);
 					        
 			          
 			          } else if (success == 0) {
@@ -130,6 +136,7 @@ public class ServicioUsuarioServlet extends HttpServlet {
 			        	  
 			          }
 			          session.setAttribute("confirmacion", confirmacion); 
+			          
 			          
 			          resp.sendRedirect("servicioUsuarios.jsp");
 			      }

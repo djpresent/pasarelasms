@@ -1,8 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page import="java.sql.*" %>
 <%@ page import="com.google.appengine.api.utils.SystemProperty" %>
 <%@ page import="com.analixdata.modelos.Usuario" %>
+<%@ page import="com.analixdata.modelos.Servicio" %>
 
 <html>
 <HEAD>
@@ -13,6 +15,8 @@
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<script src="js/codificacion.js"></script>
 	<SCRIPT type=text/javascript>
+	
+
 	
 	function validarPass(){
 		
@@ -71,6 +75,7 @@
 			
 			document.getElementById('divContrasena').style.display = 'none';
 			document.getElementById('divContrasenaC').style.display = 'none';
+			document.getElementById('divServicios').style.display = 'none';
 			
 			document.getElementById("empresaUsuario").value = el.parentNode.parentNode.cells[9].textContent; 
 			
@@ -83,6 +88,8 @@
 			document.getElementById('divContrasena').style.display = 'block';
 			document.getElementById('divContrasenaC').style.display = 'block';
 		}
+		
+		
 		
 	</SCRIPT> 
    </HEAD>
@@ -302,30 +309,48 @@ if(u.getTipo().getId() == 2){
 					<%
 					
 					rs = conn.createStatement().executeQuery("SELECT * FROM empresa where estado=1");
+					
+					List<Servicio> servicios= new ArrayList();
+					
 					if(u.getTipo().getId() == 1){
 					%>
 					
 					Empresa:
 					
-					<select name=empresa id="empresaUsuario">
+					<select name=empresaUsuario id="empresaUsuario">
+					<option value="noempresa">Seleccione una empresa</option>
 					<% 
+					
+					
+					
+					
 					while (rs.next()) {
 					String empresa = rs.getString("nombre");%>
 						<option value=<%= empresa %>><%= empresa %></option>
-					<%}	%>
-					</select>
+					<%}	
 					
-					
-				    
-					<%
 					}else{%>
 						<input name="empresa" type="hidden" value="<%= u.getEmpresa().getNombre() %>"/>
+						<div id="divServicios">
+						Servicios:
+						<%
+						   servicios=u.getServicios();
 						
+							for(int i=0;i<servicios.size();i++){
+								%>
+								<input type="checkbox" name="<%=servicios.get(i).getDescripcion() %>" value="<%=servicios.get(i).getIdServicio() %>" checked> <%=servicios.get(i).getDescripcion() %><br>
+								
+							<%
+							}
+							
+						%>
+						</div>
 					<%}
 					conn.close();
 					%>
 					</div>
-				    <div><input type="submit" value="Guardar"/>
+				    <div>
+				    <input type="submit" value="Guardar" name="btnGuardar"/>
 				    <input type="reset" value="Cancelar" onclick="habilitarC()"/></div>
 				  </form>
 			</div>	

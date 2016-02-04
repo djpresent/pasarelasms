@@ -2,9 +2,13 @@ package com.analixdata.controladores;
 
 import java.io.*;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.http.*;
 
+import com.analixdata.modelos.Servicio;
+import com.analixdata.modelos.Usuario;
 import com.google.appengine.api.utils.SystemProperty;
 
 public class UsuarioServlet extends HttpServlet {
@@ -45,13 +49,24 @@ public class UsuarioServlet extends HttpServlet {
 	        String password = req.getParameter("passwordUsuario");
 	        String estado = req.getParameter("estado");
 	        String tipo = req.getParameter("tipo");
-	        String empresa = req.getParameter("empresa");
+	        String empresa = req.getParameter("empresaUsuario");
 	        String idtipo=null;
 	        String idempresa=null;
 	        
+	        String inputVerServicios=req.getParameter("verServicios");
+	        String btnGuardar=req.getParameter("btnGuardar");
+	        
+	        ResultSet rs;
+	        List<Servicio> servicios= new ArrayList();
+	    	  
+		     
+	    	  
+		   
+	        
+	        
 	        System.out.println("clave md5 "+password );
 	        
-	        ResultSet rs = conn.createStatement().executeQuery("SELECT idtipo FROM tipo where descripcion ='"+tipo+"';");
+	        rs = conn.createStatement().executeQuery("SELECT idtipo FROM tipo where descripcion ='"+tipo+"';");
         	
         	if(rs.next()){
         		
@@ -89,6 +104,50 @@ public class UsuarioServlet extends HttpServlet {
 		          int success = 2;
 		          success = stmt.executeUpdate();
 		          if (success == 1) {
+		        	  
+		        	  	
+		        	     
+		        		Usuario u = (Usuario)req.getSession().getAttribute("usuario");
+		        		
+		        		int idnuevo=0;
+		        		
+		        		rs=conn.createStatement().executeQuery(	"SELECT idusuario FROM pasarelasms.usuario WHERE usuario.email='"+email+"';");
+		        		
+		        		if(rs.next()){
+		        			idnuevo=rs.getInt("idusuario");
+		        		}
+		        		
+		        		
+		        		if(u.getTipo().getId() == 2 && idnuevo != 0){
+		        			
+		        			servicios=u.getServicios();
+		        			
+		        		       			
+		        			for(int i=0; i<servicios.size();i++)
+		        			{
+		        				
+		        				String nomp=servicios.get(i).getDescripcion();
+		        				if(req.getParameter(nomp)!=null && req.getParameter(nomp)!=""){
+		        					
+		        					System.out.println("valor parametro"+nomp);
+		        					
+		        					statement = "INSERT INTO servicio_usuario (idservicio,idempresa,idusuario) VALUES( ? , ? , ? )";
+		        					stmt = conn.prepareStatement(statement);
+		        			          stmt.setInt(1, servicios.get(i).getIdServicio());
+		        			          stmt.setInt(2, Integer.parseInt(idempresa));
+		        			          stmt.setInt(3, idnuevo);
+		        			       
+		        			          success = 2;
+		        			          success = stmt.executeUpdate();
+		        				}
+		        				
+		        				
+		        			}
+		        			
+		        		
+		        		}
+		        		
+		        	  
 		            out.println(
 		                "<html><head></head><body>Success! Redirecting in 3 seconds...</body></html>");
 		          } else if (success == 0) {
@@ -126,6 +185,7 @@ public class UsuarioServlet extends HttpServlet {
 		                "Redirecting in 3 seconds...</body></html>");
 		          }
 	          
+	        
 	        }
 	      } finally {
 	        conn.close();

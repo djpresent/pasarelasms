@@ -144,9 +144,12 @@ ResultSet rs = conn.createStatement().executeQuery(
 
 				<div>Seleccione una empresa:
 					<select name=empresa id="empresa" > 
+					<option>Seleccionar...</option>
 					<% 
 					while (rs.next()) {
 					String empresa = rs.getString("nombre");
+					
+					System.out.println(session.getAttribute("empresa"));
 					
 					if(!(session.getAttribute("empresa") == null)){
 							
@@ -160,7 +163,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 						<option value=<%= empresa %>><%= empresa %></option>
 					<%}}
 					%>
-					</select><input type="submit" value="Continuar" name="btnContinuar" id="btnContinuar"/>
+					</select><input type="submit" class="oculto" value="Continuar" name="btnContinuar" id="btnContinuar"/>
 					</div>
 				
 					<%
@@ -173,6 +176,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 					%>
 							<div>Seleccione un usuario:
 							<select name=usuario id="usuario">
+							<option>Seleccionar...</option>
 								<% 
 								for( Usuario usuario:lista) {
 								%>
@@ -219,7 +223,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 						if(!(session.getAttribute("confirmacion") == null)){
 							if(session.getAttribute("confirmacion") == "1"){
 							%>
-								<div><h3>Servicio asignado exitosamente.</h3></div>
+								<div><h3 id="msgConfirmacion">Servicio asignado exitosamente.</h3></div>
 							<%
 							}
 							}
