@@ -1,6 +1,16 @@
 package com.analixdata.controladores;
 
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
+
+
+
+
+
+
+
+
 
 
 import javax.servlet.ServletException;
@@ -9,9 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.BufferedReader;
-
 import java.io.InputStreamReader;
-
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -22,9 +30,13 @@ import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.fileupload.*;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.io.IOUtils;
 
 import com.analixdata.modelos.Empresa;
@@ -39,6 +51,59 @@ public class EnvioMensajesServlet extends HttpServlet {
 	protected void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException,IOException
 	{
 		resp.setContentType("text/html;charset=UTF-8");
+		
+		
+		FileItemFactory factory = new DiskFileItemFactory();
+		ServletFileUpload upload = new ServletFileUpload(factory);
+
+
+		// req es la HttpServletRequest que recibimos del formulario.
+		// Los items obtenidos serán cada uno de los campos del formulario,
+		// tanto campos normales como ficheros subidos.
+		List items;
+		try {
+			items = upload.parseRequest(req);
+			// Se recorren todos los items, que son de tipo FileItem
+			for (Object item : items) {
+			   FileItem uploaded = (FileItem) item;
+
+			   // Hay que comprobar si es un campo de formulario. Si no lo es, se guarda el fichero
+			   // subido donde nos interese
+			   if (!uploaded.isFormField()) {
+			      // No es campo de formulario, guardamos el fichero en algún sitio
+			      String line=null;
+				   File fichero = new File("/tmp", uploaded.getName());
+			     
+			      FileReader fileReader =  new FileReader(fichero);
+			      BufferedReader bufferedReader =  new BufferedReader(fileReader);
+
+			            while((line = bufferedReader.readLine()) != null) {
+			                System.out.println(line);
+			            }   
+
+			            // Always close files.
+			            bufferedReader.close(); 
+			      
+			      System.out.println(fichero.getName());
+			      //uploaded.write(fichero);
+			   } else {
+			      // es un campo de formulario, podemos obtener clave y valor
+			      String key = uploaded.getFieldName();
+			      String valor = uploaded.getString();
+			      
+			      System.out.println(key+" "+valor);
+			   }
+			}
+			
+		} catch (FileUploadException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
 		
 		/*String jsonResponse = null;
         
@@ -95,7 +160,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		//processRequest(req, resp);
-		System.out.println("hOLAAA");
+	/*	System.out.println("hOLAAA");
 		
 		
 		String charset = "UTF-8";
@@ -108,7 +173,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		con.setReadTimeout(60 * 1000);
         con.setConnectTimeout(60 * 1000);
-		// optional default is GET
+
 		con.setRequestMethod("GET");
 
 		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0");
@@ -134,26 +199,20 @@ public class EnvioMensajesServlet extends HttpServlet {
 
     		Usuario u = (Usuario)session.getAttribute("usuario");
     		
-    		//print result
-    		//System.out.println(response.toString());
-
-    		///En caso de estar todo bien.. almacena en la basee
-    		
+    	
     		
     		String url = null;
     	    try {
     	      if (SystemProperty.environment.value() ==
     	          SystemProperty.Environment.Value.Production) {
-    	        // Load the class that provides the new "jdbc:google:mysql://" prefix.
+
     	        Class.forName("com.mysql.jdbc.GoogleDriver");
     	        url = "jdbc:google:mysql://pasarelasms-1190:analixdata/pasarelasms?user=root&password=1234";
     	      } else {
-    	        // Local MySQL instance to use during development.
+
     	        Class.forName("com.mysql.jdbc.Driver");
     	        url = "jdbc:mysql://localhost:3306/pasarelasms?user=geo";
 
-    	        // Alternatively, connect to a Google Cloud SQL instance using:
-    	        // jdbc:mysql://ip-address-of-google-cloud-sql-instance:3306/guestbook?user=root
     	      }
     	    } catch (Exception e) {
     	      e.printStackTrace();
@@ -182,14 +241,14 @@ public class EnvioMensajesServlet extends HttpServlet {
 		          
 				
 			} catch (SQLException e) {
-				// TODO Auto-generated catch block
+
 				e.printStackTrace();
 			}
     	    
     	    session.setAttribute("codigo", inputLine); 
     		resp.sendRedirect("mensajeria.jsp");
     	    
-        }
+        }*/
 
 	}
 

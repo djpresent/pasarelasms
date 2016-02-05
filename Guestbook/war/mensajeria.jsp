@@ -264,7 +264,10 @@ if(rs.next()){
 			<div class="col-sm-9 col-md-9 main">
 				<h1 class="page-header">Servicio de Mensajería SMS</h1>
 				<h4>SMS disponibles: <%= disponible %></h4>
-				<table>
+
+			  	<form  action="enviarSMS" enctype="multipart/form-data" method="post" >
+			  		<table>
+			  		
 			  		<tr>
 			  			<td>Archivo:</td>
 						
@@ -286,9 +289,7 @@ if(rs.next()){
 			  				<td>Caracteres:</td>
 			  				<td><input type="text" name=caracteres id="caracteres" size=4 value="160"></td>
 			  			</tr>
-			  	</table>
-			  	<form  action="enviarSMS" method="get" >
-			  		<table>
+			  		
 			  			<tr>
 			  				
 			  				<td><input type="hidden" id="mensaje" name="txtmensaje" ></input></td>
