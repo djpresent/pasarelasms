@@ -1,15 +1,31 @@
 package com.analixdata.controladores;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import com.analixdata.modelos.Usuario;
+import com.google.appengine.api.utils.SystemProperty;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.JsonNode;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 /**
@@ -18,75 +34,44 @@ import java.util.logging.Logger;
  */
 public class SMSServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException, UnirestException{
-        response.setContentType("text/html;charset=UTF-8");
-        
-        HttpResponse<String> r =
-            Unirest.post("https://api.infobip.com/sms/1/text/single")
-            .header("authorization", "Basic QU5BTElYREFUQTpKRExAbmQxM2M==")
-            .header("content-type", "application/json")
-            .header("accept", "application/json")
-            .body("{\"from\":\"Queti\",\"to\":[\"593997270944\", \"593992141808\"],\"text\":\"Mensaje de prueba enviado por Geo\"}")
-            .asString();
-        
-        
-    }
+	@Override
+	  public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
+		
+		
+		String urlEnvio = "http://9-dot-pasarelasms-1190.appspot.com/APIAnalix?idempresa=1&usuario=alina&pass=1234";
+		
+		URL obj = new URL(urlEnvio);
+		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+		con.setReadTimeout(60 * 1000);
+        con.setConnectTimeout(60 * 1000);
+		// optional default is GET
+		con.setRequestMethod("GET");
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (UnirestException ex) {
-            Logger.getLogger(SMSServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+		//con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0");
+		//con.setRequestProperty ("Authorization", "Basic REM1NjIzMTVCM0NCOUVGOjA2MzZFM0FGMTQ=");
+		int responseCode = con.getResponseCode();
+		System.out.println("\nSending 'GET' request to URL : " + urlEnvio);
+		System.out.println("Response Code : " + responseCode);
+		
+		PrintWriter out = resp.getWriter();
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        try {
-            processRequest(request, response);
-        } catch (UnirestException ex) {
-            Logger.getLogger(SMSServlet.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
+		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		out.println( in);
+		
+		String inputLine;
+		StringBuffer response = new StringBuffer();
+		
+		while ((inputLine = in.readLine()) != null)
+		{
+			response.append(inputLine);
+		}
+		in.close();
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+        if (responseCode == 200)    	
+    	    out.println( ""+inputLine );
+
+
+	  }
+
 
 }
