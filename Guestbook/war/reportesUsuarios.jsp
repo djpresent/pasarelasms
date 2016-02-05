@@ -227,7 +227,7 @@
 						else
 						{
 							%>
-							<h4>No existen resultados para esta consulta. PO</h4>
+							<h4>No existen resultados para esta consulta. Por favor, verifique las fechas</h4>
 							<% 
 						}
 					}

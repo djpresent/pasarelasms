@@ -11,10 +11,18 @@
 <head>
 	  	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 	  	<link rel="stylesheet" type="text/css" href="css/estilos.css">
+	  	
 	    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 	  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	  <script src="js/jquery.table2excel.js"></script>
+	  
+	  <script type="text/javascript" src="js/tableExport.js"></script>
+	  <script type="text/javascript" src="js/jquery.base64.js"></script>
+	  <script type="text/javascript" src="js/sprintf.js"></script>
+	  <script type="text/javascript" src="js/jspdf.js"></script>
+	  <script type="text/javascript" src="js/base64.js"></script>
 	  
 	  <script>
 		  $(function() {
@@ -22,9 +30,7 @@
 		    
 		    $( "#fechaHasta" ).datepicker({ dateFormat: 'yy-mm-dd' }).val();
 		  });
-		  
-		  
-		  
+
 	  </script>
 	  
 	  <SCRIPT type=text/javascript>
@@ -42,8 +48,36 @@
 		    });
 		});
 		
+		$("#tablaResultados").table2excel({
+		    exclude: ".excludeThisClass",
+		    name: "Worksheet Name",
+		    filename: "SomeFile" //do not include extension
+		});
 		
+		function CreateExcelSheet ()
+		{
+				
+				$(".table2excel").table2excel({
+					exclude: ".noExl",
+					name: "Excel Document Name",
+					filename: "reportes",
+					exclude_img: true,
+					exclude_links: true,
+					exclude_inputs: true
+				});
+			
+		}
+		
+		function CreatePDF ()
+		{
+			$('#table2excel').tableExport({type:'pdf',escape:'false'});
+				
+			
+		}
+
 	</SCRIPT> 
+	
+	
 	  
     <title>Analixdata Servicios en Línea</title>
   </head>
@@ -154,55 +188,64 @@ if(cookie.getName().equals("usuario"))
 				<h1 class="page-header">Reportes</h1>
 				
 				<form action="/reporteTransacciones">
-					<table>
-						<tr>
-							<td>
-								Desde: 
+					<div class="row">
+        				<div class="col-xs-3">
+        					<div class="form-group">
+							    <label for="fechaDesde">Desde</label>
 								<%
 									if (!(session.getAttribute("fDesde") == null))
 									{
 										String fd= session.getAttribute("fDesde").toString();
-										%>
-										
-										<input type="text" id="fechaDesde" name ="fechaDesde"  value=<%=fd %> required="required" >
-									 	<% 
+								%>
+												
+								<input type="text" class="form-control" placeholder="Fecha inicial de busqueda" id="fechaDesde" name ="fechaDesde"  value=<%=fd %> required="required" >
+								<% 
 									}
 									else
 									{
-										%>
-										<input type="text" id="fechaDesde" name ="fechaDesde" required="required" >
-										<% 
-										
+								%>
+								<input type="text" class="form-control" placeholder="Fecha inicial de busqueda" id="fechaDesde" name ="fechaDesde" required="required" >
+								<% 
+			
 									}
 								%>
-								
-							</td>
-							<td>
-								Hasta: 
-								<%
-									if (!(session.getAttribute("fHasta") == null))
-									{
-										String fa= session.getAttribute("fHasta").toString();
-										%>
-										
-										<input type="text" id="fechaHasta" name ="fechaHasta"  value=<%=fa %> required="required"  >
-									 	<% 
-									}
-									else
-									{
-										%>
-										<input type="text" id="fechaHasta" name ="fechaHasta" required="required">
-										<% 
-										
-									}
-								%>
-								
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Empresa: 
-								<select name=reporteEmpresa id="rEmpresa" >
+							</div>
+        				</div>
+        				
+        				<div class="col-xs-3">
+        					<div class="form-group">
+	        				<label for="fechaHasta">Hasta</label>
+							<%
+								if (!(session.getAttribute("fHasta") == null))
+								{
+									String fa= session.getAttribute("fHasta").toString();
+							%>
+											
+							<input type="text" class="form-control" placeholder="Fecha final de busqueda" id="fechaHasta" name ="fechaHasta"  value=<%=fa %> required="required"  >
+							<% 
+								}
+								else
+								{
+							%>
+							<input type="text" class="form-control" placeholder="Fecha final de busqueda" id="fechaHasta" name ="fechaHasta" required="required">
+							<% 			
+								}
+							%>		
+							</div>
+        				</div>
+        				<div class="col-xs-3 vert-offset-top-1-8">
+        					<div class="form-group">
+        						<label for="btnConsultar"></label> 
+        						<input class="btn btn-default" type="submit" value="Consultar" name="btnConsultar"/>
+        					</div>
+        				</div>
+        			</div>
+	
+        			<div class="row">
+        				<div class="col-xs-3">
+        					<div class="form-group">
+        						<label for="rEmpresa">Empresa</label>
+        						<select class="form-control" name=reporteEmpresa id="rEmpresa" >
 									<option value="noempresa" >Seleccione una empresa....</option>	
 									
 									<% 
@@ -221,59 +264,54 @@ if(cookie.getName().equals("usuario"))
 											<option value=<%= empresa %>><%= empresa %></option>
 										<%}}
 										%>
-									</select>
-									<input type="submit" class="oculto" value="Continuar" name="btnContinuarReportes" id="btnContinuarReportes"/>
-							</td>
-							<td>
-								<%
-						
-					
-								if(!(session.getAttribute("listaUsuarios") == null))
-								{
-									
-								List<Usuario> lista= (List<Usuario>)session.getAttribute("listaUsuarios");
-						
-								%>
-								
-								Usuario: <select name=reporteUsuario id="rUsuario" >
-								<option value="nousuario" >Seleccione un usuario....</option>	
-								<% 
-								
-								/*if (session.getAttribute("usu").equals("nousuario"))
-								{
-									System.out.println(session.getAttribute("entroooo"));
-									session.setAttribute("usu", null);
-								}*/
-								for( Usuario usuario:lista) 
-								{
-									//System.out.println("Dentro del for "+session.getAttribute("usu"));
-									//if(!(session.getAttribute("usu") == null) )
-									//{
-									%>
-										
-											<option value=<%= usuario.getId() %>><%= usuario.getNombres() %></option>
-									
-									
-								<%
-								}
-								%>
-								
 								</select>
-								<input type="submit" class="oculto" value="ContinuarUs" name="btnContinuarUsuarios" id="btnContinuarUsuarios"/>
-								<% 	
-						}
-					%>	
-							</td>
-							<td>
-								Servicio: <select name=reporteServicio id="rServicio" >
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<input type="submit" value="Consultar" name="btnConsultar"/>
-							</td>
-						</tr>
-					</table>
+								<input type="submit" class="oculto" value="Continuar" name="btnContinuarReportes" id="btnContinuarReportes"/>
+        					</div>
+        				</div>
+        				
+        				<div class="col-xs-3">
+        					<div class="form-group">
+        						<label for="rUsuario">Usuarios</label>
+        							<%
+
+									if(!(session.getAttribute("listaUsuarios") == null))
+									{
+										
+									List<Usuario> lista= (List<Usuario>)session.getAttribute("listaUsuarios");
+							
+									%>
+									
+									<select class="form-control" name=reporteUsuario id="rUsuario" >
+									<option value="nousuario" >Seleccione un usuario....</option>	
+									<% 
+									
+									/*if (session.getAttribute("usu").equals("nousuario"))
+									{
+										System.out.println(session.getAttribute("entroooo"));
+										session.setAttribute("usu", null);
+									}*/
+									for( Usuario usuario:lista) 
+									{
+										//System.out.println("Dentro del for "+session.getAttribute("usu"));
+										//if(!(session.getAttribute("usu") == null) )
+										//{
+									%>
+											
+									<option value=<%= usuario.getId() %>><%= usuario.getNombres() %></option>
+										
+										
+									<%
+									}
+									%>
+									
+									</select>
+									<input type="submit" class="oculto" value="ContinuarUs" name="btnContinuarUsuarios" id="btnContinuarUsuarios"/>
+									<% 	
+									}
+									%>	
+        					</div>
+        				</div>
+        			</div>
 				</form>
 	
 			<div class="table-responsive">
@@ -287,7 +325,7 @@ if(cookie.getName().equals("usuario"))
 				%>
 						
 						<h4>Los resultados son:</h4>
-						<table class="table table-bordered">
+						<table class="table table-bordered table2excel" id="table2excel">
 						<tr>
 							<td>ID</td>
 							<td>Fecha</td>
@@ -319,13 +357,15 @@ if(cookie.getName().equals("usuario"))
 							<% 
 						}
 						%>
+						 <input type="button" onclick="CreateExcelSheet()" value="Exportar a Excel"></input>
+						 
 						</table>
 						<%
 						}
 						else
 						{
 							%>
-							<h4>No existen resultados para esta consulta. PO</h4>
+							<h4>No existen resultados para esta consulta. Por favor, verifique las fechas</h4>
 							<% 
 						}
 					}
