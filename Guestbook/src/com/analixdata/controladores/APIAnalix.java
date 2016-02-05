@@ -25,15 +25,15 @@ public class APIAnalix extends HttpServlet {
 	        String u = req.getParameter("usuario");
 	        String pass = req.getParameter("pass");
 	        
-	        String atributo =req.getAttribute("Authorization").toString();
+	        //String atributo =req.getAttribute("Authorization").toString();
 	        
-	        String encabezado =req.getHeader("Authorization");
+	       // String encabezado =req.getHeader("Authorization");
 	        
 	        
-
+	      //  ATRIBUTO: "+atributo+" ENCABEZADO "+encabezado
 	
 	   
-		            out.println( "IDEMPRESA: "+id+" USUARIO:"+u+" PASS: "+pass+" ATRIBUTO: "+atributo+" ENCABEZADO "+encabezado);
+		            out.println( "IDEMPRESA: "+id+" USUARIO:"+u+" PASS: "+pass);
 		       
 	    
 	      } finally {
