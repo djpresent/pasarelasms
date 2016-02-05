@@ -107,42 +107,56 @@ if(u.getTipo().getId() == 3){
 			  	<div class="col-sm-3 col-md-2 sidebar"> 
 				    <ul class="nav nav-sidebar">
 											<%  
-							if(u != null){
-								
-								int tipo=u.getTipo().getId();
-								
-								if(tipo == 1){ 
-								%>
-									<li><a href="empresas.jsp">Empresas</a></li>
-									<li ><a href="servicios.jsp">Servicios</a></li>
-									<li><a href="usuarios.jsp">Usuarios</a></li>
-									<li ><a href="servicioEmpresa.jsp">Servicios a empresas</a></li>
-									<li><a href="servicioUsuarios.jsp">Servicios a Usuarios</a></li>
-								<%}
-								
-								if(tipo == 2){ 
-									%>
-										<li><a href="empresa.jsp">Empresa</a></li>
-										<li ><a href="serviciosContratados.jsp">Servicios</a></li>
-										<li><a href="usuarios.jsp">Usuarios</a></li>
-										<li><a href="servicioUsuarios.jsp">Servicios a Usuarios</a></li>
-									<%}
-								
-								if(tipo == 3){ 
-									%>
-										<li><a href="empresa.jsp">Empresa</a></li>
-										<li ><a href="serviciosContratados.jsp">Servicios</a></li>
-										<li><a href="usuario.jsp">Usuario</a></li>
-								
-									<%}
-								
-								if(tipo == 1 || u.tieneServicio(1)){%>
-								<li><a href="mensajeria.jsp">Mensajería</a></li>
-								<li><a href="reportes.jsp">Reportes</a></li>
-								
-							<%}
-								
-							}
+											if(u != null){
+												
+												int tipo=u.getTipo().getId();
+												
+												if(tipo == 1){ 
+												%>
+													<li><a href="empresas.jsp">Empresas</a></li>
+													<li ><a href="servicios.jsp">Servicios</a></li>
+													<li><a href="usuarios.jsp">Usuarios</a></li>
+													<li ><a href="servicioEmpresa.jsp">Servicios a empresas</a></li>
+													<li><a href="servicioUsuarios.jsp">Servicios a Usuarios</a></li>
+														
+														<li><a href="mensajeria.jsp">Mensajería</a></li>
+														<li><a href="reportes.jsp">Reportes</a></li>
+														
+													<%}
+												
+												
+												if(tipo == 2){ 
+													%>
+														<li><a href="empresa.jsp">Empresa</a></li>
+														<li ><a href="serviciosContratados.jsp">Servicios</a></li>
+														<li><a href="usuarios.jsp">Usuarios</a></li>
+														<li><a href="servicioUEmpresa.jsp">Servicios a Usuarios</a></li>
+														<%if( u.tieneServicio(1)){
+															%>
+														<li><a href="mensajeria.jsp">Mensajería</a></li>
+														<li><a href="reportesEmpresas.jsp">Reportes</a></li>
+														
+														<%}
+													}
+												
+												if(tipo == 3){ 
+													%>
+														<li><a href="empresa.jsp">Empresa</a></li>
+														<li ><a href="serviciosContratados.jsp">Servicios</a></li>
+														<li><a href="usuario.jsp">Usuario</a></li>
+												
+													<%
+													
+													if( u.tieneServicio(1)){
+														%>
+														
+														<li><a href="mensajeria.jsp">Mensajería</a></li>
+														<li><a href="reportesUsuarios.jsp">Reportes</a></li>
+														
+														<%}
+												}
+												
+												
 						%>
 			
 						<li><a href="/cerrarSesion">Cerrar Sesión</a></li>
@@ -214,6 +228,6 @@ if(u.getTipo().getId() == 3){
 		</div>
 	</div>
 
-
+<%} %>
   </body>
 </html>

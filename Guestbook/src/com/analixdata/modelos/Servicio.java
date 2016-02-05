@@ -6,6 +6,7 @@ public class Servicio implements Serializable{
 
 	private int idServicio;
 	private String descripcion;
+	private int asignado;
 	
 	public Servicio()
 	{}
@@ -14,6 +15,13 @@ public class Servicio implements Serializable{
 		super();
 		this.idServicio = idServicio;
 		this.descripcion = descripcion;
+	}
+	
+	public Servicio(int idServicio, String descripcion,int asignado) {
+		super();
+		this.idServicio = idServicio;
+		this.descripcion = descripcion;
+		this.asignado = asignado;
 	}
 
 	public int getIdServicio() {
@@ -30,6 +38,14 @@ public class Servicio implements Serializable{
 
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
+	}
+
+	public int getAsignado() {
+		return asignado;
+	}
+
+	public void setAsignado(int asignado) {
+		this.asignado = asignado;
 	}
 
 	

@@ -44,11 +44,18 @@
 		return false;
 		}
 		else {
-			document.getElementById('divContrasena').style.display = 'block';
-			document.getElementById('divContrasenaC').style.display = 'block';
-			document.getElementById('passwordUsuario').value = hex_md5(document.getElementById('password').value);
 			
-			return true;
+			
+				if(document.getElementById("empresaUsuario").value == "noempresa" || document.getElementById("tipoUsuario").value == "nousuario" ){
+								
+								alert("No hay información suficiente para continuar. Revise sus selecciones.");
+							}else{
+								document.getElementById('divContrasena').style.display = 'block';
+								document.getElementById('divContrasenaC').style.display = 'block';
+								document.getElementById('passwordUsuario').value = hex_md5(document.getElementById('password').value);
+								
+								return true;
+							}
 		      }
 		   }
 		}else{
@@ -88,6 +95,12 @@
 			document.getElementById('divContrasena').style.display = 'block';
 			document.getElementById('divContrasenaC').style.display = 'block';
 		}
+		
+
+			
+			
+			
+	
 		
 		
 		
@@ -173,42 +186,56 @@ if(u.getTipo().getId() == 2){
 			  	<div class="col-sm-3 col-md-2 sidebar"> 
 				    <ul class="nav nav-sidebar">
 						<%  
-							if(u != null){
-								
-								int tipo=u.getTipo().getId();
-								
-								if(tipo == 1){ 
-								%>
-									<li><a href="empresas.jsp">Empresas</a></li>
-									<li ><a href="servicios.jsp">Servicios</a></li>
-									<li><a href="usuarios.jsp">Usuarios</a></li>
-									<li ><a href="servicioEmpresa.jsp">Servicios a empresas</a></li>
-									<li><a href="servicioUsuarios.jsp">Servicios a Usuarios</a></li>
+						if(u != null){
+							
+							int tipou=u.getTipo().getId();
+							
+							if(tipou == 1){ 
+							%>
+								<li><a href="empresas.jsp">Empresas</a></li>
+								<li ><a href="servicios.jsp">Servicios</a></li>
+								<li><a href="usuarios.jsp">Usuarios</a></li>
+								<li ><a href="servicioEmpresa.jsp">Servicios a empresas</a></li>
+								<li><a href="servicioUsuarios.jsp">Servicios a Usuarios</a></li>
+									
+									<li><a href="mensajeria.jsp">Mensajería</a></li>
+									<li><a href="reportes.jsp">Reportes</a></li>
+									
 								<%}
-								
-								if(tipo == 2){ 
-									%>
-										<li><a href="empresa.jsp">Empresa</a></li>
-										<li ><a href="serviciosContratados.jsp">Servicios</a></li>
-										<li><a href="usuarios.jsp">Usuarios</a></li>
-										<li><a href="servicioUsuarios.jsp">Servicios a Usuarios</a></li>
+							
+							
+							if(tipou == 2){ 
+								%>
+									<li><a href="empresa.jsp">Empresa</a></li>
+									<li ><a href="serviciosContratados.jsp">Servicios</a></li>
+									<li><a href="usuarios.jsp">Usuarios</a></li>
+									<li><a href="servicioUEmpresa.jsp">Servicios a Usuarios</a></li>
+									<%if( u.tieneServicio(1)){
+										%>
+									<li><a href="mensajeria.jsp">Mensajería</a></li>
+									<li><a href="reportesEmpresas.jsp">Reportes</a></li>
+									
 									<%}
+								}
+							
+							if(tipou == 3){ 
+								%>
+									<li><a href="empresa.jsp">Empresa</a></li>
+									<li ><a href="serviciosContratados.jsp">Servicios</a></li>
+									<li><a href="usuario.jsp">Usuario</a></li>
+							
+								<%
 								
-								if(tipo == 3){ 
+								if( u.tieneServicio(1)){
 									%>
-										<li><a href="empresa.jsp">Empresa</a></li>
-										<li ><a href="serviciosContratados.jsp">Servicios</a></li>
-										<li><a href="usuario.jsp">Usuario</a></li>
-								
+									
+									<li><a href="mensajeria.jsp">Mensajería</a></li>
+									<li><a href="reportesUsuarios.jsp">Reportes</a></li>
+									
 									<%}
-								
-								if(tipo == 1 || u.tieneServicio(1)){%>
-								<li><a href="mensajeria.jsp">Mensajería</a></li>
-								<li><a href="reportes.jsp">Reportes</a></li>
-								
-							<%}
-								
 							}
+							
+							
 						%>
 					
 						<li><a href="/cerrarSesion">Cerrar Sesión</a></li>
@@ -294,6 +321,7 @@ if(u.getTipo().getId() == 2){
 					</div>
 					<div>Tipo de usuario:
 				    	<select name=tipo id="tipoUsuario">
+				    	<option value="nousuario">Seleccionar...</option>
 				    		<% 
 					while (rs.next()) {
 						
@@ -318,7 +346,7 @@ if(u.getTipo().getId() == 2){
 					Empresa:
 					
 					<select name=empresaUsuario id="empresaUsuario">
-					<option value="noempresa">Seleccione una empresa</option>
+					<option value="noempresa">Seleccionar...</option>
 					<% 
 					
 					
@@ -357,6 +385,6 @@ if(u.getTipo().getId() == 2){
 	
 		</div>
 	</div>
-
+<%} %>
   </body>
 </html>

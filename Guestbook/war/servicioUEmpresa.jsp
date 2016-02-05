@@ -13,31 +13,20 @@
 	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<SCRIPT type=text/javascript>
 	
+
 	
 	$(function() {
-	    $('#empresa').on('change', function(event) {
-	    	document.getElementById("btnContinuar").click();
-	    });
-	});
-	
-	$(function() {
-	    $('#empresa').on('focus', function(event) {
-	    	document.getElementById("msgConfirmacion").style.display="none";
-	    });
-	});
-	
-	$(function() {
-	    $('#usuario').on('change', function(event) {
-	    	document.getElementById("verServicios").click();
+	    $('#userEmpresa').on('change', function(event) {
+	    	document.getElementById("btnServicios").click();
 	    });
 	});
 	
 	function validar(){
 		
 	
-		if(document.getElementById("empresa").value == "noempresa" && document.getElementById("usuario").value == "nousuario" ){
+		if(document.getElementById("userEmpresa").value == "nousuario" ){
 			
-			alert("No hay información suficiente para continuar. Revise sus selecciones.");
+			alert("No ha seleccionado un usuario.");
 		}
 		
 	}
@@ -87,7 +76,7 @@ if (SystemProperty.environment.value() ==
 
 Connection conn = DriverManager.getConnection(url);
 ResultSet rs = conn.createStatement().executeQuery(
-    "SELECT * FROM empresa WHERE estado=1");
+	    "SELECT * FROM usuario WHERE estado=1 and idempresa="+u.getEmpresa().getIdEmpresa()+";");
 %>
 
 
@@ -164,7 +153,6 @@ ResultSet rs = conn.createStatement().executeQuery(
 							
 							
 						
-						
 						%>
 						
 					
@@ -175,74 +163,40 @@ ResultSet rs = conn.createStatement().executeQuery(
 		
 			<div class="col-sm-9 col-md-9 main">
 				<h1 class="page-header">Asignación de Servicios a Usuarios</h1>
-				<form  action="/asignarServicioUsuario" onsubmit="validar()">
+				<form  action="/asignarServicioUEmpresa" onsubmit="validar()">
 
-				<div>Seleccione una empresa:
-					<select name=empresa id="empresa" > 
-					<option value="noempresa">Seleccionar...</option>
+				<div>Seleccione un usuario:
+					<select name=userEmpresa id="userEmpresa" > 
+					<option value="nousuario">Seleccionar...</option>
 					<% 
 					while (rs.next()) {
-					String empresa = rs.getString("nombre");
+					String usuario = rs.getString("idusuario");
 					
-					System.out.println(session.getAttribute("empresa"));
+					System.out.println(session.getAttribute("usuario"));
 					
-					if(!(session.getAttribute("empresa") == null)){
+					if(!(session.getAttribute("idusuario") == null)){
 							
-							if(empresa.equals(session.getAttribute("empresa"))){%>
-								<option value=<%= empresa %> selected ><%= empresa %></option>
+							if(usuario.equals(session.getAttribute("idusuario"))){%>
+								<option value=<%= usuario %> selected ><%= usuario %></option>
 							<%}else{%>
-							<option value=<%= empresa %>><%= empresa %></option>
+							<option value=<%= usuario %>><%= usuario %></option>
 					<%	
 							}
 						}else{%>
-						<option value=<%= empresa %>><%= empresa %></option>
+						<option value=<%= usuario %>><%= usuario %></option>
 					<%}}
 					%>
-					</select><input type="submit" class="oculto" value="Continuar" name="btnContinuar" id="btnContinuar"/>
+					</select><input type="submit" class="oculto" value="Continuar" name="btnServicios" id="btnServicios"/>
 					</div>
 				
 					<%
 						
 					
-						if(!(session.getAttribute("listaUsuarios") == null)){
+			
+				
+						if(!(session.getAttribute("serviciosU") == null) && !(session.getAttribute("idusuario") == null)){
 							
-						List<Usuario> lista= (List<Usuario>)session.getAttribute("listaUsuarios");
-						
-					%>
-							<div>Seleccione un usuario:
-							<select name=usuario id="usuario">
-							<option value="nousuario">Seleccionar...</option>
-								<% 
-								for( Usuario usuario:lista) {
-							
-					
-					if(!(session.getAttribute("idusuario") == null)){
-							
-							String id=session.getAttribute("idusuario").toString();
-						
-							if(usuario.getId()==Integer.parseInt(id)){%>
-								<option value=<%= usuario.getId() %> selected ><%= usuario.getNombres() %></option>
-								<%}else{%>
-							<option value=<%= usuario.getId() %>><%= usuario.getNombres() %></option>
-							<%	
-							}
-						}else{%>
-						<option value=<%= usuario.getId() %>><%= usuario.getNombres() %></option>
-						<%}
-								}	
-									
-								%>
-				    		</select> <input type="submit" class="oculto" value="Continuar" name="verServicios" id="verServicios"/>
-							
-					<% 	
-						}
-					%>	
-					</div>
-					
-					<%
-						if(!(session.getAttribute("listaServicios") == null) && !(session.getAttribute("idusuario") == null)){
-							
-						List<Servicio> listaS= (List<Servicio>)session.getAttribute("listaServicios");
+						List<Servicio> listaS= (List<Servicio>)session.getAttribute("serviciosU");
 						
 					%>
 					   
@@ -262,7 +216,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 									}else{
 										
 										%>
-										<input type="checkbox" name="<%=ser.getDescripcion() %>" > <%=ser.getDescripcion() %><br>
+										<input type="checkbox" name="<%=ser.getDescripcion() %>"> <%=ser.getDescripcion() %><br>
 										
 										<%
 									}
@@ -299,9 +253,9 @@ ResultSet rs = conn.createStatement().executeQuery(
 		</div>
 	</div>
 	
-
-
 <%} %>
+
+
 
   </body>
 </html>

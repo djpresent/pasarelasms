@@ -22,7 +22,7 @@ import com.analixdata.modelos.Servicio;
 import com.analixdata.modelos.Usuario;
 import com.google.appengine.api.utils.SystemProperty;
 
-public class ServicioUsuarioServlet extends HttpServlet {
+public class ServicioUEmpresaServlet extends HttpServlet {
 
 	protected void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException,IOException
 	{
@@ -54,44 +54,22 @@ public class ServicioUsuarioServlet extends HttpServlet {
 		      Connection conn = DriverManager.getConnection(url);
 		      try {
 			
-		    	  String empresa=req.getParameter("empresa");
-		    	  String usu=req.getParameter("usuario");
-		    	  String idu=req.getParameter("idusuario");
-		    	  String ser=req.getParameter("servicio");
-		    	  String inputContinuar=req.getParameter("btnContinuar");
+		    	 
+		    	  String usu=req.getParameter("userEmpresa");
+		    	
 		    	  String inputServicios=req.getParameter("verServicios");
 		    	  String inputGuardar=req.getParameter("btnGuardar");
 		    	  String inputCancelar=req.getParameter("btnCancelar");
 		    	  
+		    	  HttpSession session = req.getSession();
+			    	Usuario u = (Usuario)session.getAttribute("usuario");
+		    	  
 		    	  ResultSet rs;
 		    	  
-			      if(inputContinuar!=null){  
-		    	  
-			      rs = conn.createStatement().executeQuery("SELECT usuario.* FROM pasarelasms.usuario,pasarelasms.empresa WHERE usuario.idempresa=empresa.idempresa and usuario.estado=1 and empresa.nombre='"+empresa+"';");
-		        	
-			        List<Usuario> listaUsuarios=new ArrayList();
-			        
-			        while (rs.next()) {
-			            int id =rs.getInt("idusuario");
-			        	String nombre = rs.getString("nombres")+" "+rs.getString("apellidos");
-			        	
-			        	Usuario usuario=new Usuario(id,nombre);
-			        	
-			        	listaUsuarios.add(usuario);
-			        	
-			        }
-			        	
-			        	HttpSession session=req.getSession(true);
-				        session.setAttribute("empresa", empresa);
-				        session.setAttribute("listaUsuarios", listaUsuarios);
-				        session.setAttribute("confirmacion", null); 
-				        
-				        resp.sendRedirect("servicioUsuarios.jsp");
-			        	
-	 
-		        	}else  if(inputServicios!=null){  
+			       if(inputServicios!=null){  
+			    	   
 				    	  
-			        	rs = conn.createStatement().executeQuery("Select A.idservicio,descripcion,idusuario from (SELECT servicio_empresa.idservicio,descripcion FROM pasarelasms.servicio_empresa,pasarelasms.empresa,pasarelasms.servicio WHERE nombre='"+empresa+"' and servicio_empresa.idservicio=servicio.idservicio and servicio_empresa.idempresa=empresa.idempresa) A left join (SELECT idservicio,idusuario   FROM pasarelasms.servicio_usuario WHERE idusuario="+usu+") B on A.idservicio=B.idservicio;");
+			        	rs = conn.createStatement().executeQuery("Select A.idservicio,descripcion,idusuario from (SELECT servicio_empresa.idservicio,descripcion FROM pasarelasms.servicio_empresa,pasarelasms.empresa,pasarelasms.servicio WHERE empresa.idempresa='"+u.getEmpresa().getIdEmpresa()+"' and servicio_empresa.idservicio=servicio.idservicio and servicio_empresa.idempresa=empresa.idempresa) A left join (SELECT idservicio,idusuario   FROM pasarelasms.servicio_usuario WHERE idusuario="+usu+") B on A.idservicio=B.idservicio;");
 				        
 				        
 				        List<Servicio> listaServicios=new ArrayList();
@@ -114,31 +92,22 @@ public class ServicioUsuarioServlet extends HttpServlet {
 				        	listaServicios.add(servicio);
 				        	
 			        	}
-				        HttpSession session=req.getSession(true);
-				        session.setAttribute("empresa", empresa);
+				      
+				    
 				        session.setAttribute("idusuario", usu);
-				       // session.setAttribute("listaUsuarios", listaUsuarios);
-				        session.setAttribute("listaServicios", listaServicios);
+				   
+				        session.setAttribute("serviciosU", listaServicios);
 				        session.setAttribute("confirmacion", null); 
-				        resp.sendRedirect("servicioUsuarios.jsp");
+				        resp.sendRedirect("servicioUEmpresa.jsp");
 				        
 				        	
 		 
 			        	} else if(inputGuardar!=null){
 			    	  
 			    	  PrintWriter out = resp.getWriter();
-			    	  String idempresa=null;
 			    	  
-			    	  rs = conn.createStatement().executeQuery("SELECT idempresa FROM pasarelasms.empresa WHERE nombre='"+empresa+"';");
-			        	
-			    	  if(rs.next()){
-			        		
-			        		 idempresa=Integer.toString(rs.getInt("idempresa"));
-			        		 
-			        	}
-			    	  
-			    	  HttpSession session=req.getSession(true);
-			    	  List<Servicio> listaS=(List<Servicio>)session.getAttribute("listaServicios");
+			    	
+			    	  List<Servicio> listaS=(List<Servicio>)session.getAttribute("serviciosU");
 			    	  
 			    	  for(Servicio serv:listaS)
 			    		  
@@ -148,11 +117,11 @@ public class ServicioUsuarioServlet extends HttpServlet {
 			    		  
 			    		  
 			    		 if(idser!=null && serv.getAsignado()==0){
-			    			  String statement = "INSERT INTO servicio_usuario (idservicio,idempresa,idusuario) VALUES( ? , ? , ? )";
+			    			  String statement = "INSERT INTO servicio_usuario (idservicio,idempresa,idusuario) VALUES( ? , "+u.getEmpresa().getIdEmpresa()+" , ? )";
 					          PreparedStatement stmt = conn.prepareStatement(statement);
 					          stmt.setInt(1, serv.getIdServicio());
-					          stmt.setString(2, idempresa);
-					          stmt.setString(3, usu);
+					   
+					          stmt.setString(2, usu);
 					          
 					          int success = 2;
 					          success = stmt.executeUpdate();
@@ -192,23 +161,22 @@ public class ServicioUsuarioServlet extends HttpServlet {
 			    		  session.setAttribute("confirmacion", "1"); 
 			    		  
 			    	  }
-			    	  session.setAttribute("listaUsuarios", null);
-			          session.setAttribute("listaServicios", null);
-			          session.setAttribute("empresa",null);
+			    	
+			          session.setAttribute("serviciosU", null);
+			   
 			          session.setAttribute("idusuario",null);
-			          /*session.setAttribute("usuario",null);*/
+			        
 			    	  
 			         
 			          
 			          
-			          resp.sendRedirect("servicioUsuarios.jsp");
+			          resp.sendRedirect("servicioUEmpresa.jsp");
 			      }else if(inputCancelar!=null){
-			    	  HttpSession session=req.getSession(true);
-			    	  session.setAttribute("listaUsuarios", null);
-			          session.setAttribute("listaServicios", null);
-			          session.setAttribute("empresa",null);
+			    	  session=req.getSession(true);
+			    	  session.setAttribute("serviciosU", null);
+		
 			          session.setAttribute("idusuario",null);
-			          resp.sendRedirect("servicioUsuarios.jsp");
+			          resp.sendRedirect("servicioUEmpresa.jsp");
 			      }
 			      
 			      

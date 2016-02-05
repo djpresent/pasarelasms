@@ -24,6 +24,15 @@
 			else
 				document.getElementById("estado").value = 0 ;
 			}
+			
+			function validar(){
+				
+				if(document.getElementById("empresa").value =="noempresa" && document.getElementById("servicio").value =="noservicio" ){
+					
+					alert("No hay información suficiente para continuar. Revise sus selecciones.");
+				}
+				
+			}
 		
 		
 	</SCRIPT> 
@@ -92,42 +101,56 @@ ResultSet rs = conn.createStatement().executeQuery(
 			  	<div class="col-sm-3 col-md-2 sidebar"> 
 				    <ul class="nav nav-sidebar">
 											<%  
-							if(u != null){
-								
-								int tipo=u.getTipo().getId();
-								
-								if(tipo == 1){ 
-								%>
-									<li><a href="empresas.jsp">Empresas</a></li>
-									<li ><a href="servicios.jsp">Servicios</a></li>
-									<li><a href="usuarios.jsp">Usuarios</a></li>
-									<li ><a href="servicioEmpresa.jsp">Servicios a empresas</a></li>
-									<li><a href="servicioUsuarios.jsp">Servicios a Usuarios</a></li>
-								<%}
-								
-								if(tipo == 2){ 
-									%>
-										<li><a href="empresa.jsp">Empresa</a></li>
-										<li ><a href="serviciosContratados.jsp">Servicios</a></li>
-										<li><a href="usuarios.jsp">Usuarios</a></li>
-										<li><a href="servicioUsuarios.jsp">Servicios a Usuarios</a></li>
-									<%}
-								
-								if(tipo == 3){ 
-									%>
-										<li><a href="empresa.jsp">Empresa</a></li>
-										<li ><a href="serviciosContratados.jsp">Servicios</a></li>
-										<li><a href="usuario.jsp">Usuario</a></li>
-								
-									<%}
-								
-								if(tipo == 1 || u.tieneServicio(1)){%>
-								<li><a href="mensajeria.jsp">Mensajería</a></li>
-								<li><a href="reportes.jsp">Reportes</a></li>
-								
-							<%}
-								
-							}
+											if(u != null){
+												
+												int tipo=u.getTipo().getId();
+												
+												if(tipo == 1){ 
+												%>
+													<li><a href="empresas.jsp">Empresas</a></li>
+													<li ><a href="servicios.jsp">Servicios</a></li>
+													<li><a href="usuarios.jsp">Usuarios</a></li>
+													<li ><a href="servicioEmpresa.jsp">Servicios a empresas</a></li>
+													<li><a href="servicioUsuarios.jsp">Servicios a Usuarios</a></li>
+														
+														<li><a href="mensajeria.jsp">Mensajería</a></li>
+														<li><a href="reportes.jsp">Reportes</a></li>
+														
+													<%}
+												
+												
+												if(tipo == 2){ 
+													%>
+														<li><a href="empresa.jsp">Empresa</a></li>
+														<li ><a href="serviciosContratados.jsp">Servicios</a></li>
+														<li><a href="usuarios.jsp">Usuarios</a></li>
+														<li><a href="servicioUEmpresa.jsp">Servicios a Usuarios</a></li>
+														<%if( u.tieneServicio(1)){
+															%>
+														<li><a href="mensajeria.jsp">Mensajería</a></li>
+														<li><a href="reportesEmpresas.jsp">Reportes</a></li>
+														
+														<%}
+													}
+												
+												if(tipo == 3){ 
+													%>
+														<li><a href="empresa.jsp">Empresa</a></li>
+														<li ><a href="serviciosContratados.jsp">Servicios</a></li>
+														<li><a href="usuario.jsp">Usuario</a></li>
+												
+													<%
+													
+													if( u.tieneServicio(1)){
+														%>
+														
+														<li><a href="mensajeria.jsp">Mensajería</a></li>
+														<li><a href="reportesUsuarios.jsp">Reportes</a></li>
+														
+														<%}
+												}
+												
+												
 						%>
 						
 						<li><a href="/cerrarSesion">Cerrar Sesión</a></li>
@@ -180,30 +203,33 @@ ResultSet rs = conn.createStatement().executeQuery(
 				</table>
 				
 				<p><strong>ASGINAR NUEVO SERVICIO A EMPRESAS</strong></p>
-				<form action="/asignarServicio" method="post">
+				<form action="/asignarServicio" method="post" onsubmit="validar()">
 					 <div><input type="hidden" name="idServicio" id="idServicio" required="required"></input></div>
 				   
+										
+					<%ResultSet rs1 = conn.createStatement().executeQuery("SELECT * FROM empresa where estado=1");%>
+					
+					
+					<div>Empresa:
+					<select name=empresa id="empresa">
+					<option value="noempresa">Seleccionar...</option>
+					<% 
+					while (rs1.next()) {
+					String empresa = rs1.getString("nombre");%>
+						<option value=<%= empresa %>><%= empresa %></option>
+					<%}%>
+					</select>
+					</div>
+					
 					<div>Servicio:
 				    	<select name=servicio id="servicio">
+				    	<option value="noservicio">Seleccionar...</option>
 				    		<% 
 					while (rs.next()) {
 					String descServicio = rs.getString("descripcion");%>
 						<option value=<%= descServicio %>><%= descServicio %></option>
 					<%}%>
 				    		</select> 
-					</div>
-					
-					<%rs = conn.createStatement().executeQuery("SELECT * FROM empresa where estado=1");%>
-					
-					
-					<div>Empresa:
-					<select name=empresa id="empresa">
-					<% 
-					while (rs.next()) {
-					String empresa = rs.getString("nombre");%>
-						<option value=<%= empresa %>><%= empresa %></option>
-					<%}%>
-					</select>
 					</div>
 					
 				    <div>Límite mensual: <input type="number" name="limite" id="limite" required="required"></input></div>
@@ -227,7 +253,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 	
 		</div>
 	</div>
-
+<%} %>
 
   </body>
 </html>
