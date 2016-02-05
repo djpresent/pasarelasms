@@ -44,7 +44,7 @@ public class APIAnalix extends HttpServlet {
 	   
 		         //   out.println( "IDEMPRESA: "+id+" USUARIO:"+u+" PASS: "+pass+" ENCABEZADO "+encabezado);
 		       
-	    
+	        out.println( "RESPUESTA");
 	      
 	    } catch (Error e) {
 	      e.printStackTrace();
