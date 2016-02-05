@@ -31,18 +31,11 @@
 	
 	
 		$(function() {
-		    $('#rEmpresa').on('change', function(event) {
+		    $('#usuario').on('change', function(event) {
 		    	document.getElementById("btnContinuarReportes").click();
 		    });
 		});
-	
-		$(function() {
-		    $('#rUsuario').on('change', function(event) {
-		    	document.getElementById("btnContinuarUusuario").click();
-		    });
-		});
-		
-		
+
 	</SCRIPT> 
 	  
     <title>Analixdata Servicios en Línea</title>
@@ -55,23 +48,23 @@
 	
   session = request.getSession();
 	Usuario u = (Usuario)session.getAttribute("usuario");
-	
+		
 	if (u==null)
 	{
-		
-		session.setAttribute("error", "error");
-		response.sendRedirect("/login.jsp");
-	}
-String userName = null;
-String sessionID = null;
-Cookie[] cookies = request.getCookies();
-if(cookies !=null){
-for(Cookie cookie : cookies){
-if(cookie.getName().equals("usuario")) 
-	userName = cookie.getValue();
-}
-}
+			
+	session.setAttribute("error", "error");
+	response.sendRedirect("/login.jsp");
 	
+	}
+	String userName = null;
+	String sessionID = null;
+	Cookie[] cookies = request.getCookies();
+	if(cookies !=null){
+	for(Cookie cookie : cookies){
+	if(cookie.getName().equals("usuario")) 
+		userName = cookie.getValue();
+	}
+	}
 	
 	String url = null;
 	if (SystemProperty.environment.value() ==
@@ -86,8 +79,9 @@ if(cookie.getName().equals("usuario"))
 	}
 
 	Connection conn = DriverManager.getConnection(url);
+	//session.setAttribute("idEmpresa", u.getEmpresa().getIdEmpresa());
 	ResultSet rs = conn.createStatement().executeQuery(
-	    "SELECT * FROM empresa WHERE estado=1");
+	    "SELECT * FROM usuario where idempresa="+u.getEmpresa().getIdEmpresa()+" and estado =1");
   	%>
   	
   	<nav class="navbar" >
@@ -153,129 +147,92 @@ if(cookie.getName().equals("usuario"))
 			<div class="col-sm-9 col-md-9 main">
 				<h1 class="page-header">Reportes</h1>
 				
-				<form action="/reporteTransacciones">
-					<table>
-						<tr>
-							<td>
-								Desde: 
+				<form action="/reporteEmpresasTransacciones">
+					
+					<div class="row">
+        				<div class="col-xs-3">
+        					<div class="form-group">
+							    <label for="fechaDesde">Desde</label>
 								<%
 									if (!(session.getAttribute("fDesde") == null))
 									{
 										String fd= session.getAttribute("fDesde").toString();
-										%>
-										
-										<input type="text" id="fechaDesde" name ="fechaDesde"  value=<%=fd %> required="required" >
-									 	<% 
+								%>
+												
+								<input type="text" class="form-control" placeholder="Fecha inicial de busqueda" id="fechaDesde" name ="fechaDesde"  value=<%=fd %> required="required" >
+								<% 
 									}
 									else
 									{
-										%>
-										<input type="text" id="fechaDesde" name ="fechaDesde" required="required" >
-										<% 
-										
+								%>
+								<input type="text" class="form-control" placeholder="Fecha inicial de busqueda" id="fechaDesde" name ="fechaDesde" required="required" >
+								<% 
+			
 									}
 								%>
-								
-							</td>
-							<td>
-								Hasta: 
-								<%
-									if (!(session.getAttribute("fHasta") == null))
-									{
-										String fa= session.getAttribute("fHasta").toString();
-										%>
-										
-										<input type="text" id="fechaHasta" name ="fechaHasta"  value=<%=fa %> required="required"  >
-									 	<% 
-									}
-									else
-									{
-										%>
-										<input type="text" id="fechaHasta" name ="fechaHasta" required="required">
-										<% 
-										
-									}
-								%>
-								
-							</td>
-						</tr>
-						<tr>
-							<td>
-								Empresa: 
-								<select name=reporteEmpresa id="rEmpresa" >
-									<option value="noempresa" >Seleccione una empresa....</option>	
-									
+							</div>
+        				</div>
+        				
+        				<div class="col-xs-3">
+        					<div class="form-group">
+	        				<label for="fechaHasta">Hasta</label>
+							<%
+								if (!(session.getAttribute("fHasta") == null))
+								{
+									String fa= session.getAttribute("fHasta").toString();
+							%>
+											
+							<input type="text" class="form-control" placeholder="Fecha final de busqueda" id="fechaHasta" name ="fechaHasta"  value=<%=fa %> required="required"  >
+							<% 
+								}
+								else
+								{
+							%>
+							<input type="text" class="form-control" placeholder="Fecha final de busqueda" id="fechaHasta" name ="fechaHasta" required="required">
+							<% 			
+								}
+							%>		
+							</div>
+        				</div>
+        				
+        				<div class="col-xs-3">
+        					<div class="form-group">
+        					<label for="usuario">Usuarios</label> 
+								<select class="form-control" name=usuario id="usuario" >
+								<option value="nousuario" >Seleccione un usuario...</option>
 									<% 
 										while (rs.next()) {
-										String empresa = rs.getString("nombre");
+										String usuario = rs.getString("nombres")+" "+rs.getString("apellidos");
+										String userid= rs.getString("idusuario") ;
 										
-										if(!(session.getAttribute("empresa") == null)){
+										//System.out.println(session.getAttribute("idusuario"));
+										if(!(session.getAttribute("idusuario") == null)){
 												
-												if(empresa.equals(session.getAttribute("empresa"))){%>
-													<option value=<%= empresa %> selected ><%= empresa %></option>
+												if( userid.equals(session.getAttribute("idusuario"))){%>
+													<option value=<%= rs.getInt("idusuario") %> selected ><%= usuario %></option>
 												<%}else{%>
-												<option value=<%= empresa %>><%= empresa %></option>
+												<option value=<%= rs.getInt("idusuario") %>><%= usuario %></option>
 										<%	
 												}
 											}else{%>
-											<option value=<%= empresa %>><%= empresa %></option>
+											<option value=<%= rs.getInt("idusuario") %>><%= usuario %></option>
 										<%}}
 										%>
 									</select>
 									<input type="submit" class="oculto" value="Continuar" name="btnContinuarReportes" id="btnContinuarReportes"/>
-							</td>
-							<td>
-								<%
-						
-					
-								if(!(session.getAttribute("listaUsuarios") == null))
-								{
-									
-								List<Usuario> lista= (List<Usuario>)session.getAttribute("listaUsuarios");
-						
-								%>
-								
-								Usuario: <select name=reporteUsuario id="rUsuario" >
-								<option value="nousuario" >Seleccione un usuario....</option>	
-								<% 
-								
-								/*if (session.getAttribute("usu").equals("nousuario"))
-								{
-									System.out.println(session.getAttribute("entroooo"));
-									session.setAttribute("usu", null);
-								}*/
-								for( Usuario usuario:lista) 
-								{
-									//System.out.println("Dentro del for "+session.getAttribute("usu"));
-									//if(!(session.getAttribute("usu") == null) )
-									//{
-									%>
-										
-											<option value=<%= usuario.getId() %>><%= usuario.getNombres() %></option>
-									
-									
-								<%
-								}
-								%>
-								
-								</select>
-								<input type="submit" class="oculto" value="ContinuarUs" name="btnContinuarUsuarios" id="btnContinuarUsuarios"/>
-								<% 	
-						}
-					%>	
-							</td>
-							<td>
-								Servicio: <select name=reporteServicio id="rServicio" >
-							</td>
-						</tr>
-						<tr>
-							<td>
-								<input type="submit" value="Consultar" name="btnConsultar"/>
-							</td>
-						</tr>
-					</table>
+        					</div>
+        				</div>
+        				<div class="col-xs-3 vert-offset-top-1-8">
+        					<div class="form-group">
+        						<label for="btnConsultar"></label> 
+        						<input class="btn btn-default" type="submit" value="Consultar" name="btnConsultar"/>
+        					</div>
+        				</div>
+        				
+        			</div>
 				</form>
-	
+				
+				
 			<div class="table-responsive">
 
 				<%
@@ -338,6 +295,7 @@ if(cookie.getName().equals("usuario"))
 				%>
 				
 			</div>
+			
 			
 			</div>	
 	

@@ -27,7 +27,7 @@ import com.analixdata.modelos.Usuario;
 import com.google.appengine.api.utils.SystemProperty;
 
 
-public class ReportesEmpresasServlet extends HttpServlet
+public class ReportesUsuariosServlet extends HttpServlet
 {
 	
 	protected void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException,IOException
@@ -61,13 +61,13 @@ public class ReportesEmpresasServlet extends HttpServlet
 			Connection conn = DriverManager.getConnection(url);
 			try 
 			{
-				String idUser=req.getParameter("usuario");
-		    	String inputContinuarReportes=req.getParameter("btnContinuarReportes");
-		    	String inputConsultar = req.getParameter("btnConsultar");
+				//
+		    	//String inputContinuarReportes=req.getParameter("btnContinuarReportes");
+		    	//String inputConsultar = req.getParameter("btnConsultar");
 		    	String fechaDesde = req.getParameter("fechaDesde");
 		    	String fechaHasta = req.getParameter("fechaHasta");
 
-		    	if (inputContinuarReportes!=null)
+		    	/*if (inputContinuarReportes!=null)
 		    	{
 		    		HttpSession session=req.getSession(true);
 		    		Usuario u = (Usuario)session.getAttribute("usuario");
@@ -75,17 +75,18 @@ public class ReportesEmpresasServlet extends HttpServlet
 				    session.setAttribute("fDesde", fechaDesde);
 				    session.setAttribute("fHasta", fechaHasta);
 				   
-				    resp.sendRedirect("reportesEmpresas.jsp");
+				    resp.sendRedirect("reporteEmpresas.jsp");
 		    	}
 		    	else if (inputConsultar!=null)
-		    	{
+		    	{*/
 		    		Transaccion tran ;
 		    		List <Transaccion> transacciones = new ArrayList<Transaccion> ();
 			    	  
 		    		HttpSession session=req.getSession(true);
 		    		Usuario u = (Usuario)session.getAttribute("usuario");
+		    		
 
-			    	if (idUser.equals("nousuario"))
+			    /*	if (idUser.equals("nousuario"))
 			    	{
 			    		ResultSet rs = conn.createStatement().executeQuery("SELECT idtransaccion,fecha,hora,codigoretorno,descripcionerror,celular,mensaje,servicio.descripcion as servicio,concat(usuario.nombres,\" \",usuario.apellidos) as usuario, empresa.nombre as empresa FROM  pasarelasms.transaccion, pasarelasms.servicio,pasarelasms.usuario,pasarelasms.empresa WHERE servicio.idservicio=transaccion.idservicio AND usuario.idusuario= transaccion.idusuario and empresa.idempresa = transaccion.idempresa and empresa.idempresa="+u.getEmpresa().getIdEmpresa()+"  AND  fecha between '"+fechaDesde+"' AND '"+fechaHasta+"'; ");
 			    		
@@ -96,9 +97,9 @@ public class ReportesEmpresasServlet extends HttpServlet
 				    	}
 			    	}
 			   		else
-			    	{
+			    	{*/
   
-		    			ResultSet rs = conn.createStatement().executeQuery("SELECT idtransaccion,fecha,hora,codigoretorno,descripcionerror,celular,mensaje,servicio.descripcion as servicio,concat(usuario.nombres,\" \",usuario.apellidos) as usuario, empresa.nombre as empresa FROM  pasarelasms.transaccion, pasarelasms.servicio,pasarelasms.usuario,pasarelasms.empresa WHERE servicio.idservicio=transaccion.idservicio AND usuario.idusuario= transaccion.idusuario and empresa.idempresa = transaccion.idempresa and empresa.idempresa="+u.getEmpresa().getIdEmpresa()+"  AND usuario.idusuario="+idUser+" AND fecha between '"+fechaDesde+"' AND '"+fechaHasta+"'; ");
+		    			ResultSet rs = conn.createStatement().executeQuery("SELECT idtransaccion,fecha,hora,codigoretorno,descripcionerror,celular,mensaje,servicio.descripcion as servicio,concat(usuario.nombres,\" \",usuario.apellidos) as usuario, empresa.nombre as empresa FROM  pasarelasms.transaccion, pasarelasms.servicio,pasarelasms.usuario,pasarelasms.empresa WHERE servicio.idservicio=transaccion.idservicio AND usuario.idusuario= transaccion.idusuario and empresa.idempresa = transaccion.idempresa and empresa.idempresa="+u.getEmpresa().getIdEmpresa()+"  AND usuario.idusuario="+u.getId()+" AND fecha between '"+fechaDesde+"' AND '"+fechaHasta+"'; ");
 			    		
 		    			while(rs.next())
 				    	{
@@ -106,14 +107,14 @@ public class ReportesEmpresasServlet extends HttpServlet
 				        	tran = new Transaccion(rs.getInt("idTransaccion"), rs.getString("fecha"), rs.getString("hora"), rs.getString("codigoretorno"), rs.getString("celular"), rs.getString("mensaje"),rs.getString("servicio"), rs.getString("usuario"), rs.getString("empresa"));
 				        	transacciones.add(tran);
 				    	 }
-		    		}
+		    		//}
 
-		    		session.setAttribute("idusuario", idUser);
+
 				    session.setAttribute("fDesde", fechaDesde);
 				    session.setAttribute("fHasta", fechaHasta);
 				    session.setAttribute("transacciones", transacciones);
-				    resp.sendRedirect("reportesEmpresas.jsp");
-		    	}
+				    resp.sendRedirect("reportesUsuarios.jsp");
+		    	//}
 
 			}
 			finally 

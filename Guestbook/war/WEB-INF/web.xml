@@ -118,7 +118,14 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
         <url-pattern>/reporteEmpresasTransacciones</url-pattern>
     </servlet-mapping>
     
-    
+    <servlet>
+        <servlet-name>reporteUsuariosTransacciones</servlet-name>
+        <servlet-class>com.analixdata.controladores.ReportesUsuariosServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>reporteUsuariosTransacciones</servlet-name>
+        <url-pattern>/reporteUsuariosTransacciones</url-pattern>
+    </servlet-mapping>
     
      <servlet>
         <servlet-name>actContrasena</servlet-name>
