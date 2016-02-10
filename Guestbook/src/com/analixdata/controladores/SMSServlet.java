@@ -38,8 +38,9 @@ public class SMSServlet extends HttpServlet {
 	  public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		
 		
-		String urlEnvio = "http://9-dot-pasarelasms-1190.appspot.com/APIAnalix?idempresa=1&usuario=alina&pass=1234";
+		String urlEnvio = "http://10-dot-pasarelasms-1190.appspot.com/APIAnalix?idempresa=1&usuario=alina&pass=1234";
 		
+
 		URL obj = new URL(urlEnvio);
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 		con.setReadTimeout(60 * 1000);
@@ -48,7 +49,7 @@ public class SMSServlet extends HttpServlet {
 		con.setRequestMethod("GET");
 
 		//con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0");
-		//con.setRequestProperty ("Authorization", "Basic REM1NjIzMTVCM0NCOUVGOjA2MzZFM0FGMTQ=");
+		con.setRequestProperty ("Authorization", "Basic REM1NjIzMTVCM0NCOUVGOjA2MzZFM0FGMTQ=");
 		int responseCode = con.getResponseCode();
 		System.out.println("\nSending 'GET' request to URL : " + urlEnvio);
 		System.out.println("Response Code : " + responseCode);
@@ -56,22 +57,19 @@ public class SMSServlet extends HttpServlet {
 		PrintWriter out = resp.getWriter();
 
 		BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		out.println( in);
+
+
+        if (responseCode == 200){ 	
+        	out.println( in.readLine());
+        }else{
+        	out.println("ERROR DE CONEXION");
+        	
+        }
+        
+        in.close();
+
+	  	}
 		
-		String inputLine;
-		StringBuffer response = new StringBuffer();
-		
-		while ((inputLine = in.readLine()) != null)
-		{
-			response.append(inputLine);
-		}
-		in.close();
-
-        if (responseCode == 200)    	
-    	    out.println( ""+inputLine );
-
-
-	  }
 
 
 }
