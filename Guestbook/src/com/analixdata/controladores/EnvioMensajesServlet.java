@@ -53,6 +53,9 @@ public class EnvioMensajesServlet extends HttpServlet {
 		resp.setContentType("text/html;charset=UTF-8");
 		
 		
+		
+		
+		
 		FileItemFactory factory = new DiskFileItemFactory();
 		ServletFileUpload upload = new ServletFileUpload(factory);
 
@@ -71,27 +74,20 @@ public class EnvioMensajesServlet extends HttpServlet {
 			   // subido donde nos interese
 			   if (!uploaded.isFormField()) {
 			      // No es campo de formulario, guardamos el fichero en algún sitio
-			      String line=null;
-				   File fichero = new File("/tmp", uploaded.getName());
-			     
-			      FileReader fileReader =  new FileReader(fichero);
-			      BufferedReader bufferedReader =  new BufferedReader(fileReader);
-
-			            while((line = bufferedReader.readLine()) != null) {
-			                System.out.println(line);
-			            }   
-
-			            // Always close files.
-			            bufferedReader.close(); 
+				   
+				   BufferedReader reader = new BufferedReader(new InputStreamReader(uploaded.getInputStream()));
+					for (String line; (line = reader.readLine()) != null;) {
+					    System.out.println(line);
+					}
+				   
 			      
-			      System.out.println(fichero.getName());
 			      //uploaded.write(fichero);
 			   } else {
 			      // es un campo de formulario, podemos obtener clave y valor
-			      String key = uploaded.getFieldName();
-			      String valor = uploaded.getString();
+			      //String key = uploaded.getFieldName();
+			      //String valor = uploaded.getString();
 			      
-			      System.out.println(key+" "+valor);
+			      //System.out.println(key+" "+valor);
 			   }
 			}
 			
@@ -102,6 +98,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 
 		
 		
