@@ -4,7 +4,6 @@ import java.io.*;
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.sql.*;
 import java.text.SimpleDateFormat;
@@ -42,20 +41,19 @@ public class APIAnalix extends HttpServlet {
 	                    Charset.forName("UTF-8"));
 	            // credentials = username:password
 	            int i=0;
-	            
-	            StringTokenizer st = new StringTokenizer(credentials);
+	             
+	            StringTokenizer st = new StringTokenizer(credentials,":");
 	            while (st.hasMoreTokens()) {
 	            	if(i==0){
 	            		u=st.nextToken();
-	            		i++;
+	            		
 	            	}
 	            	if(i==1){
 	            		pass=st.nextToken();
 	            	}
+	            	i++;
+	             
 	            }
-	            
-	            
-	            
 	            
 	            if(u != null && pass !=null){
 	            	DAO dao = new DAO();
@@ -97,8 +95,10 @@ public class APIAnalix extends HttpServlet {
 	    				String charset = "UTF-8";
 	    		        String decmensaje = URLDecoder.decode(mensaje, charset);
 	    				
-	    		        String fecha= new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()).toString();
-	    		        String hora=new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()).toString();
+	    		        java.util.TimeZone zone = java.util.TimeZone.getTimeZone("America/Quito");
+	    		        
+	    		        String fecha= new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance(zone).getTime()).toString();
+	    		        String hora=new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance(zone).getTime()).toString();
 	    				
 	    				String statement = "INSERT INTO transaccion (fecha,hora,retorno,plataforma,celular,mensaje,idservicio,idusuario,idempresa) VALUES( ? , ? , ? , ? , ? , ? , ? , ? , ? )";
 	    		          PreparedStatement stmt = conn.prepareStatement(statement);
@@ -116,9 +116,9 @@ public class APIAnalix extends HttpServlet {
 	    		          System.out.println(stmt);
 	    		          success = stmt.executeUpdate();
 	    		          
-	    		          if(success==1){
+	    		          if(success==1){/*
 	    		        	  
-	    		        	  String urlEnvio = "http://envia-movil.com/Api/Envios?mensaje="+mensaje+"&numero="+numero;
+	    		        	 String urlEnvio = "http://envia-movil.com/Api/Envios?mensaje="+mensaje+"&numero="+numero;
 	    		        		
 	    		        		URL obj = new URL(urlEnvio);
 	    		        		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
@@ -149,7 +149,8 @@ public class APIAnalix extends HttpServlet {
 		    		        		try{
 		    		        		
 		    		        		statement = "UPDATE transaccion SET retorno="+response.toString()+", WHERE fecha="+fecha+" and hora="+hora+" and idusuario="+val.getId()+"and celular='"+numero+"'";
-		    		 		       
+		    		        		stmt = conn.prepareStatement(statement);
+		    		        		
 		    		        		success = 2;
 		  	    		            System.out.println(stmt);
 		  	    		            success = stmt.executeUpdate();
@@ -168,7 +169,7 @@ public class APIAnalix extends HttpServlet {
 	    		        			out.println("ERROR DE ENVIO");
 	    		        			
 	    		        		}
-	    		          }
+	    		         */ }
 	    		         
 	    		          
 	    		          
@@ -199,7 +200,6 @@ public class APIAnalix extends HttpServlet {
 	        out.close();
 	        
 
-	
 	}
-}
+	}
 
