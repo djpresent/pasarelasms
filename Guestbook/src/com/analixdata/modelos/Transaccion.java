@@ -27,6 +27,11 @@ public class Transaccion implements Serializable {
 	}
 
 
+	public Transaccion (String celular, String mensaje)
+	{
+		this.celular=celular;
+		this.mensaje=mensaje;
+	}
 
 	public int getId() {
 		return id;
