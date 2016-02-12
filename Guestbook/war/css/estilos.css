@@ -1,23 +1,44 @@
+img.logologin {
+    width: 100%;
+    margin-top: 15%;
+    margin-left: -5px;
+    height: 13%;
+}
+
+.icomenu{
+	
+	padding-right:10px;
+}
+
+.col-sm-9.col-md-9.main.contenido {
+    margin-left: 25px!important;
+}
+
 .navbar{
 	
 	margin-bottom: 0px;
 	background-image: url("/imagenes/fondoBarra.png");
 }
 
-
-.glyphicon-log-out{
-	padding-left:4px;
-}
-
 .msgbienvenida {
     padding-right: 45px;
-    margin-top: 14.5%;
+    margin-top: 8.5%;
     color: white;
 }
 
-.cerrarsesion {
+.icoheader {
+    padding: 5px!important;
+}
+
+
+.imglogout {
     margin-left: -13%;
-    margin-top: 8%;
+    margin-top: 19%;
+}
+
+
+img.imgpestana {
+    margin-left: 22px;
 }
 
 .col-sm-3.col-md-2.sidebar {
@@ -34,17 +55,16 @@ ul.nav.nav-sidebar {
     padding-top: 10%;
 }
 
-img.logologin {
-    width: 100%;
-    margin-top: 15%;
-    margin-left: -5px;
-    height: 13%;
+
+
+img.icousuario {
+    margin-left: 15px;
 }
 
 
 img.logo {
     margin-top: 2em;
-    margin-bottom: 3em;
+    margin-bottom: 1.4em;
 }
 
 

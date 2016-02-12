@@ -47,7 +47,7 @@
 		</div>  
 		
 		<div class="navbar-nav navbar-right">
-			<a href="/cerrarSesion"><button type="button" class="btn btn-lg btn-default cerrarsesion">Cerrar sesión <span class="glyphicon glyphicon-log-out"></span></button></a>
+			<a href="/cerrarSesion" class="cerrarsesion"><img class="imglogout" src="imagenes/imglogout.png"/></button></a>
 		</div>
 		<div class="navbar-nav navbar-right ">
 			<h4 class="msgbienvenida">Bienvenido usuario <%= userName %><img class="icousuario" src="imagenes/icousuario.png"/></h4>
@@ -58,7 +58,9 @@
   	</nav>
   	<div class="container-fluid">
 	  	<div class="row">
+	  			
 			  	<div class="col-sm-3 col-md-2 sidebar"> 
+			  	<img class="imgpestana" src="imagenes/imgpestana.png"/>
 				    <ul class="nav nav-sidebar">
 						<%  
 						if(u != null){
@@ -67,14 +69,14 @@
 							
 							if(tipo == 1){ 
 							%>
-								<li><a href="empresas.jsp">Empresas</a></li>
-								<li ><a href="servicios.jsp">Servicios</a></li>
-								<li><a href="usuarios.jsp">Usuarios</a></li>
-								<li ><a href="servicioEmpresa.jsp">Servicios a empresas</a></li>
-								<li><a href="servicioUsuarios.jsp">Servicios a Usuarios</a></li>
+								<li><a href="empresas.jsp"><h5><img class="icomenu" src="imagenes/icoempresa.png"/>Empresas</h5></a></li>
+								<li ><a href="servicios.jsp"><h5><img class="icomenu" src="imagenes/icoservicios.png"/>Servicios</h5></a></li>
+								<li><a href="usuarios.jsp"><h5><img class="icomenu" src="imagenes/icousuarios.png"/>Usuarios</h5></a></li>
+								<li ><a href="servicioEmpresa.jsp"><h5>Servicios a empresas</h5></a></li>
+								<li><a href="servicioUsuarios.jsp"><h5>Servicios a Usuarios</h5></a></li>
 									
-									<li><a href="mensajeria.jsp">Mensajería</a></li>
-									<li><a href="reportes.jsp">Reportes</a></li>
+									<li><a href="mensajeria.jsp"><h5><img class="icomenu" src="imagenes/icomensajeria.png"/>Mensajería</h5></a></li>
+									<li><a href="reportes.jsp"><h5><img class="icomenu" src="imagenes/icoreportes.png"/>Reportes</h5></a></li>
 									
 								<%}
 							
@@ -117,13 +119,13 @@
 						
 						
 						
-						<li><a href="/cerrarSesion">Cerrar Sesión</a></li>
+						<li><a href="/cerrarSesion"><img class="icomenu" src="imagenes/icocerrar.png"/>Cerrar Sesión</a></li>
 				
 					</ul>
 				</div>
 		
-			<div class="col-sm-9 col-md-9 main">
-				<h1 class="page-header">Analixdata</h1>
+			<div class="col-sm-9 col-md-9 main contenido">
+				<div><h1 class="page-header">Analixdata  <img class="icoheader" src="imagenes/icoreloj.png"/><img class="icoheader" src="imagenes/icopastel.png"/><img class="icoheader" src="imagenes/icoaudifonos.png"/><img class="icoheader" src="imagenes/icodescarga.png"/> </h1></div>
 			</div>	
 	
 		</div>
