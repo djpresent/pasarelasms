@@ -1,13 +1,9 @@
 .navbar{
 	
-	background-color: gainsboro;
 	margin-bottom: 0px;
+	background-image: url("/imagenes/fondoBarra.png");
 }
 
-.logo{
-
-    height: 13%;
-}
 
 .glyphicon-log-out{
 	padding-left:4px;
@@ -15,7 +11,8 @@
 
 .msgbienvenida {
     padding-right: 45px;
-    margin-top: 11.5%;
+    margin-top: 14.5%;
+    color: white;
 }
 
 .cerrarsesion {
@@ -37,11 +34,19 @@ ul.nav.nav-sidebar {
     padding-top: 10%;
 }
 
-
-.logoInicio{
+img.logologin {
     width: 100%;
     margin-top: 15%;
+    margin-left: -5px;
+    height: 13%;
 }
+
+
+img.logo {
+    margin-top: 2em;
+    margin-bottom: 3em;
+}
+
 
 .oculto
 {

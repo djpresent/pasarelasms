@@ -50,7 +50,8 @@
 			<a href="/cerrarSesion"><button type="button" class="btn btn-lg btn-default cerrarsesion">Cerrar sesión <span class="glyphicon glyphicon-log-out"></span></button></a>
 		</div>
 		<div class="navbar-nav navbar-right ">
-			<h4 class="msgbienvenida">Bienvenido usuario <%= userName %></h4>
+			<h4 class="msgbienvenida">Bienvenido usuario <%= userName %><img class="icousuario" src="imagenes/icousuario.png"/></h4>
+			 
 		</div>
 		
 	</div>	
