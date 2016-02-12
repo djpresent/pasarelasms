@@ -94,11 +94,9 @@ public class APIAnalix extends HttpServlet {
 	    				
 	    				String charset = "UTF-8";
 	    		        String decmensaje = URLDecoder.decode(mensaje, charset);
-	    				
-	    		        java.util.TimeZone zone = java.util.TimeZone.getTimeZone("America/Quito");
-	    		        
-	    		        String fecha= new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance(zone).getTime()).toString();
-	    		        String hora=new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance(zone).getTime()).toString();
+	    		         		        
+	    		        String fecha= new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()).toString();
+	    		        String hora=new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()).toString();
 	    				
 	    				String statement = "INSERT INTO transaccion (fecha,hora,retorno,plataforma,celular,mensaje,idservicio,idusuario,idempresa) VALUES( ? , ? , ? , ? , ? , ? , ? , ? , ? )";
 	    		          PreparedStatement stmt = conn.prepareStatement(statement);
@@ -116,7 +114,7 @@ public class APIAnalix extends HttpServlet {
 	    		          System.out.println(stmt);
 	    		          success = stmt.executeUpdate();
 	    		          
-	    		          if(success==1){/*
+	    		          if(success==1){
 	    		        	  
 	    		        	 String urlEnvio = "http://envia-movil.com/Api/Envios?mensaje="+mensaje+"&numero="+numero;
 	    		        		
@@ -145,10 +143,12 @@ public class APIAnalix extends HttpServlet {
 		    		        			response.append(inputLine);
 		    		        		}
 		    		        		in.close();
-		    		        		
+		    		        	
+	    		        	  
+	    		        	 
 		    		        		try{
 		    		        		
-		    		        		statement = "UPDATE transaccion SET retorno="+response.toString()+", WHERE fecha="+fecha+" and hora="+hora+" and idusuario="+val.getId()+"and celular='"+numero+"'";
+		    		        		statement = "UPDATE transaccion SET retorno="+response.toString()+" WHERE fecha='"+fecha+"' and hora='"+hora+"' and idusuario="+val.getId()+" and celular='"+numero+"'";
 		    		        		stmt = conn.prepareStatement(statement);
 		    		        		
 		    		        		success = 2;
@@ -169,7 +169,7 @@ public class APIAnalix extends HttpServlet {
 	    		        			out.println("ERROR DE ENVIO");
 	    		        			
 	    		        		}
-	    		         */ }
+	    		          }
 	    		         
 	    		          
 	    		          

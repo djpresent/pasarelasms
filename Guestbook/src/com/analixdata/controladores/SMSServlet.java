@@ -38,7 +38,7 @@ public class SMSServlet extends HttpServlet {
 	  public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		
 		
-		String urlEnvio = "http://11-dot-pasarelasms-1190.appspot.com/APIAnalix?numero=593992831273&mensaje=Hooola";
+		String urlEnvio = "http://serviciosms.analixdata.com/APIAnalix?numero=593992845597&mensaje=Hooola";
 		
 
 		URL obj = new URL(urlEnvio);

@@ -24,7 +24,7 @@
 }
 
 .col-sm-3.col-md-2.sidebar {
-    background-color: bisque;
+    background-color: #4d4d4d;
 }
 
 .sidebar{
@@ -47,6 +47,11 @@ ul.nav.nav-sidebar {
 {
 	display: none;
 }
+
+a {
+    color: #fff;
+}
+
 
 
 /* Vertical Offset Bottom */
@@ -132,3 +137,4 @@ ul.nav.nav-sidebar {
 .vert-offset-bottom-0{
     margin-bottom: 0em;
 }
+
