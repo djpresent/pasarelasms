@@ -279,10 +279,10 @@ if(rs.next()){
 			  					<textarea cols="40" rows="5" name="mensaje" id="idTexto" required="required" onKeyDown="cuenta()" onKeyUp="cuenta()"></textarea>
 			  				</td>
 			  				<td>
-			  					<input type="button" onclick="agregarV(' [VARIABLE1] ')" value="Variable 1"></input></br>
-					  			<input type="button" onclick="agregarV(' [VARIABLE2] ')" value="Variable 2"></input></br>
-					  			<input type="button" onclick="agregarV(' [VARIABLE3] ')" value="Variable 3"></input></br>
-					  			<input type="button" onclick="agregarV(' [VARIABLE4] ')" value="Variable 4"></input></br>
+			  					<input type="button" onclick="agregarV('[VARIABLE1]')" value="Variable 1"></input></br>
+					  			<input type="button" onclick="agregarV('[VARIABLE2]')" value="Variable 2"></input></br>
+					  			<input type="button" onclick="agregarV('[VARIABLE3]')" value="Variable 3"></input></br>
+					  			<input type="button" onclick="agregarV('[VARIABLE4]')" value="Variable 4"></input></br>
 			  				</td>
 			  			</tr>
 			  			<tr>
