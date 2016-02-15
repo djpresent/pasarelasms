@@ -7,7 +7,7 @@
     
      <!-- Bootstrap -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
-    
+    <link rel="stylesheet" type="text/css" href="css/estilos.css">
     <script src="js/codificacion.js"></script>
     
   </head>
@@ -43,7 +43,7 @@ session = request.getSession();
 			<input type="hidden" name="txtPassword" id="txtPassword"/>
 			
 			
-			<input type="submit" class="btn btn-lg btn-primary btn-block" value="Iniciar Sesión"/>
+			<input type="submit" class="btn btn-lg btn-primary btn-block btnlogin" value="Iniciar Sesión"/>
 		</form>
 		<a href="#">¿Olvidaste tu contraseña?</a> 
 		</div>

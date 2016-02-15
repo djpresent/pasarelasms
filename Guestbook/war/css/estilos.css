@@ -1,8 +1,13 @@
+
 img.logologin {
-    width: 100%;
     margin-top: 15%;
-    margin-left: -5px;
-    height: 13%;
+    margin-left: -15px;
+}
+
+.btnlogin{
+	
+    margin-top: 4%;
+
 }
 
 .icomenu{
@@ -77,13 +82,31 @@ a {
     color: #fff;
 }
 
-.footer{
-	
+
+
+.footderecha{
+    float: right;
+    margin-top: 10px;
+    margin-bottom: 5px;
+    text-align: right;
+    margin-right: -50px;
+    color:white;
+
 }
 
-.icoredes{
-	
+.footizquierda {
+    float: left;
+    margin-top: 14px;
+    padding-left:50px;
+	 color:white;
 }
+
+.footer{
+	background-color: #c94f24;
+}
+
+
+
 
 
 
