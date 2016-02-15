@@ -54,7 +54,7 @@
 
 //allow access only if session exists
 
-session = request.getSession();
+	session = request.getSession();
 	Usuario u = (Usuario)session.getAttribute("usuario");
 	
 	if (u==null)
@@ -63,15 +63,17 @@ session = request.getSession();
 		session.setAttribute("error", "error");
 		response.sendRedirect("/login.jsp");
 	}
-String userName = null;
-String sessionID = null;
-Cookie[] cookies = request.getCookies();
-if(cookies !=null){
-for(Cookie cookie : cookies){
-  if(cookie.getName().equals("usuario")) 
-  	userName = cookie.getValue();
-}
-}
+	String userName = null;
+	String sessionID = null;
+	Cookie[] cookies = request.getCookies();
+	if(cookies !=null)
+	{
+		for(Cookie cookie : cookies)
+		{
+		  if(cookie.getName().equals("usuario")) 
+		  	userName = cookie.getValue();
+		}
+	}
 
 
 

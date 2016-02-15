@@ -180,7 +180,15 @@ String disponible="N/D";
 
 if(rs.next()){
  disponible=Integer.toString(rs.getInt("disponible"));
+ 
+ 
 }
+else
+{
+	disponible="0";
+}
+
+session.setAttribute("disponibles",disponible );
 %>
 
 <nav class="navbar" >
@@ -302,20 +310,37 @@ if(rs.next()){
 			  	</form>
 			  	
 			  	<%
-					if(!(session.getAttribute("codigo") == null)){
+					if(!(session.getAttribute("codigo") == null))
+					{
+					
+						if(session.getAttribute("codigo").toString().equalsIgnoreCase("ENVIADOS"))
+						{
+							
+						String cod= "MENSAJES ENVIADOS SATISFACTORIAMENTE";
 						
-					String cod= session.getAttribute("codigo").toString();
-					
-					
-				%>
-					
-			                
-			                <div>
-			                    <h2><%= cod %></h2>
-			                   
-			    		</div>
 						
-				<% 	
+					%>
+						<div>
+							<p class="bg-success">
+								<%= cod %>
+							</p>
+				    	</div>
+							
+					<% 	
+						}
+						else
+						{
+							String cod= "LOS MENSAJES NO HAN SIDO ENVIADOS. El NUMERO DE MENSAJES ES SUPERIOR A LOS MENSAJES DISPONIBLES";
+							%>
+							
+							<div>
+								<p class="bg-danger">
+									<%= cod %>
+								</p>        
+				    		</div>
+							
+							<% 
+						}
 					}
 				%>
 			</div>	
