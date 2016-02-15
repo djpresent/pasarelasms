@@ -233,7 +233,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 					</div>
 					
 				    <div>Límite mensual: <input type="number" name="limite" id="limite" required="required"></input></div>
-				    <div>Costo por Transacción: <input type="text" name="costo" id="costo" required="required"></input></div>
+				    <div>Precio por Transacción: <input type="text" name="costo" id="costo" required="required"></input></div>
 				    <div>Estado:
 				    	<select name=estado id="estado">
 				    		<option seleted value=1>Activo</option>

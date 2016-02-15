@@ -330,7 +330,7 @@ session.setAttribute("disponibles",disponible );
 						}
 						else
 						{
-							String cod= "LOS MENSAJES NO HAN SIDO ENVIADOS. El NUMERO DE MENSAJES ES SUPERIOR A LOS MENSAJES DISPONIBLES";
+							String cod= "LOS MENSAJES NO HAN SIDO ENVIADOS. El NUMERO DE MENSAJES ES SUPERIOR A LOS MENSAJES DISPONIBLES. POR FAVOR CONTACTARSE CON ANALIXDATA";
 							%>
 							
 							<div>

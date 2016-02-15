@@ -1,20 +1,7 @@
 package com.analixdata.controladores;
 
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 
-import org.apache.poi.hssf.usermodel.HSSFCell;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.poifs.filesystem.POIFSFileSystem;
-import org.apache.poi.sl.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
-import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -26,19 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -47,10 +22,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.*;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
-import org.apache.commons.io.IOUtils;
 
-import com.analixdata.modelos.DAO;
-import com.analixdata.modelos.Empresa;
 import com.analixdata.modelos.Transaccion;
 import com.analixdata.modelos.Usuario;
 import com.google.appengine.api.utils.SystemProperty;
@@ -98,12 +70,12 @@ public class EnvioMensajesServlet extends HttpServlet {
 		// tanto campos normales como ficheros subidos.
 		List items;
 		try {
-			items = upload.parseRequest(req);
-			// Se recorren todos los items, que son de tipo FileItem
+			//items = upload.parseRequest(req);
+				// Se recorren todos los items, que son de tipo FileItem
 			FileItem uploadedFile = null;
 			String mensaje = null;
 			List <Transaccion> mensajes = new ArrayList();
-			for (Object item : items) 
+			/*for (Object item : items) 
 			{
 			   FileItem uploaded = (FileItem) item;
 
@@ -113,6 +85,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 				   
 			      // No es campo de formulario, guardamos el fichero en algún sitio
 				   uploadedFile = uploaded;   
+				   
 			   }
 			   else
 			   {
@@ -121,9 +94,12 @@ public class EnvioMensajesServlet extends HttpServlet {
 				   mensaje = uploaded.getString();
 
 			   }
-			}
+			}*/
 			
-			if (uploadedFile.getContentType().equalsIgnoreCase("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+			session.setAttribute("codigo", "ENVIADOS");
+			resp.sendRedirect("mensajeria.jsp");
+			
+			/*if (uploadedFile.getContentType().equalsIgnoreCase("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
 			   {					   
 				   XSSFWorkbook workBook = new XSSFWorkbook(uploadedFile.getInputStream());
 				   XSSFSheet sheet = workBook.getSheetAt(0); 
@@ -214,10 +190,11 @@ public class EnvioMensajesServlet extends HttpServlet {
 						//System.out.println(line);
 					}
 			   }
-			System.out.println(disp);
-			if (Integer.parseInt(disp)>=mensajes.size())
+			//System.out.println(disp);
+			/*if (Integer.parseInt(disp)>=mensajes.size())
 			{	
-				 Connection conn = DriverManager.getConnection(url);
+				
+				Connection conn = DriverManager.getConnection(url);
 				int enviados=0;
 				for (int i =0; i<mensajes.size();i++)
 				{
@@ -313,68 +290,23 @@ public class EnvioMensajesServlet extends HttpServlet {
 			}
 			
 			
+			*/
 			
-		} catch (FileUploadException e) {
+	//	} catch (FileUploadException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+		//	session.setAttribute("codigo", e);
+			
+			///e.printStackTrace();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+			//session.setAttribute("codigo", e);
+		
 		}
+	
 		
+	//	resp.sendRedirect("mensajeria.jsp");
 
-		
-		
-		/*String jsonResponse = null;
-        
-        //String mensaje = req.getParameter("txtmensaje");
-        //String numero = req.getParameter("txtmensaje");
-		String mensaje = "Este es un mensaje de prueba";
-        String numero = "593992831273";
-
-        URL myURL = new URL("http://envia-movil.com/Api/Envios");
-        HttpURLConnection myURLConnection = (HttpURLConnection)myURL.openConnection();
-       // myURLConnection.setReadTimeout(60 * 1000);
-        //myURLConnection.setConnectTimeout(60 * 1000);
-        myURLConnection.setRequestProperty ("Authorization", "Basic REM1NjIzMTVCM0NCOUVGOjA2MzZFM0FGMTQ==");
-        myURLConnection.setRequestMethod("GET");
-        //myURLConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        //myURLConnection.setRequestProperty("Content-Length", "" + Integer.toString(postData.getBytes().length));
-        myURLConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-        //myURLConnection.setRequestProperty("accept", "application/json");
-
-        myURLConnection.setUseCaches(false);
-        myURLConnection.setDoInput(true);
-        myURLConnection.setDoOutput(true);
-        
-        String charset = "UTF-8";
-        String s = "mensaje=" + URLEncoder.encode(mensaje, charset);
-        s += "&numero=" + URLEncoder.encode(numero, charset);
-        
-        
-       OutputStreamWriter writer = new OutputStreamWriter(myURLConnection.getOutputStream());
-
-            writer.write(s);
-          //  writer.wr
-        writer.close();
-        
-        
-        int responseCode = myURLConnection.getResponseCode();
-        
-        if (responseCode == 200) {
-                InputStream inputStr = myURLConnection.getInputStream();
-                String encoding = myURLConnection.getContentEncoding() == null ? "UTF-8"
-                        : myURLConnection.getContentEncoding();
-                jsonResponse = IOUtils.toString(inputStr, encoding);
-                /************** For getting response from HTTP URL end ***************/
-
-        /*}
-        
-        HttpSession session=req.getSession(true);
-        session.setAttribute("codigo", jsonResponse); 
-        session.setAttribute("sms", mensaje);
-		resp.sendRedirect("mensajeria.jsp");
-		*/
 	}
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
