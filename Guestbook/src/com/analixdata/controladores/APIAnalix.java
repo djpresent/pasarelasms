@@ -4,10 +4,12 @@ import java.io.*;
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.charset.Charset;
 import java.sql.*;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import javax.servlet.http.*;
@@ -15,6 +17,7 @@ import javax.servlet.http.*;
 import org.apache.commons.codec.binary.Base64;
 
 import com.analixdata.modelos.DAO;
+import com.analixdata.modelos.Servicio;
 import com.analixdata.modelos.Usuario;
 import com.google.appengine.api.utils.SystemProperty;
 
@@ -66,37 +69,68 @@ public class APIAnalix extends HttpServlet {
 	            numero=req.getParameter("numero");
 	            mensaje=req.getParameter("mensaje");
 	            
-	            
+
 
 	            
 	            if(numero!=null && mensaje!=null){
 	            	
-	        		String url = null;
-	        	    try {
-	        	      if (SystemProperty.environment.value() ==
-	        	          SystemProperty.Environment.Value.Production) {
-
-	        	        Class.forName("com.mysql.jdbc.GoogleDriver");
-	        	        url = "jdbc:google:mysql://pasarelasms-1190:analixdata/pasarelasms?user=root&password=1234";
-	        	      } else {
-
-	        	        Class.forName("com.mysql.jdbc.Driver");
-	        	        url = "jdbc:mysql://localhost:3306/pasarelasms?user=geo";
-
-	        	      }
-	        	    } catch (Exception e) {
-	        	      e.printStackTrace();
-	        	      return;
-	        	    }
+	            	
 
 	        	    try {
-	    				Connection conn = DriverManager.getConnection(url);
+	        	    	
+	        	    	
+		            		
+		            	
+		        		String url = null;
+		        	    try {
+		        	      if (SystemProperty.environment.value() ==
+		        	          SystemProperty.Environment.Value.Production) {
+
+		        	        Class.forName("com.mysql.jdbc.GoogleDriver");
+		        	        url = "jdbc:google:mysql://pasarelasms-1190:analixdata/pasarelasms?user=root&password=1234";
+		        	      } else {
+
+		        	        Class.forName("com.mysql.jdbc.Driver");
+		        	        url = "jdbc:mysql://localhost:3306/pasarelasms?user=geo";
+
+		        	      }
+		        	    } catch (Exception e) {
+		        	      e.printStackTrace();
+		        	      out.println("ERROR DE CONEXION");
+		        	    }
+		        	    
+		        	    Connection conn = DriverManager.getConnection(url);
+	        	    	
+		        	    List<Servicio> servicios= val.getServicios();
+		            	
+		            	int disponible=0;
+		            	
+		            	ResultSet rs = conn.createStatement().executeQuery(
+		            		    "SELECT disponible FROM servicio_empresa where idservicio=1 and idempresa="+val.getEmpresa().getIdEmpresa()+";");
+		            		 
+		  
+
+		            		if(rs.next()){
+		            		 disponible=rs.getInt("disponible");
+		            		}
+		            	
+		            	
+		            	
+		            	if(disponible>0){
+		        	    
+		        	    
+	    				
 	    				
 	    				String charset = "UTF-8";
 	    		        String decmensaje = URLDecoder.decode(mensaje, charset);
+	    		        
+	    		        Calendar cal = Calendar.getInstance(); // creates calendar
+	    		
+	    		        cal.add(Calendar.HOUR_OF_DAY, -5); // adds one hour
+
 	    		         		        
-	    		        String fecha= new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()).toString();
-	    		        String hora=new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()).toString();
+	    		        String fecha= new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()).toString();
+	    		        String hora=new SimpleDateFormat("HH:mm:ss").format(cal.getTime()).toString();
 	    				
 	    				String statement = "INSERT INTO transaccion (fecha,hora,retorno,plataforma,celular,mensaje,idservicio,idusuario,idempresa) VALUES( ? , ? , ? , ? , ? , ? , ? , ? , ? )";
 	    		          PreparedStatement stmt = conn.prepareStatement(statement);
@@ -116,9 +150,11 @@ public class APIAnalix extends HttpServlet {
 	    		          
 	    		          if(success==1){
 	    		        	  
-	    		        	 String urlEnvio = "http://envia-movil.com/Api/Envios?mensaje="+mensaje+"&numero="+numero;
+	    		        	 String urlEnvio = "http://envia-movil.com/Api/Envios?mensaje="+URLEncoder.encode(mensaje,"UTF-8")+"&numero="+numero;
+	    		        	 
+	    		    
 	    		        		
-	    		        		URL obj = new URL(urlEnvio);
+	    		        	 	URL obj = new URL(urlEnvio);
 	    		        		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 	    		        		con.setReadTimeout(60 * 1000);
 	    		                con.setConnectTimeout(60 * 1000);
@@ -131,6 +167,7 @@ public class APIAnalix extends HttpServlet {
 	    		        		System.out.println("\nSending 'GET' request to URL : " + urlEnvio);
 	    		        		System.out.println("Response Code : " + responseCode);
 	    		        		
+	    		        
 	    		        		if(responseCode==200){
 
 		    		        		BufferedReader in = new BufferedReader(
@@ -144,23 +181,42 @@ public class APIAnalix extends HttpServlet {
 		    		        		}
 		    		        		in.close();
 		    		        	
-	    		        	  
+		    		        		String respuesta=response.toString();
+	    		        			
+	    		        			if(response.toString().equals("\"Mensaje enviado\"")){
+	    		        				respuesta="MENSAJE ENVIADO";
+	    		        			
+	    		        			}
+	    		        			
+	    		        			if(response.toString().equals("\"Error al enviar el mensaje\"")){
+	    		        				respuesta="MENSAJE NO ENVIADO";
+	    		        			
+	    		        			}
 	    		        	 
 		    		        		try{
+		    		        			
+		    		        			
 		    		        		
-		    		        		statement = "UPDATE transaccion SET retorno="+response.toString()+" WHERE fecha='"+fecha+"' and hora='"+hora+"' and idusuario="+val.getId()+" and celular='"+numero+"'";
+		    		        		statement = "UPDATE transaccion SET retorno='"+respuesta+"' WHERE fecha='"+fecha+"' and hora='"+hora+"' and idusuario="+val.getId()+" and celular='"+numero+"'";
 		    		        		stmt = conn.prepareStatement(statement);
 		    		        		
 		    		        		success = 2;
 		  	    		            System.out.println(stmt);
 		  	    		            success = stmt.executeUpdate();
 		  	    		            
-		  	    		            	out.println(response);
+		  	    		           statement = "UPDATE servicio_empresa SET disponible="+(disponible-1)+" WHERE idempresa="+val.getEmpresa().getIdEmpresa();
+		    		        		stmt = conn.prepareStatement(statement);
+		    		        		
+		    		        		success = 2;
+		  	    		            System.out.println(stmt);
+		  	    		            success = stmt.executeUpdate();
+		  	    		            
+		  	    		            	out.println(respuesta);
 		  	    		            
 		    		        		}catch (Error e){
 		    		        			
 		    		        		}finally{
-		    		        			out.println(response);
+		    		        			out.println(respuesta);
 		    		        		}
 		  	    		            
 		  	    		            
@@ -169,9 +225,11 @@ public class APIAnalix extends HttpServlet {
 	    		        			out.println("ERROR DE ENVIO");
 	    		        			
 	    		        		}
-	    		          }
+	    		         }
 	    		         
-	    		          
+	        	    }else{
+		            	out.println("SIN SALDO");
+		            }
 	    		          
 	    				
 		    			} catch (SQLException e) {
@@ -180,7 +238,7 @@ public class APIAnalix extends HttpServlet {
 		    				e.printStackTrace();
 		    			}
 	    	
-	        		
+		           
 		            }else{
 			        	out.println("PARAMETROS INCORRECTOS");
 			        }

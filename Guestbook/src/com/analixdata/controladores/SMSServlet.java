@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -37,8 +38,11 @@ public class SMSServlet extends HttpServlet {
 	@Override
 	  public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		
+		String charset = "UTF-8";
+		String mensajecod=URLEncoder.encode("Ahora si amigo.",charset); 
 		
-		String urlEnvio = "http://serviciosms.analixdata.com/APIAnalix?numero=593992845597&mensaje=Hooola";
+		
+		String urlEnvio = "http://serviciosms.analixdata.com/APIAnalix?numero=593992845597&mensaje="+mensajecod;
 		
 
 		URL obj = new URL(urlEnvio);
