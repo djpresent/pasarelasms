@@ -5,20 +5,20 @@ import java.io.Serializable;
 public class Transaccion implements Serializable {
 
 	private int id;
-	private String fecha,hora,codRetorno,descError,celular,mensaje, nombreEmpresa, nombreUsuario, nombreServicio;
+	private String fecha,hora,codRetorno,plataforma,celular,mensaje, nombreEmpresa, nombreUsuario, nombreServicio;
 	
 	public Transaccion(){}
 	
 
 	
-	public Transaccion(int id, String fecha, String hora, String codRetorno,
+	public Transaccion(int id, String fecha, String hora, String codRetorno,String plataforma,
 			 String celular, String mensaje, String nombreServicio ,String nombreUsuario,String nombreEmpresa) {
 		super();
 		this.id = id;
 		this.fecha = fecha;
 		this.hora = hora;
 		this.codRetorno = codRetorno;
-		
+		this.plataforma=plataforma;
 		this.celular = celular;
 		this.mensaje = mensaje;
 		this.nombreEmpresa = nombreEmpresa;
@@ -81,14 +81,14 @@ public class Transaccion implements Serializable {
 
 
 
-	public String getDescError() {
-		return descError;
+	public String getPlataforma() {
+		return plataforma;
 	}
 
 
 
-	public void setDescError(String descError) {
-		this.descError = descError;
+	public void setPlataforma(String plataforma) {
+		this.plataforma = plataforma;
 	}
 
 

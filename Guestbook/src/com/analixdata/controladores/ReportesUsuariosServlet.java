@@ -99,12 +99,12 @@ public class ReportesUsuariosServlet extends HttpServlet
 			   		else
 			    	{*/
   
-		    			ResultSet rs = conn.createStatement().executeQuery("SELECT idtransaccion,fecha,hora,codigoretorno,descripcionerror,celular,mensaje,servicio.descripcion as servicio,concat(usuario.nombres,\" \",usuario.apellidos) as usuario, empresa.nombre as empresa FROM  pasarelasms.transaccion, pasarelasms.servicio,pasarelasms.usuario,pasarelasms.empresa WHERE servicio.idservicio=transaccion.idservicio AND usuario.idusuario= transaccion.idusuario and empresa.idempresa = transaccion.idempresa and empresa.idempresa="+u.getEmpresa().getIdEmpresa()+"  AND usuario.idusuario="+u.getId()+" AND fecha between '"+fechaDesde+"' AND '"+fechaHasta+"'; ");
+		    			ResultSet rs = conn.createStatement().executeQuery("SELECT idtransaccion,fecha,hora,retorno,plataforma,celular,mensaje,servicio.descripcion as servicio,concat(usuario.nombres,\" \",usuario.apellidos) as usuario, empresa.nombre as empresa FROM  pasarelasms.transaccion, pasarelasms.servicio,pasarelasms.usuario,pasarelasms.empresa WHERE servicio.idservicio=transaccion.idservicio AND usuario.idusuario= transaccion.idusuario and empresa.idempresa = transaccion.idempresa and empresa.idempresa="+u.getEmpresa().getIdEmpresa()+"  AND usuario.idusuario="+u.getId()+" AND fecha between '"+fechaDesde+"' AND '"+fechaHasta+"'; ");
 			    		
 		    			while(rs.next())
 				    	{
 		    				System.out.println("Entró bucle ");
-				        	tran = new Transaccion(rs.getInt("idTransaccion"), rs.getString("fecha"), rs.getString("hora"), rs.getString("codigoretorno"), rs.getString("celular"), rs.getString("mensaje"),rs.getString("servicio"), rs.getString("usuario"), rs.getString("empresa"));
+				        	tran = new Transaccion(rs.getInt("idTransaccion"), rs.getString("fecha"), rs.getString("hora"), rs.getString("retorno"),rs.getString("plataforma"), rs.getString("celular"), rs.getString("mensaje"),rs.getString("servicio"), rs.getString("usuario"), rs.getString("empresa"));
 				        	transacciones.add(tran);
 				    	 }
 		    		//}

@@ -354,7 +354,7 @@ if(cookie.getName().equals("usuario"))
 							<td>Fecha</td>
 							<td>Hora</td>
 							<td>Código de retorno</td>
-							<td>Descripcion</td>
+							<td>Plataforma</td>
 							<td>Celular</td>
 							<td>Mensaje</td>
 							<td>Empresa</td>
@@ -370,7 +370,7 @@ if(cookie.getName().equals("usuario"))
 								<td><%= transacciones.get(i).getFecha() %></td>
 								<td><%= transacciones.get(i).getHora() %></td>
 								<td> <%= transacciones.get(i).getCodRetorno() %></td>
-								<td></td>
+								<td><%= transacciones.get(i).getPlataforma() %></td>
 								<td><%= transacciones.get(i).getCelular() %></td>
 								<td><%= transacciones.get(i).getMensaje() %></td>
 								<td><%= transacciones.get(i).getNombreEmpresa() %></td>

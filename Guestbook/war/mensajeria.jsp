@@ -278,25 +278,43 @@ session.setAttribute("disponibles",disponible );
 				<h4>SMS disponibles: <%= disponible %></h4>
 
 			  	<form  action="enviarSMS" enctype="multipart/form-data" method="post" >
+			  	
+			  		<div class="row">
+        				<div class="col-xs-1">
+        					<div class="form-group">
+        						<label for="idTexto">Mensaje:</label>
+        					</div>
+        				</div>
+        				
+        				
+        				<div class="col-xs-4">
+        					<div class="form-group">
+        						<textarea class="form-control" cols="40" rows="5" name="mensaje" id="idTexto" required="required" onKeyDown="cuenta()" onKeyUp="cuenta()"></textarea>
+        					</div>
+        				</div>
+        				
+        				
+        				<div class="col-xs-1">
+        					<div class="form-group">
+        						<input class="form-control" type="button" onclick="agregarV('[VARIABLE1]')" value="Variable 1"></input></br>
+					  			<input class="form-control" type="button" onclick="agregarV('[VARIABLE2]')" value="Variable 2"></input></br>
+					  			<input class="form-control" type="button" onclick="agregarV('[VARIABLE3]')" value="Variable 3"></input></br>
+					  			<input class="form-control" type="button" onclick="agregarV('[VARIABLE4]')" value="Variable 4"></input></br>
+        					</div>
+        				</div>
+        			</div>
+        			
+        			
+        			
 			  		<table>
 			  		
-			  		<tr>
+			  		
+				
+			  			<tr>
 			  			<td>Archivo:</td>
 						
 			  			<td><input type="file" name="archivo" onchange="handleFiles(this.files)" accept=".csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain" required="required"  /></td>
 					</tr>
-					<tr>
-			  				<td>Mensaje:</td>
-			  				<td>
-			  					<textarea cols="40" rows="5" name="mensaje" id="idTexto" required="required" onKeyDown="cuenta()" onKeyUp="cuenta()"></textarea>
-			  				</td>
-			  				<td>
-			  					<input type="button" onclick="agregarV('[VARIABLE1]')" value="Variable 1"></input></br>
-					  			<input type="button" onclick="agregarV('[VARIABLE2]')" value="Variable 2"></input></br>
-					  			<input type="button" onclick="agregarV('[VARIABLE3]')" value="Variable 3"></input></br>
-					  			<input type="button" onclick="agregarV('[VARIABLE4]')" value="Variable 4"></input></br>
-			  				</td>
-			  			</tr>
 			  			<tr>
 			  				<td>Caracteres:</td>
 			  				<td><input type="text" name=caracteres id="caracteres" size=4 value="160"></td>
@@ -308,7 +326,7 @@ session.setAttribute("disponibles",disponible );
 			  				<td>
 			  				<input type="hidden" id="cantDisponibles" value="<%= disponible %>"/>
 			  				<input type="hidden" id="cantSMS" />
-			  				<input type="submit" value="Enviar" /></td>
+			  				<input onclick="return confirm('¿Está seguro que desea enviar los mensajes?')"  type="submit" value="Enviar" /></td>
 			  			</tr>
 			  		</table>
 			  	</form>
@@ -320,15 +338,14 @@ session.setAttribute("disponibles",disponible );
 						if(session.getAttribute("codigo").toString().equalsIgnoreCase("ENVIADOS"))
 						{
 							
-						String cod= "MENSAJES ENVIADOS SATISFACTORIAMENTE";
+						String cod= "MENSAJES ENVIADOS SATISFACTORIAMENTE!";
 						
 						
 					%>
-						<div>
-							<p class="bg-success">
-								<%= cod %>
-							</p>
-				    	</div>
+						<div class="alert alert-success">
+						  <strong>Exito!</strong> <%= cod %>
+						</div>
+						
 							
 					<% 	
 						}
@@ -337,12 +354,10 @@ session.setAttribute("disponibles",disponible );
 							String cod= "LOS MENSAJES NO HAN SIDO ENVIADOS. El NUMERO DE MENSAJES ES SUPERIOR A LOS MENSAJES DISPONIBLES. POR FAVOR CONTACTARSE CON ANALIXDATA";
 							%>
 							
-							<div>
-								<p class="bg-danger">
-									<%= cod %>
-								</p>        
-				    		</div>
-							
+							<div class="alert alert-danger">
+							  <strong>Error!</strong> <%= cod %>
+							</div>
+
 							<% 
 						}
 					}

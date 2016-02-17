@@ -12,8 +12,19 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.BufferedReader;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -22,6 +33,7 @@ import javax.servlet.http.HttpSession;
 import org.apache.commons.fileupload.*;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.IOUtils;
 
 import com.analixdata.modelos.Transaccion;
 import com.analixdata.modelos.Usuario;
@@ -36,13 +48,19 @@ public class EnvioMensajesServlet extends HttpServlet {
 	{
 		resp.setContentType("text/html;charset=UTF-8");
 		
-		HttpSession session=req.getSession(true);
+		/*
+		 * Este servlet realiza el envio de un listado de mensajes obtenido a partir de un archivo de texto, csv o excel.
+		 * */
+		
+		HttpSession session=req.getSession(true); //Se obtiene la session actual
 		session = req.getSession();
-		Usuario u = (Usuario)session.getAttribute("usuario");
+		Usuario u = (Usuario)session.getAttribute("usuario"); 
 		String disp =  (String) session.getAttribute("disponibles");
-		//String mensaje = req.getParameter("mensaje");
-//		String disponibles = req.getParameter("disponibles");
+		List <Transaccion> mensajes = new ArrayList<Transaccion>();
 		String url = null;
+		
+		//conexion a la 
+		
 		try {
   	      if (SystemProperty.environment.value() ==
   	          SystemProperty.Environment.Value.Production) {
@@ -59,144 +77,158 @@ public class EnvioMensajesServlet extends HttpServlet {
   	      e.printStackTrace();
   	      return;
   	    }
-	//	System.out.println(mensaje+" "+disponibles);
+
 		
 		FileItemFactory factory = new DiskFileItemFactory();
 		ServletFileUpload upload = new ServletFileUpload(factory);
 
-
-		// req es la HttpServletRequest que recibimos del formulario.
-		// Los items obtenidos serán cada uno de los campos del formulario,
-		// tanto campos normales como ficheros subidos.
-		List items;
 		try {
-			//items = upload.parseRequest(req);
-				// Se recorren todos los items, que son de tipo FileItem
-			FileItem uploadedFile = null;
+		
+			FileItemIterator iterator = upload.getItemIterator(req);
 			String mensaje = null;
-			List <Transaccion> mensajes = new ArrayList();
-			/*for (Object item : items) 
+			FileItemStream uploadedFile = null;
+			while (iterator.hasNext()) 
 			{
-			   FileItem uploaded = (FileItem) item;
+	            FileItemStream uploaded = iterator.next();
+	            
+	            if (!uploaded.isFormField()) 
+	            {
 
-			   // Hay que comprobar si es un campo de formulario. Si no lo es, se guarda el fichero
-			   // subido donde nos interese
-			   if (!uploaded.isFormField()) {
-				   
-			      // No es campo de formulario, guardamos el fichero en algún sitio
-				   uploadedFile = uploaded;   
-				   
-			   }
-			   else
-			   {
-				   if (uploaded.getFieldName().equals("mensaje"))
-				   
-				   mensaje = uploaded.getString();
+					   uploadedFile =  uploaded;   
 
-			   }
-			}*/
-			
-			session.setAttribute("codigo", "ENVIADOS");
-			resp.sendRedirect("mensajeria.jsp");
-			
-			/*if (uploadedFile.getContentType().equalsIgnoreCase("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
-			   {					   
-				   XSSFWorkbook workBook = new XSSFWorkbook(uploadedFile.getInputStream());
-				   XSSFSheet sheet = workBook.getSheetAt(0); 
-				   
-				  // System.out.println(sheet.getRow(1).getPhysicalNumberOfCells());
-				   for (int i=0;i<sheet.getPhysicalNumberOfRows();i++)
-				   {
-					   XSSFRow row = sheet.getRow(i);
-					   String mtemp = mensaje;
-					   //System.out.println(row.getCell(0).toString());
-					   if (row.getCell(1)!=null)  
-						   mtemp = mtemp.replace("[VARIABLE1]", row.getCell(1).toString());
-					   
-					   if (row.getCell(2)!=null)  
-						   mtemp = mtemp.replace("[VARIABLE2]", row.getCell(2).toString());
-					   
-					   if (row.getCell(3)!=null)  
-						   mtemp = mtemp.replace("[VARIABLE3]", row.getCell(3).toString());
-					   
-					   if (row.getCell(4)!=null)  
-						   mtemp = mtemp.replace("[VARIABLE4]", row.getCell(4).toString());
-
-					   //System.out.println(row.getCell(0)+" "+row.getCell(1)+" "+row.getCell(2)+""+row.getCell(3));
-					   System.out.println(mtemp);
-					   Transaccion mens = new Transaccion (row.getCell(0).toString(),mtemp);
-					   
-					   mensajes.add(mens);
-					   }
-				   
-
-			   }
-			   else
-			   {
-				   BufferedReader reader = new BufferedReader(new InputStreamReader(uploadedFile.getInputStream()));
-					for (String line; (line = reader.readLine()) != null;) 
-					{
-						String mtemp = mensaje;
-						String numero=null;
-					    StringTokenizer st = new StringTokenizer(line,";");
-					    int i=0;
-					    System.out.println(st.countTokens());
-					    if (st.countTokens()>0)
-					    {
-					    while(st.hasMoreTokens()) 
-					    {
-					    	if (i==0){
-					    		 numero = st.nextToken();
-					    		 
-					    		
-					    	}
-					    	if (i==1)
-					    	{
-					    		String variable1 = st.nextToken();
-					    		if (!variable1.equals(""))
-					    			mtemp = mtemp.replace("[VARIABLE1]", variable1);
-					    	}
-					    	if (i==2)
-					    	{
-					    		String variable2 = st.nextToken();
-					    		if (!variable2.equals(""))
-					    			mtemp = mtemp.replace("[VARIABLE2]", variable2);
-					    	}
-					    	if (i==3)
-					    	{
-					    		String variable3 = st.nextToken();
-					    		if (!variable3.equals(""))
-					    			mtemp = mtemp.replace("[VARIABLE3]", variable3);
-					    	}
-					    	if (i==4)
-					    	{
-					    		String variable4 = st.nextToken();
-					    		System.out.println("Esta es la variable 4"+variable4);
-					    		if (!variable4.equals(""))
-					    			mtemp = mtemp.replace("[VARIABLE4]", variable4);
-
-					    	}
-					    	i++;
-					    }
-					    
-					    //System.out.println(row.getCell(0)+" "+row.getCell(1)+" "+row.getCell(2)+""+row.getCell(3));
-						   System.out.println(numero+" sms: "+mtemp);
-						   Transaccion mens = new Transaccion (numero,mtemp);
-						   mensajes.add(mens);
-					    }
-					    
+					   if (uploadedFile.getContentType().equalsIgnoreCase("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
+					   {					   
+						   XSSFWorkbook workBook = new XSSFWorkbook(uploadedFile.openStream());
+						   XSSFSheet sheet = workBook.getSheetAt(0); 
 						   
-					    
-						//System.out.println(line);
-					}
-			   }
-			//System.out.println(disp);
-			/*if (Integer.parseInt(disp)>=mensajes.size())
+						   System.out.println("El numero de filas es: "+sheet.getPhysicalNumberOfRows());
+						   for (int i=0;i<sheet.getPhysicalNumberOfRows();i++)
+						   {
+							   XSSFRow row = sheet.getRow(i);
+							   String mtemp = mensaje;
+							   if (!row.getCell(0).toString().equalsIgnoreCase(""))
+							   {
+								   System.out.println("El valor del numero es: "+row.getCell(0).toString());
+								   if (row.getCell(1)!=null)  
+									   mtemp = mtemp.replace("[VARIABLE1]", row.getCell(1).toString());
+								   
+								   if (row.getCell(2)!=null)  
+									   mtemp = mtemp.replace("[VARIABLE2]", row.getCell(2).toString());
+								   
+								   if (row.getCell(3)!=null)  
+									   mtemp = mtemp.replace("[VARIABLE3]", row.getCell(3).toString());
+								   
+								   if (row.getCell(4)!=null)  
+									   mtemp = mtemp.replace("[VARIABLE4]", row.getCell(4).toString());
+	
+								   Transaccion mens = new Transaccion (row.getCell(0).toString(),mtemp);
+								   mensajes.add(mens);
+							   }
+							   else
+							   {
+								  break; 
+							   }
+						   	}
+						   
+					   }
+					   else
+					   {
+
+						   BufferedReader br = null;
+						   String line;
+							try {
+
+								br = new BufferedReader(new InputStreamReader(uploadedFile.openStream()));
+								while ((line = br.readLine()) != null) 
+								{
+
+									String mtemp = mensaje;
+									String numero=null;
+								    StringTokenizer st = new StringTokenizer(line,";");
+								    int i=0;
+								    
+								    if (st.countTokens()>0)
+								    {
+									    while(st.hasMoreTokens()) 
+									    {
+									    	if (i==0){
+									    		 numero = st.nextToken();
+									    		 
+									    		
+									    	}
+									    	if (i==1)
+									    	{
+									    		String variable1 = st.nextToken();
+									    		if (!variable1.equals(""))
+									    			mtemp = mtemp.replace("[VARIABLE1]", variable1);
+									    	}
+									    	if (i==2)
+									    	{
+									    		String variable2 = st.nextToken();
+									    		if (!variable2.equals(""))
+									    			mtemp = mtemp.replace("[VARIABLE2]", variable2);
+									    	}
+									    	if (i==3)
+									    	{
+									    		String variable3 = st.nextToken();
+									    		if (!variable3.equals(""))
+									    			mtemp = mtemp.replace("[VARIABLE3]", variable3);
+									    	}
+									    	if (i==4)
+									    	{
+									    		String variable4 = st.nextToken();
+									    		System.out.println("Esta es la variable 4"+variable4);
+									    		if (!variable4.equals(""))
+									    			mtemp = mtemp.replace("[VARIABLE4]", variable4);
+	
+									    	}
+									    	i++;
+									    }
+
+									   Transaccion mens = new Transaccion (numero,mtemp);
+									   mensajes.add(mens);
+								    }
+									
+									
+								}
+
+							} catch (IOException e) {
+								e.printStackTrace();
+							} finally {
+								if (br != null) {
+									try {
+										br.close();
+									} catch (IOException e) {
+										e.printStackTrace();
+									}
+								}
+							}
+						 
+					   }
+				   }
+				   else
+				   {
+					   if (uploaded.getFieldName().equals("mensaje"))
+					   {
+						  
+						   mensaje = IOUtils.toString(uploaded.openStream(), "utf-8"); 
+
+					   }
+
+				   }
+	            
+	            
+	        }
+			
+			
+			
+				
+			if (Integer.parseInt(disp)>=mensajes.size())
 			{	
 				
 				Connection conn = DriverManager.getConnection(url);
 				int enviados=0;
-				for (int i =0; i<mensajes.size();i++)
+				for (int i = 0; i<mensajes.size();i++)
 				{
 					PrintWriter out = resp.getWriter();
 					String charset = "UTF-8";
@@ -204,8 +236,8 @@ public class EnvioMensajesServlet extends HttpServlet {
 					String urlEnvio ="http://envia-movil.com/Api/Envios?mensaje="+decmensaje+"&numero="+mensajes.get(i).getCelular() ;
 					URL obj = new URL(urlEnvio);
 	        		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-	        		con.setReadTimeout(60 * 1000);
-	                con.setConnectTimeout(60 * 1000);
+	        		con.setReadTimeout(60 * 5000);
+	                con.setConnectTimeout(60 * 5000);
 	
 	        		con.setRequestMethod("GET");
 	
@@ -215,7 +247,9 @@ public class EnvioMensajesServlet extends HttpServlet {
 	        		System.out.println("\nSending 'GET' request to URL : " + urlEnvio);
 	        		System.out.println("Response Code : " + responseCode);
 	        		
-	        		if(responseCode==200)
+	        		
+	        		
+	        		/*if(responseCode==200)
 	        		{
 	
 		        		BufferedReader in = new BufferedReader(
@@ -232,19 +266,35 @@ public class EnvioMensajesServlet extends HttpServlet {
 		        		try
 		        		{
 		        			
-		        		
+		        			Calendar cal = Calendar.getInstance(); // creates calendar
+		    	    		
+		    		        cal.add(Calendar.HOUR_OF_DAY, -5); // adds one hour
+
+		    		         		        
+		    		        String fecha= new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()).toString();
+		    		        String hora=new SimpleDateFormat("HH:mm:ss").format(cal.getTime()).toString();
 		        			
-		    		        java.util.TimeZone zone = java.util.TimeZone.getTimeZone("America/Quito");
-		    		        String fecha= new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance(zone).getTime()).toString();
-		    		        String hora=new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance(zone).getTime()).toString();
+		    		       
+		    		        String respuesta=response.toString();
+		        			
+		        			if(response.toString().equals("\"Mensaje enviado\"")){
+		        				respuesta="MENSAJE ENVIADO";
+		        			
+		        			}
+		        			
+		        			if(response.toString().equals("\"Error al enviar mensaje\"")){
+		        				respuesta="MENSAJE NO ENVIADO";
+		        			
+		        			}
+		    		        
 		        			String statement = "INSERT INTO transaccion (fecha,hora,retorno,plataforma,celular,mensaje,idservicio,idusuario,idempresa) VALUES( ? , ? , ? , ? , ? , ? , ? , ? , ? )";
 		    		          PreparedStatement stmt = conn.prepareStatement(statement);
 		    		          stmt.setString(1, fecha);
 		    		          stmt.setString(2,  hora);
-		    		          stmt.setString(3, response.toString());
+		    		          stmt.setString(3, respuesta);
 		    		          stmt.setString(4, "FRONTEND");
 		    		          stmt.setString(5, mensajes.get(i).getCelular());
-		    		          stmt.setString(6, decmensaje);
+		    		          stmt.setString(6, URLDecoder.decode(decmensaje,"UTF-8"));
 		    		          stmt.setInt(7, 1);
 		    		          stmt.setInt(8, u.getId() );
 		    		          stmt.setInt(9, u.getEmpresa().getIdEmpresa());
@@ -259,25 +309,32 @@ public class EnvioMensajesServlet extends HttpServlet {
 		    		          success = stmt.executeUpdate();
 	  		            
 		        		}catch (Error e){
-		        			
-		        		}finally{
-		        			out.println(response);
+		        			out.println(e);
+		        		}finally
+		        		{
+		        			out.println("Hola "+response);
 		        		}
 			
 	        		}else
 	        		{
 	        			out.println("ERROR DE ENVIO");
 	        			
+	        		}*/
+	        		con.disconnect();
+	        		if ((i % 10)==0)
+	        		{
+	        			Thread.sleep(3000);
 	        		}
 				}
 				
-				int env = Integer.parseInt(disp)-enviados;
+				/*int env = Integer.parseInt(disp)-enviados;
 				String stmt1 = "UPDATE servicio_empresa SET disponible="+env+" WHERE idempresa="+u.getEmpresa().getIdEmpresa();
 				PreparedStatement stmt = conn.prepareStatement(stmt1);
 				
 				stmt.executeUpdate();
 				
 				conn.close();
+				*/
 				
 				session.setAttribute("codigo", "ENVIADOS");
 				resp.sendRedirect("mensajeria.jsp");
@@ -285,14 +342,15 @@ public class EnvioMensajesServlet extends HttpServlet {
 			}
 			else
 			{
+				System.out.println(mensajes.size());
 				session.setAttribute("codigo", "NOENVIADOS");
 				resp.sendRedirect("mensajeria.jsp");
 			}
 			
 			
-			*/
 			
-	//	} catch (FileUploadException e) {
+			
+		} catch (FileUploadException e) {
 			// TODO Auto-generated catch block
 		//	session.setAttribute("codigo", e);
 			
@@ -312,95 +370,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		processRequest(req, resp);
-	/*	System.out.println("hOLAAA");
-		
-		
-		String charset = "UTF-8";
-		String numero="593992845597";
-        String mensaje = URLEncoder.encode("Mensaje de prueba para Geovanny by ANALIXDATA", charset);
-     
-        String urlEnvio = "http://envia-movil.com/Api/Envios?mensaje="+mensaje+"&numero="+numero;
-		
-		URL obj = new URL(urlEnvio);
-		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-		con.setReadTimeout(60 * 1000);
-        con.setConnectTimeout(60 * 1000);
-
-		con.setRequestMethod("GET");
-
-		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0");
-		con.setRequestProperty ("Authorization", "Basic REM1NjIzMTVCM0NCOUVGOjA2MzZFM0FGMTQ=");
-		int responseCode = con.getResponseCode();
-		System.out.println("\nSending 'GET' request to URL : " + urlEnvio);
-		System.out.println("Response Code : " + responseCode);
-
-		BufferedReader in = new BufferedReader(
-		        new InputStreamReader(con.getInputStream()));
-		String inputLine;
-		StringBuffer response = new StringBuffer();
-
-		while ((inputLine = in.readLine()) != null)
-		{
-			response.append(inputLine);
-		}
-		in.close();
-
-        if (responseCode == 200) 
-        {
-        	HttpSession session=req.getSession(true);
-
-    		Usuario u = (Usuario)session.getAttribute("usuario");
-    		
-    	
-    		
-    		String url = null;
-    	    try {
-    	      if (SystemProperty.environment.value() ==
-    	          SystemProperty.Environment.Value.Production) {
-
-    	        Class.forName("com.mysql.jdbc.GoogleDriver");
-    	        url = "jdbc:google:mysql://pasarelasms-1190:analixdata/pasarelasms?user=root&password=1234";
-    	      } else {
-
-    	        Class.forName("com.mysql.jdbc.Driver");
-    	        url = "jdbc:mysql://localhost:3306/pasarelasms?user=geo";
-
-    	      }
-    	    } catch (Exception e) {
-    	      e.printStackTrace();
-    	      return;
-    	    }
-
-    	    try {
-				Connection conn = DriverManager.getConnection(url);
-				
-				String statement = "INSERT INTO transaccion (fecha,hora,codigoretorno,celular,mensaje,idservicio,idusuario,idempresa) VALUES( ? , ? , ? , ? , ? , ? , ? , ? )";
-		          PreparedStatement stmt = conn.prepareStatement(statement);
-		          stmt.setString(1, new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime()).toString());
-		          stmt.setString(2, new SimpleDateFormat("HH:mm:ss").format(Calendar.getInstance().getTime()).toString() );
-		          stmt.setString(3, "1");
-		          stmt.setString(4, numero);
-		          stmt.setString(5, mensaje);
-		          stmt.setInt(6, 1);
-		          stmt.setInt(7, u.getId());
-		          stmt.setInt(8, u.getEmpresa().getIdEmpresa());
-		          
-		          int success = 2;
-		          System.out.println(stmt);
-		          success = stmt.executeUpdate();
-		         
-		          
-		          
-				
-			} catch (SQLException e) {
-
-				e.printStackTrace();
-			}
-    	    
-    	    session.setAttribute("codigo", inputLine); 
-    		resp.sendRedirect("mensajeria.jsp");
-    	    
-        }*/
+	
 
 	}
 
