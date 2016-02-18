@@ -294,7 +294,7 @@ session.setAttribute("disponibles",disponible );
         				</div>
         				
         				
-        				<div class="col-xs-1">
+        				<div class="col-xs-2">
         					<div class="form-group">
         						<input class="form-control" type="button" onclick="agregarV('[VARIABLE1]')" value="Variable 1"></input></br>
 					  			<input class="form-control" type="button" onclick="agregarV('[VARIABLE2]')" value="Variable 2"></input></br>
@@ -334,32 +334,68 @@ session.setAttribute("disponibles",disponible );
 			  	<%
 					if(!(session.getAttribute("codigo") == null))
 					{
-					
-						if(session.getAttribute("codigo").toString().equalsIgnoreCase("ENVIADOS"))
+						String codigo = session.getAttribute("codigo").toString();
+						String cod;
+						switch (codigo)
 						{
-							
-						String cod= "MENSAJES ENVIADOS SATISFACTORIAMENTE!";
-						
-						
-					%>
-						<div class="alert alert-success">
-						  <strong>Exito!</strong> <%= cod %>
-						</div>
-						
-							
-					<% 	
+							case "ERRORBASE":
+												cod= "ERROR AL CONECTARSE CON LA BASE DE DATOS!";
+												%>
+													<div class="alert alert-danger">
+													  <strong>Error!</strong> <%= cod %>
+													</div>	
+												<%
+												break;
+							case "ERRORTEXTO":
+												cod= "EL ARCHIVO DE TEXTO O CSV CONTIENE ERRORES!";
+												%>
+													<div class="alert alert-danger">
+													  <strong>Error!</strong> <%= cod %>
+													</div>	
+												<%
+												break;
+							case "ERRORGRABARBASE":
+												cod= "ALGUNOS MENSAJES NO FUERON ENVIADOS. POR FAVOR, COMUNIQUESE CON ANALIXDATA";
+												%>
+													<div class="alert alert-danger">
+													  <strong>Error!</strong> <%= cod %>
+													</div>	
+												<%
+												break;
+							case "ENVIADOS":
+												cod= "MENSAJES ENVIADOS SATISFACTORIAMENTE!";
+												%>
+													<div class="alert alert-success">
+													  <strong>Exito!</strong> <%= cod %>
+													</div>	
+												<%
+												break;
+							case "NOENVIADOS":
+												cod= "LOS MENSAJES NO HAN SIDO ENVIADOS. El NUMERO DE MENSAJES ES SUPERIOR A LOS MENSAJES DISPONIBLES. POR FAVOR CONTACTARSE CON ANALIXDATA";
+												%>
+													<div class="alert alert-danger">
+													  <strong>Error!</strong> <%= cod %>
+													</div>	
+												<%
+												break;
+							case "ERRORSUBIRARCHIVO":
+												cod= "ERROR AL SUBIR EL ARCHIVO!";
+												%>
+													<div class="alert alert-danger">
+													  <strong>Error!</strong> <%= cod %>
+													</div>	
+												<%
+												break;
+							case "ERRORGENERAL":
+												cod= "ERROR EN LA PLATAFORMA DE ENVIO. POR FAVOR, COMUNICARSE CON ANALIXDATA URGENTEMENTE";
+												%>
+													<div class="alert alert-danger">
+													  <strong>Error!</strong> <%= cod %>
+													</div>	
+												<%
+												break;
 						}
-						else
-						{
-							String cod= "LOS MENSAJES NO HAN SIDO ENVIADOS. El NUMERO DE MENSAJES ES SUPERIOR A LOS MENSAJES DISPONIBLES. POR FAVOR CONTACTARSE CON ANALIXDATA";
-							%>
-							
-							<div class="alert alert-danger">
-							  <strong>Error!</strong> <%= cod %>
-							</div>
 
-							<% 
-						}
 					}
 				%>
 			</div>	

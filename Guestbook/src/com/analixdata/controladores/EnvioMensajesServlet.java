@@ -74,9 +74,10 @@ public class EnvioMensajesServlet extends HttpServlet {
   	        url = "jdbc:mysql://localhost:3306/pasarelasms?user=geo";
 
   	      }
-  	    } catch (Exception e) {
-  	      e.printStackTrace();
-  	      return;
+  	    } catch (Exception e) 
+		{
+  	    	session.setAttribute("codigo", "ERRORBASE");
+			resp.sendRedirect("mensajeria.jsp");
   	    }
 
 		
@@ -194,7 +195,8 @@ public class EnvioMensajesServlet extends HttpServlet {
 								}
 
 							} catch (IOException e) {
-								e.printStackTrace();
+								session.setAttribute("codigo", "ERRORTEXTO");
+								resp.sendRedirect("mensajeria.jsp");
 							} finally {
 								if (br != null) {
 									try {
@@ -220,10 +222,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 	            
 	            
 	        }
-			
-			
-			
-				
+
 			if (Integer.parseInt(disp)>=mensajes.size())
 			{	
 				
@@ -306,17 +305,12 @@ public class EnvioMensajesServlet extends HttpServlet {
 		    		          stmt.executeUpdate();
 	  		            
 		        		}catch (Error e){
-		        			out.println(e);
-		        		}finally
-		        		{
-		        			out.println("Hola "+response);
+		        			session.setAttribute("codigo", "ERRORGRABARBASE");
+		    				resp.sendRedirect("mensajeria.jsp");
 		        		}
 			
-	        		}else
-	        		{
-	        			out.println("ERROR DE ENVIO");
-	        			
 	        		}
+	        		
 	        		con.disconnect();
 
 				}
@@ -343,14 +337,15 @@ public class EnvioMensajesServlet extends HttpServlet {
 			
 			
 		} catch (FileUploadException e) {
-			// TODO Auto-generated catch block
-		//	session.setAttribute("codigo", e);
+			
+			session.setAttribute("codigo", "ERRORSUBIRARCHIVO");
+			resp.sendRedirect("mensajeria.jsp");
 			
 			///e.printStackTrace();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			//e.printStackTrace();
-			//session.setAttribute("codigo", e);
+
+			session.setAttribute("codigo", "ERRORGENERAL");
+			resp.sendRedirect("mensajeria.jsp");
 		
 		}
 	
