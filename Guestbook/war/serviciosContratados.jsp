@@ -106,6 +106,7 @@ if(u.getTipo().getId() == 3){
   	<div class="container-fluid">
 	  	<div class="row">
 			  	<div class="col-sm-3 col-md-2 sidebar"> 
+			  	<img class="imgpestana" src="imagenes/imgpestana.png"/>
 				    <ul class="nav nav-sidebar">
 								<%  
 						if(u != null){
@@ -169,26 +170,38 @@ if(u.getTipo().getId() == 3){
 					</ul>
 				</div>
 		
-			<div class="col-sm-9 col-md-9 main">
-				<h1 class="page-header">Servicios Contratados</h1>
-				<table style="border: 1px solid black" id="datosServiciosC">
+			<div class="col-sm-9 col-md-9 main contenido">
+			
+			
+				<h1 class="page-header">Servicios Contratados<img class="icoheader" src="imagenes/icoreloj.png"/><img class="icoheader" src="imagenes/icopastel.png"/><img class="icoheader" src="imagenes/icoaudifonos.png"/><img class="icoheader" src="imagenes/icodescarga.png"/> </h1>
+				<%if (rs.first()){ %>
+				<table id="datosServiciosC" class="table table-bordered">
 				<tbody>
 				<tr>
-				<th style="background-color: #CCFFCC; margin: 5px">ID Servicio</th>
-				<th style="background-color: #CCFFCC; margin: 5px">Descripción</th>
-				<th style="background-color: #CCFFCC; margin: 5px">Límite mensual</th>
-				<th style="background-color: #CCFFCC; margin: 5px">Disponible</th>
+				<th >ID Servicio</th>
+				<th >Descripción</th>
+				<th >Límite mensual</th>
+				<th >Disponible</th>
 				
 				<%if (u.getTipo().getId()<3){ %>
 				
-				<th style="background-color: #CCFFCC; margin: 5px">Costo / Transacción</th>
+				<th >Costo / Transacción</th>
 				
 				<% }%>
 				
-				<th style="background-color: #CCFFCC; margin: 5px">Estado</th>
+				<th >Estado</th>
 				</tr>
 				
 				<%
+				}else{
+					
+					%>
+					
+						<div class="alert alert-info">
+						  No cuenta con servicios contratados. Comuníquese con ANALIXDATA.
+						</div>
+					<%
+				}
 				while (rs.next()) {
 				    int id =rs.getInt("idservicio");
 					String servicio = rs.getString("descripcion");

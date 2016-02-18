@@ -106,9 +106,31 @@ a {
 }
 
 
+.col-sm-9.col-md-9.main {
+    padding-left: 25px;
+}
 
 
+.btnCambiarC {
+    margin-top: 25px;
+}
 
+form#formActDatos {
+    margin-top: 25px;
+}
+
+.btnCancelar {
+    margin-left: 25px;
+}
+
+.alert{
+	
+	margin-top:5px;
+}
+
+form#formEmpresa {
+    margin-top: 25px;
+}
 
 /* Vertical Offset Bottom */
 .vert-offset-top-12{

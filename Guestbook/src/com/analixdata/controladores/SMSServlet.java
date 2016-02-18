@@ -42,7 +42,7 @@ public class SMSServlet extends HttpServlet {
 		String mensajecod=URLEncoder.encode("Ahora si amigo.",charset); 
 		
 		
-		String urlEnvio = "http://serviciosms.analixdata.com/APIAnalix?numero=593992845597&mensaje="+mensajecod;
+		String urlEnvio = "http://serviciosms.analixdata.com/APIAnalix?numero=593992831273&mensaje="+mensajecod;
 		
 
 		URL obj = new URL(urlEnvio);

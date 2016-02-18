@@ -27,7 +27,7 @@ public class ServicioUEmpresaServlet extends HttpServlet {
 	protected void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException,IOException
 	{
 		String url = null;
-		String confirmacion=null;
+		
 		
 		resp.setContentType("text/html;charset=UTF-8");
 		
@@ -57,7 +57,7 @@ public class ServicioUEmpresaServlet extends HttpServlet {
 		    	 
 		    	  String usu=req.getParameter("userEmpresa");
 		    	
-		    	  String inputServicios=req.getParameter("verServicios");
+		    	  String inputServicios=req.getParameter("btnServicios");
 		    	  String inputGuardar=req.getParameter("btnGuardar");
 		    	  String inputCancelar=req.getParameter("btnCancelar");
 		    	  
@@ -80,7 +80,7 @@ public class ServicioUEmpresaServlet extends HttpServlet {
 				        	
 				        	int asignado=0;
 				        	
-				        	System.out.println("Asignado "+rs.getInt("idusuario"));
+				        
 				        	
 				        	if(rs.getInt("idusuario") > 0){
 				        		asignado=1;
@@ -97,7 +97,7 @@ public class ServicioUEmpresaServlet extends HttpServlet {
 				        session.setAttribute("idusuario", usu);
 				   
 				        session.setAttribute("serviciosU", listaServicios);
-				        session.setAttribute("confirmacion", null); 
+				        session.setAttribute("confServU", null); 
 				        resp.sendRedirect("servicioUEmpresa.jsp");
 				        
 				        	
@@ -127,12 +127,12 @@ public class ServicioUEmpresaServlet extends HttpServlet {
 					          success = stmt.executeUpdate();
 					         
 					          if (success == 1) {
-					        	  confirmacion="1";
+					        	  session.setAttribute("confServU", 1);
 					        	  
 							        
 					          
 					          } else if (success == 0) {
-					        	  confirmacion="0";
+					        	  session.setAttribute("confServU", 0);
 					        	  
 					          }
 					          
@@ -147,18 +147,18 @@ public class ServicioUEmpresaServlet extends HttpServlet {
 					          success = stmt.executeUpdate();
 					         
 					          if (success == 1) {
-					        	  confirmacion="1";
+					        	  session.setAttribute("confServU", 1);
 					        	  
 							        
 					          
 					          } else if (success == 0) {
-					        	  confirmacion="0";
+					        	  session.setAttribute("confServU", 0);
 					        	  
 					          }
 			    			  
 			    		  }
 			    		  
-			    		  session.setAttribute("confirmacion", "1"); 
+			    		   
 			    		  
 			    	  }
 			    	
@@ -172,7 +172,7 @@ public class ServicioUEmpresaServlet extends HttpServlet {
 			          
 			          resp.sendRedirect("servicioUEmpresa.jsp");
 			      }else if(inputCancelar!=null){
-			    	  session=req.getSession(true);
+			    	
 			    	  session.setAttribute("serviciosU", null);
 		
 			          session.setAttribute("idusuario",null);

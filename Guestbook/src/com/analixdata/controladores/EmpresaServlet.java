@@ -63,12 +63,9 @@ public class EmpresaServlet extends HttpServlet {
 		        	  u.getEmpresa().setTelefono(telefono);
 		        	  u.getEmpresa().setContacto(contacto);
 		        	  
-		            out.println(
-		                "<html><head></head><body>Success! Redirecting in 3 seconds...</body></html>");
+		        	  session.setAttribute("updateEmpresa", 1);
 		          } else if (success == 0) {
-		            out.println(
-		                "<html><head></head><body>Failure! Please try again! " +
-		                "Redirecting in 3 seconds...</body></html>");
+		        	  session.setAttribute("updateEmpresa", 2);
 		          }
 	          
 	        }

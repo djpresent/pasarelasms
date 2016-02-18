@@ -179,33 +179,79 @@ ResultSet rs = conn.createStatement().executeQuery(
 					</ul>
 				</div>
 		
-			<div class="col-sm-9 col-md-9 main">
-				<h1 class="page-header">Datos Empresariales</h1>
+			<div class="col-sm-9 col-md-9 main contenido">
+				<h1 class="page-header">Datos Empresariales<img class="icoheader" src="imagenes/icoreloj.png"/><img class="icoheader" src="imagenes/icopastel.png"/><img class="icoheader" src="imagenes/icoaudifonos.png"/><img class="icoheader" src="imagenes/icodescarga.png"/> </h1>
 				
-				<div class="datosEmpresa">
-				<div><h4>Nombre: </h4> <h5><%= u.getEmpresa().getNombre() %></h5></div>
-				<div><h4>Dirección: </h4> <h5 id="valorDireccion"><%= u.getEmpresa().getDireccion() %></h5></div>
-				<div><h4>Teléfono: </h4> <h5 id="valorTelefono"><%= u.getEmpresa().getTelefono() %></h5></div>
-				<div><h4>Contacto: </h4> <h5 id="valorContacto"><%= u.getEmpresa().getContacto() %></h5></div>
+				<table class="datosEmpresa">
+				<tbody>
+				<tr><th><h4>Nombre: </h4></th> <th><h5><%= u.getEmpresa().getNombre() %></h5></th></tr>
+				<tr><th><h4>Dirección: </h4></th> <th><h5 id="valorDireccion"><%= u.getEmpresa().getDireccion() %></h5></th></tr>
+				<tr><th><h4>Teléfono: </h4></th> <th> <h5 id="valorTelefono"><%= u.getEmpresa().getTelefono() %></h5></th></tr>
+				<tr><th><h4>Contacto: </h4> </th> <th><h5 id="valorContacto"><%= u.getEmpresa().getContacto() %></h5></th></tr>
 				
 			<% 
 			int estado=u.getEmpresa().getEstado();
 			String est="";
 		    if(estado==1){est="Activo";}else{est="Inactivo";}
 			%>
-				<div><h4>Estado: </h4><h5> <%= est %></h5></div>
-				</div>
+				<tr><th><h4>Estado: </h4> </th><th><h5> <%= est %></h5></th></tr>
+				</tbody>
+				</table>
 						
 			<% if(u.getTipo().getId() == 2){ %>	
-				<button value="Editar" onclick="habilitar()">Editar</button>
+				<button value="Editar" class="btn btn-default" onclick="habilitar()">Editar</button>
 
-						<form  onsubmit="return validar(this);" action="/empresa" method="post" style="display:none" id="formEmpresa">
+						<form  onsubmit="return validar(this);"  class="form-horizontal" action="/empresa" method="post" style="display:none" id="formEmpresa">
 							
-						    <div>Dirección: <input type="text" name="direccion" id="dirEmpresa" required="required"></input></div>
-						    <div>Teléfono: <input type="tel" name="telefono" id="telEmpresa" required="required"></input></div>
-						    <div>Contacto: <input type="text" name="contacto" id="conEmpresa" required="required"></input></div>
-						    <div><input type="submit" value="Guardar"/><input type="reset" value="Cancelar" onclick="deshabilitar()"/></div>
+							<div class="form-group">
+								<label for="dirEmpresa" class="col-sm-2 control-label">Dirección:</label>
+						    	<div class="col-sm-10"> 
+						    		<input type="text" name="direccion" id="dirEmpresa" class="form-control" required="required"></input>
+						    	</div>
+						    </div>
+						    
+						    <div class="form-group">
+								<label for="telEmpresa" class="col-sm-2 control-label">Teléfono:</label>
+						    	<div class="col-sm-10">
+						    		<input type="tel" name="telefono" id="telEmpresa" class="form-control" required="required"></input>
+						    	</div>
+						    </div>
+						    
+						    <div class="form-group">
+								<label for="conEmpresa" class="col-sm-2 control-label">Contacto:</label>
+						    	<div class="col-sm-10">
+						   			<input type="text" name="contacto" id="conEmpresa" class="form-control" required="required"></input>
+						   		</div>
+						   	</div>
+						    <div class="col-sm-offset-2">
+						    	<input type="submit" class="btn btn-primary"  value="Guardar"/>
+						    	<input type="reset" value="Cancelar" class="btn btn-default btnCancelar" onclick="deshabilitar()"/>
+						    </div>
 						  </form>
+						  
+						   <%
+						
+						  if(session.getAttribute("updateEmpresa") != null){ 
+							
+							  
+							  if(session.getAttribute("updateEmpresa").toString().equals("1")){
+								  %>
+									<div class="alert alert-success">
+									  Datos actualizados exitosamente.
+									</div>
+								<%
+							  }
+							  
+							  if(session.getAttribute("updateEmpresa").toString().equals("2")){
+								  %>
+									<div class="alert alert-danger">
+									  No fue posible completar la acción. Por favor intentar nuevamente o comunicarse con Analixdata.
+									</div>
+								<%
+							  }
+							  
+							  session.setAttribute("updateEmpresa", null);							  
+						  } %>
 						  
 			 <% } %>
 			</div>	

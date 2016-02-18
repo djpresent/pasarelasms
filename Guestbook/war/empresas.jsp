@@ -112,6 +112,8 @@ ResultSet rs = conn.createStatement().executeQuery(
   	<div class="container-fluid">
 	  	<div class="row">
 			  	<div class="col-sm-3 col-md-2 sidebar"> 
+			  	
+			  	<img class="imgpestana" src="imagenes/imgpestana.png"/>
 				    <ul class="nav nav-sidebar">
 								<%  
 						if(u != null){

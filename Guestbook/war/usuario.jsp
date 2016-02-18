@@ -129,6 +129,7 @@ ResultSet rs = conn.createStatement().executeQuery(
   	<div class="container-fluid">
 	  	<div class="row">
 			  	<div class="col-sm-3 col-md-2 sidebar"> 
+			  	<img class="imgpestana" src="imagenes/imgpestana.png"/>
 				    <ul class="nav nav-sidebar">
 								<%  
 						if(u != null){
@@ -193,41 +194,96 @@ ResultSet rs = conn.createStatement().executeQuery(
 					</ul>
 				</div>
 		
-			<div class="col-sm-9 col-md-9 main">
-				<h1 class="page-header">Mis Datos</h1>
+			<div class="col-sm-9 col-md-9 main contenido">
+				<h1 class="page-header">Mis Datos<img class="icoheader" src="imagenes/icoreloj.png"/><img class="icoheader" src="imagenes/icopastel.png"/><img class="icoheader" src="imagenes/icoaudifonos.png"/><img class="icoheader" src="imagenes/icodescarga.png"/> </h1>
 				
-				<div class="datosU">
-				<div><h4>Cédula: </h4> <h5><%= u.getCedula()%> </h5></div>
-				<div><h4>Nombres: </h4> <h5><%= u.getNombres()%> <%= u.getApellidos()%>  </h5></div>
-				<div><h4>Apellidos: </h4> <h5><%= u.getApellidos() %></h5></div>
-				<div><h4>Cargo: </h4> <h5><%= u.getCargo() %></h5></div>
-				<div><h4>Email: </h4> <h5><%= u.getEmail() %></h5></div>
-				<div><h4>Teléfono: </h4> <h5><%= u.getTelefono() %></h5></div>
-				<div><h4>Tipo de usuario: </h4> <h5><%= u.getTipo().getDescripcion() %></h5></div>
+				<table class="datosU">
+				<tbody>
+				
+				
+				<tr><th><h4>Cédula: </h4></th> <th> <h5><%= u.getCedula()%> </h5></th></tr>
+				<tr><th><h4>Nombres: </h4></th> <th> <h5><%= u.getNombres()%> <%= u.getApellidos()%>  </h5></th></tr>
+				<tr><th><h4>Apellidos: </h4></th> <th> <h5><%= u.getApellidos() %></h5></th></tr>
+				<tr><th><h4>Cargo: </h4></th> <th> <h5><%= u.getCargo() %></h5></th></tr>
+				<tr><th><h4>Email: </h4></th> <th> <h5><%= u.getEmail() %></h5></th></tr>
+				<tr><th><h4>Teléfono: </h4></th> <th> <h5><%= u.getTelefono() %></h5></th></tr>
+				<tr><th><h4>Tipo de usuario: </h4></th> <th> <h5><%= u.getTipo().getDescripcion() %></h5></th></tr>
 			
 			<% 
 			int estado=u.getEstado();
 			String est="";
 		    if(estado==1){est="Activo";}else{est="Inactivo";}
 			%>
-				<div><h4>Estado: </h4><h5> <%= est %></h5></div>
-				</div>
+				<tr><th><h4>Estado: </h4></th> <th><h5> <%= est %></h5></th></tr>
+				</tbody>
+				</table>
 						
 		
-				<button value="CambiarContrasena" onclick="habilitar()">Cambiar contraseña</button>
+				<button value="CambiarContrasena" class="btn btn-default btnCambiarC" onclick="habilitar()">Cambiar contraseña</button>
 
-						<form  onsubmit="return validar();" action="/actContrasena" method="post" style="display:none" id="formActDatos">
+						<form  onsubmit="return validar();" action="/actContrasena" class="form-horizontal" method="post" style="display:none" id="formActDatos">
 							
-						    <div>Ingrese su contraseña actual: <input type="password" name="oldpass" id="oldpass" required="required"></input></div>
-						    <div>Nueva contraseña: <input type="password" name="newpass" id="newpass" required="required"></input></div>
-						    <div>Confirmar contrseña: <input type="password" name="confpass" id="confpass" required="required"></input></div>
+						    <div class="form-group">
+						    	<label for="oldpass" class="col-sm-2 control-label">Contraseña actual:</label> 
+						    	<div class="col-sm-10">
+						    		<input type="password" name="oldpass" id="oldpass" class="form-control" required="required"></input>
+						    	</div>
+						    </div>
+						    <div class="form-group">
+						    	<label for="newpass" class="col-sm-2 control-label">Nueva contraseña:</label> 
+						    	<div class="col-sm-10">
+						     		<input type="password" name="newpass" class="form-control" id="newpass" required="required"></input>
+						     	</div>
+						     </div>
+						     
+						    <div class="form-group">
+							    <label for="confpass" class="col-sm-2 control-label">Confirmar:</label> 
+							    	<div class="col-sm-10">
+						    			 <input type="password" name="confpass" class="form-control" id="confpass" required="required"></input>
+						    		</div>
+						    </div>
 						    
 						    <input type="hidden" id="oldcod" name="oldcod"/>
 						    <input type="hidden" id="newcod" name="newcod"/>
 						
 						    
-						    <div><input type="submit" value="Aceptar"/><input type="reset" value="Cancelar" onclick="deshabilitar()"/></div>
+						    <div class="col-sm-offset-2"><input type="submit" class="btn btn-primary" value="Aceptar"/><input type="reset"  class="btn btn-default btnCancelar" value="Cancelar" onclick="deshabilitar()"/></div>
 						  </form>
+						  
+						 
+						  
+						  <%
+						
+						  if(session.getAttribute("confCambioC") != null){ 
+							
+							  
+							  if(session.getAttribute("confCambioC").toString().equals("1")){
+								  %>
+									<div class="alert alert-success">
+									  Contraseña actualizada exitosamente.
+									</div>
+								<%
+							  }
+							  
+							  if(session.getAttribute("confCambioC").toString().equals("2")){
+								  %>
+									<div class="alert alert-danger">
+									  No fue posible completar la acción. Por favor intentar nuevamente o comunicarse con Analixdata.
+									</div>
+								<%
+							  }
+							  
+							  if(session.getAttribute("confCambioC").toString().equals("3")){
+								  %>
+									<div class="alert alert-warning">
+									  La contraseña actual proporcionada es incorrecta.
+									</div>
+								<%
+							  }
+							  
+							  session.setAttribute("confCambioC", null);
+							  
+						  } %>
 						  
 			</div>	
 	
