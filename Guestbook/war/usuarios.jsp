@@ -185,6 +185,7 @@ if(u.getTipo().getId() == 2){
   	<div class="container-fluid">
 	  	<div class="row">
 			  	<div class="col-sm-3 col-md-2 sidebar"> 
+			  	<img class="imgpestana" src="imagenes/imgpestana.png"/>
 				    <ul class="nav nav-sidebar">
 							<%  
 						if(u != null){
@@ -251,19 +252,19 @@ if(u.getTipo().getId() == 2){
 		
 			<div class="col-sm-9 col-md-9 main">
 				<h1 class="page-header">Usuarios</h1>
-				<table style="border: 1px solid black" id="datosUsuarios">
+				<table class="table table-bordered" id="datosUsuarios">
 				<tbody>
 				<tr>
-				<th style="background-color: #CCFFCC; margin: 5px">ID</th>
-				<th style="background-color: #CCFFCC; margin: 5px">Cédula</th>
-				<th style="background-color: #CCFFCC; margin: 5px">Nombres</th>
-				<th style="background-color: #CCFFCC; margin: 5px">Apellidos</th>
-				<th style="background-color: #CCFFCC; margin: 5px">Cargo</th>
-				<th style="background-color: #CCFFCC; margin: 5px">Telefono</th>
-				<th style="background-color: #CCFFCC; margin: 5px">Email</th>
-				<th style="background-color: #CCFFCC; margin: 5px">Estado</th>
-				<th style="background-color: #CCFFCC; margin: 5px">Tipo</th>
-				<th style="background-color: #CCFFCC; margin: 5px">Empresa</th>
+				<th>ID</th>
+				<th>Cédula</th>
+				<th>Nombres</th>
+				<th>Apellidos</th>
+				<th>Cargo</th>
+				<th>Telefono</th>
+				<th>Email</th>
+				<th>Estado</th>
+				<th>Tipo</th>
+				<th>Empresa</th>
 				</tr>
 				
 				<%
@@ -307,39 +308,85 @@ if(u.getTipo().getId() == 2){
 				</tbody>
 				</table>
 				
-				<p><strong>DATOS DEL USUARIO</strong></p>
-				<form onSubmit="validarPass();" action="/usuario" method="post" name="datosUsuario">
+				<h4>Datos del Usuario</h4>
+				<form onSubmit="validarPass();" action="/usuario" class="form-horizontal" method="post" name="datosUsuario">
 					<div><input type="hidden" name="identificador" id="idUsuario" ></input></div>
-				    <div>Cedula: <input type="text" name="cedula" id="cedulaUsuario" required="required"></input></div>
-				    <div>Nombres: <input type="text" name="nombres" id="nombresUsuario" required="required"></input></div>
-				    <div>Apellidos: <input type="text" name="apellidos" id="apellidosUsuario" required="required"></input></div>
-				    <div>Cargo: <input type="text" name="cargo" id="cargoUsuario" required="required"></input></div>
-				    <div>Teléfono: <input type="text" name="telefono" id="telefonoUsuario" required="required"></input></div>
-				   	<div>Email: <input type="text" name="email" id="emailUsuario" required="required"></input></div>
-				   	<div id="divContrasena">Contraseña:<input type="password" name="password" id="password"></input></div>
-				   	<div><input type="hidden" id="passwordUsuario" name="passwordUsuario" ></input></div>
-				   	<div id="divContrasenaC">Confirmar Contraseña: <input type="password" name="cpassword" id="cpassword"></input></div>
-				    <div>Estado:
-				    	<select name=estado id="estadoUsuario">
-				    		<option seleted value=1>Activo</option>
-				    		<option value=0>Inactivo</option>
-				    		</select> 
+				    <div class="form-group">
+						 <label for="cedulaUsuario" class="col-sm-2 control-label">Cédula:</label> 
+						 <div class="col-sm-10">
+						 <input type="text" name="cedula" class="form-control" id="cedulaUsuario" required="required"></input>
+						 </div>
 					</div>
-					<div>Tipo de usuario:
-				    	<select name=tipo id="tipoUsuario">
-				    	<option value="nousuario">Seleccionar...</option>
-				    		<% 
-					while (rs.next()) {
-						
-					int idtipo = rs.getInt("idtipo");	
-					if(idtipo >= u.getTipo().getId()){
-					String tipoU = rs.getString("descripcion");%>
-						<option value=<%= tipoU %>><%= tipoU %></option>
-					<%}}%>
-				    		</select> 
+				    <div class="form-group">
+						 <label for="nombresUsuario" class="col-sm-2 control-label">Nombres:</label> 
+						 <div class="col-sm-10">
+						 <input type="text" name="nombres" class="form-control" id="nombresUsuario" required="required"></input>
+						 </div>
+					</div>
+				    <div class="form-group">
+						 <label for="apellidosUsuario" class="col-sm-2 control-label">Apellidos:</label> 
+						 <div class="col-sm-10">
+						 <input type="text" name="apellidos" class="form-control" id="apellidosUsuario" required="required"></input>
+						 </div>
+				    </div>
+				    <div class="form-group">
+						 <label for="cargoUsuario" class="col-sm-2 control-label">Cargo:</label> 
+						 <div class="col-sm-10">
+						 <input type="text" name="cargo" class="form-control" id="cargoUsuario" required="required"></input>
+						 </div>
+				    </div>
+				    <div class="form-group">
+						 <label for="telefonoUsuario" class="col-sm-2 control-label">Teléfono:</label> 
+						 <div class="col-sm-10">
+						 <input type="text" name="telefono" class="form-control" id="telefonoUsuario" required="required"></input>
+						 </div>
+					</div>
+				   	<div class="form-group">
+						 <label for="emailUsuario" class="col-sm-2 control-label">Email:</label> 
+						 <div class="col-sm-10">
+						 <input type="text" name="email" class="form-control" id="emailUsuario" required="required"></input>
+						 </div>
+					</div>
+				   	<div id="divContrasena" class="form-group">
+				   		 <label for="password" class="col-sm-2 control-label">Contraseña:</label> 
+						 <div class="col-sm-10">
+				   		 <input type="password" class="form-control" name="password" id="password"></input>
+				   		 </div>
+				   	</div>
+				   	<div><input type="hidden" id="passwordUsuario" name="passwordUsuario" ></input></div>
+				   	<div id="divContrasenaC" class="form-group">
+				   		<label for="cpassword" class="col-sm-2 control-label">Confirmar Contraseña:</label> 
+						 <div class="col-sm-10">
+				   	 	 <input type="password" class="form-control" name="cpassword" id="cpassword"></input>
+				   	 	 </div>
+				   	 </div>
+				    <div class="form-group">
+						 <label class="col-sm-2 control-label">Estado:</label> 
+						 <div class="col-sm-10">
+					    	<select name=estado id="estadoUsuario" class="form-control">
+					    		<option seleted value=1>Activo</option>
+					    		<option value=0>Inactivo</option>
+					    		</select> 
+					    </div>
+					</div>
+					<div class="form-group">
+						 <label class="col-sm-2 control-label"> Tipo de usuario:</label> 
+						 <div class="col-sm-10">
+						    	<select name=tipo id="tipoUsuario" class="form-control">
+						    	<option value="nousuario">Seleccionar...</option>
+						    		<% 
+							while (rs.next()) {
+								
+							int idtipo = rs.getInt("idtipo");	
+							if(idtipo >= u.getTipo().getId()){
+							String tipoU = rs.getString("descripcion");%>
+								<option value=<%= tipoU %>><%= tipoU %></option>
+							<%}}%>
+						    		</select> 
+					</div>
 					</div>
 					
-					<div>
+					<div class="form-group">
 					<%
 					
 					rs = conn.createStatement().executeQuery("SELECT * FROM empresa where estado=1");
@@ -348,10 +395,11 @@ if(u.getTipo().getId() == 2){
 					
 					if(u.getTipo().getId() == 1){
 					%>
+					<label class="col-sm-2 control-label"> Empresa:</label> 
+						 <div class="col-sm-10">
 					
-					Empresa:
 					
-					<select name=empresaUsuario id="empresaUsuario">
+					<select name=empresaUsuario id="empresaUsuario" class="form-control">
 					<option value="noempresa">Seleccionar...</option>
 					<% 
 					
@@ -362,11 +410,18 @@ if(u.getTipo().getId() == 2){
 					String empresa = rs.getString("nombre");%>
 						<option value=<%= empresa %>><%= empresa %></option>
 					<%}	
-					
+					%>
+						</select>
+						</div>
+					<%					
 					}else{%>
 						<input name="empresa" type="hidden" value="<%= u.getEmpresa().getNombre() %>"/>
-						<div id="divServicios">
-						Servicios:
+						
+						
+						<div id="divServicios" class="form-group">
+						<label class="col-sm-2 control-label"> Servicios:</label> 
+						 <div class="col-sm-10">
+						
 						<%
 						   servicios=u.getServicios();
 						
@@ -379,14 +434,48 @@ if(u.getTipo().getId() == 2){
 							
 						%>
 						</div>
+						</div>
 					<%}
 					conn.close();
 					%>
 					</div>
-				    <div>
-				    <input type="submit" value="Guardar" name="btnGuardar"/>
-				    <input type="reset" value="Cancelar" onclick="habilitarC()"/></div>
+				    <div class="col-sm-offset-2" >
+				    <input type="submit" class="btn btn-primary" value="Guardar" name="btnGuardar"/>
+				    <input type="reset" value="Cancelar" class="btn btn-default btnCancelar" onclick="habilitarC()"/></div>
 				  </form>
+				  <%
+				  if(session.getAttribute("updateUsuario") != null){ 
+							
+							  
+							  if(session.getAttribute("updateUsuario").toString().equals("1")){
+								  %>
+									<div class="alert alert-success">
+									  Usuario almacenado exitosamente.
+									</div>
+								<%
+							  }
+							  
+							  if(session.getAttribute("updateUsuario").toString().equals("2")){
+								  %>
+									<div class="alert alert-success">
+										Datos actualizados exitosamente.
+									</div>
+								<%
+							  }
+							  
+							  if(session.getAttribute("updateUsuario").toString().equals("3")){
+								  %>
+									<div class="alert alert-danger">
+									    No fue posible completar la acción. Por favor intentar nuevamente o comunicarse con Analixdata.
+									</div>
+								<%
+							  }
+							  
+							  session.setAttribute("updateUsuario", null);
+							  
+						  } %>
+				  
+				  
 			</div>	
 	
 		</div>

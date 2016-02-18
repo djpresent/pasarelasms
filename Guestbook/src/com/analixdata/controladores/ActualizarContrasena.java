@@ -77,18 +77,14 @@ public class ActualizarContrasena extends HttpServlet {
 		          if (success == 1) {
 		        	  
 		        	  u.setPassword(newpass);
-		        	  
-		            out.println(
-		                "<html><head></head><body>Success! Redirecting in 3 seconds...</body></html>");
+		        	  session.setAttribute("confCambioC", 1);
+		            
 		          } else if (success == 0) {
-		            out.println(
-		                "<html><head></head><body>Failure! Please try again! " +
-		                "Redirecting in 3 seconds...</body></html>");
+		        	  session.setAttribute("confCambioC", 2);
 		          }
 	        	}else{
-	        		
-	        		out.println(
-			                "Contrasena incorrecta");
+	        		session.setAttribute("confCambioC", 3);
+	       
 	        	} 
 	        }
 	      } finally {

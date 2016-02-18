@@ -165,31 +165,38 @@ ResultSet rs = conn.createStatement().executeQuery(
 		
 			<div class="col-sm-9 col-md-9 main">
 				<h1 class="page-header">Asignación de Servicios a Usuarios</h1>
-				<form  action="/asignarServicioUEmpresa" onsubmit="validar()">
+				<form  action="/asignarServicioUEmpresa" onsubmit="validar()" class="form-horizontal">
 
-				<div>Seleccione un usuario:
-					<select name=userEmpresa id="userEmpresa" > 
+				<div class="form-group">
+					<label class="col-sm-3 control-label">Seleccione un usuario:</label>
+					<div class="col-sm-4"> 
+					<select name=userEmpresa id="userEmpresa" class="form-control"> 
 					<option value="nousuario">Seleccionar...</option>
 					<% 
 					while (rs.next()) {
 					String usuario = rs.getString("idusuario");
 					
-					System.out.println(session.getAttribute("usuario"));
+					String nomusuario=rs.getString("nombres")+" "+rs.getString("apellidos");
+					
+					
 					
 					if(!(session.getAttribute("idusuario") == null)){
 							
 							if(usuario.equals(session.getAttribute("idusuario"))){%>
-								<option value=<%= usuario %> selected ><%= usuario %></option>
+								<option value=<%= usuario %> selected ><%= nomusuario %></option>
 							<%}else{%>
-							<option value=<%= usuario %>><%= usuario %></option>
+							<option value=<%= usuario %>><%= nomusuario %></option>
 					<%	
 							}
 						}else{%>
-						<option value=<%= usuario %>><%= usuario %></option>
+						<option value=<%= usuario %>><%= nomusuario %></option>
 					<%}}
 					%>
-					</select><input type="submit" class="oculto" value="Continuar" name="btnServicios" id="btnServicios"/>
+					</select>
 					</div>
+					
+					<input type="submit" class="oculto" value="Continuar" name="btnServicios" id="btnServicios"/>
+				</div>
 				
 					<%
 						
@@ -202,7 +209,9 @@ ResultSet rs = conn.createStatement().executeQuery(
 						
 					%>
 					   
-							<div>Seleccione un servicio:
+							<div class="form-group">
+								<label class="col-sm-3 control-label">Seleccione un usuario:</label>
+								<div class="col-sm-4"> 
 														<% 
 								for( Servicio ser:listaS) {
 									
@@ -210,7 +219,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 								%>
 								
 									
-									<input type="checkbox" name="<%=ser.getDescripcion() %>" checked> <%=ser.getDescripcion() %><br>
+									<input type="checkbox" name="<%=ser.getDescripcion() %>" checked/> <%=ser.getDescripcion() %><br>
 						
 									
 								<%
@@ -218,40 +227,67 @@ ResultSet rs = conn.createStatement().executeQuery(
 									}else{
 										
 										%>
-										<input type="checkbox" name="<%=ser.getDescripcion() %>"> <%=ser.getDescripcion() %><br>
+										<input type="checkbox" name="<%=ser.getDescripcion() %>"/> <%=ser.getDescripcion() %><br>
 										
 										<%
 									}
 									}
+														
 								%>
-				  
+				  				</div>
+				  				</div>
 							
 					<% 	
 						}
 					%>	
-					</div>
+					
+					
 				    
 				    
 				
-				<div><input type="submit" value="Guardar" name="btnGuardar"/><input type="submit" value="Cancelar" name="btnCancelar"/> </div>
-					<%
+				<div class="col-sm-offset-3">
+					<input type="submit" class="btn btn-primary" value="Guardar" name="btnGuardar"/>
+					<input type="submit" value="Cancelar" class="btn btn-default btnCancelar" name="btnCancelar"/> 
+				</div>
 				
-						
-						
-						if(!(session.getAttribute("confirmacion") == null)){
-							if(session.getAttribute("confirmacion").equals("1")){
-							%>
-								<div><h3 id="msgConfirmacion">Operación realizada exitosamente.</h3></div>
-							<%
-							}
-							}
-					conn.close();
-					%>
 				
 				
 				  </form>
+				  <%
+				
+						
+						
+						if(session.getAttribute("confServU") != null){
+														
+							if(session.getAttribute("confServU").toString().equals("1")){
+							%>
+							
+								<div class="alert alert-success">
+									  Operación realizada exitosamente.
+								</div>
+								
+							<%
+							}
+							
+							if(session.getAttribute("confServU").toString().equals("0")){
+								%>
+								
+									<div class="alert alert-danger">
+										  No se pudo completar la acción. Por favor intentar nuevamente o comunicarse con Analixdata.
+									</div>
+									
+								<%
+								}
+							
+							session.setAttribute("confServU",null);
+							
+							}
+					conn.close();
+					%>
+				  	
 			</div>	
-	
+			
+			
 		</div>
 	</div>
 	<footer class="footer">
