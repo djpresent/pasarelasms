@@ -7,10 +7,17 @@
     Allows App Engine to send multiple requests to one instance in parallel:
   -->
   <threadsafe>true</threadsafe>
+  <instance-class>B8</instance-class>
+  <basic-scaling>
+    <max-instances>20</max-instances>
+    <idle-timeout>10m</idle-timeout>
+  </basic-scaling>
 
   <!-- Configure java.util.logging -->
   <system-properties>
     <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
+     <property name="appengine.api.urlfetch.defaultDeadline" value="2000"/>
+    
   </system-properties>
 	<sessions-enabled>true</sessions-enabled>
   <use-google-connector-j>true</use-google-connector-j>

@@ -56,6 +56,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 		session = req.getSession();
 		Usuario u = (Usuario)session.getAttribute("usuario"); 
 		String disp =  (String) session.getAttribute("disponibles");
+		int env = Integer.parseInt(disp);
 		List <Transaccion> mensajes = new ArrayList<Transaccion>();
 		String url = null;
 		
@@ -228,10 +229,11 @@ public class EnvioMensajesServlet extends HttpServlet {
 				
 				Connection conn = DriverManager.getConnection(url);
 				int enviados=0;
+				PrintWriter out = resp.getWriter();
+				String charset = "UTF-8";
 				for (int i = 0; i<mensajes.size();i++)
 				{
-					PrintWriter out = resp.getWriter();
-					String charset = "UTF-8";
+					
 					String decmensaje = URLEncoder.encode(mensajes.get(i).getMensaje(), charset);
 					String urlEnvio ="http://envia-movil.com/Api/Envios?mensaje="+decmensaje+"&numero="+mensajes.get(i).getCelular() ;
 					URL obj = new URL(urlEnvio);
@@ -244,12 +246,12 @@ public class EnvioMensajesServlet extends HttpServlet {
 	        		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0");
 	        		con.setRequestProperty ("Authorization", "Basic REM1NjIzMTVCM0NCOUVGOjA2MzZFM0FGMTQ=");
 	        		int responseCode = con.getResponseCode();
-	        		System.out.println("\nSending 'GET' request to URL : " + urlEnvio);
-	        		System.out.println("Response Code : " + responseCode);
+	        		//System.out.println("\nSending 'GET' request to URL : " + urlEnvio);
+	        		//System.out.println("Response Code : " + responseCode);
 	        		
 	        		
 	        		
-	        		/*if(responseCode==200)
+	        		if(responseCode==200)
 	        		{
 	
 		        		BufferedReader in = new BufferedReader(
@@ -279,7 +281,9 @@ public class EnvioMensajesServlet extends HttpServlet {
 		        			
 		        			if(response.toString().equals("\"Mensaje enviado\"")){
 		        				respuesta="MENSAJE ENVIADO";
-		        			
+		        				
+		        				enviados++;
+
 		        			}
 		        			
 		        			if(response.toString().equals("\"Error al enviar mensaje\"")){
@@ -299,14 +303,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 		    		          stmt.setInt(8, u.getId() );
 		    		          stmt.setInt(9, u.getEmpresa().getIdEmpresa());
 		    		          
-		    		          int success = 2;
-		    		          System.out.println(stmt);
-		    		          System.out.println(response.toString());
-		    		          if (response.toString().equalsIgnoreCase("\"Mensaje enviado\""))
-		    		          {
-		    		        	  enviados++;
-		    		          }
-		    		          success = stmt.executeUpdate();
+		    		          stmt.executeUpdate();
 	  		            
 		        		}catch (Error e){
 		        			out.println(e);
@@ -319,22 +316,17 @@ public class EnvioMensajesServlet extends HttpServlet {
 	        		{
 	        			out.println("ERROR DE ENVIO");
 	        			
-	        		}*/
-	        		con.disconnect();
-	        		if ((i % 10)==0)
-	        		{
-	        			Thread.sleep(3000);
 	        		}
+	        		con.disconnect();
+
 				}
 				
-				/*int env = Integer.parseInt(disp)-enviados;
-				String stmt1 = "UPDATE servicio_empresa SET disponible="+env+" WHERE idempresa="+u.getEmpresa().getIdEmpresa();
+				String stmt1 = "UPDATE servicio_empresa SET disponible="+(env-enviados)+" WHERE idempresa="+u.getEmpresa().getIdEmpresa();
 				PreparedStatement stmt = conn.prepareStatement(stmt1);
-				
 				stmt.executeUpdate();
 				
 				conn.close();
-				*/
+				
 				
 				session.setAttribute("codigo", "ENVIADOS");
 				resp.sendRedirect("mensajeria.jsp");
@@ -342,7 +334,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 			}
 			else
 			{
-				System.out.println(mensajes.size());
+				//System.out.println(mensajes.size());
 				session.setAttribute("codigo", "NOENVIADOS");
 				resp.sendRedirect("mensajeria.jsp");
 			}
