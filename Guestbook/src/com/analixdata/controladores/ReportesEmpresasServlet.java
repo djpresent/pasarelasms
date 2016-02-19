@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.mail.Session;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,7 +35,11 @@ public class ReportesEmpresasServlet extends HttpServlet
 	{
 		String url = null;
 		resp.setContentType("text/html;charset=UTF-8");
-	
+		HttpSession session = req.getSession();
+        session = req.getSession();
+        Usuario u = (Usuario)session.getAttribute("usuario"); 
+        if (u!=null)
+        {
 		try
 		{
 			if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Production) 
@@ -69,8 +74,7 @@ public class ReportesEmpresasServlet extends HttpServlet
 
 		    	if (inputContinuarReportes!=null)
 		    	{
-		    		HttpSession session=req.getSession(true);
-		    		Usuario u = (Usuario)session.getAttribute("usuario");
+		    		 u = (Usuario)session.getAttribute("usuario");
 		    		session.setAttribute("idusuario", idUser);
 				    session.setAttribute("fDesde", fechaDesde);
 				    session.setAttribute("fHasta", fechaHasta);
@@ -82,8 +86,7 @@ public class ReportesEmpresasServlet extends HttpServlet
 		    		Transaccion tran ;
 		    		List <Transaccion> transacciones = new ArrayList<Transaccion> ();
 			    	  
-		    		HttpSession session=req.getSession(true);
-		    		Usuario u = (Usuario)session.getAttribute("usuario");
+		    		 u = (Usuario)session.getAttribute("usuario");
 
 			    	if (idUser.equals("nousuario"))
 			    	{
@@ -125,6 +128,23 @@ public class ReportesEmpresasServlet extends HttpServlet
 		{
 			e.printStackTrace();
 		}
+        }
+        else
+	    {
+	    	
+	    	session.invalidate();
+	    	RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.jsp");
+            PrintWriter out= resp.getWriter();
+            out.println("<div class=\"alert alert-warning\" style=\"text-align: center;\"><strong>Lo sentimos! </strong>Su sesión a caducado. Por favor, vuelva a ingresar</div>	");
+            try 
+            {
+				rd.include(req, resp);
+			} catch (ServletException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	
+	    }
 		
 	}
 	@Override

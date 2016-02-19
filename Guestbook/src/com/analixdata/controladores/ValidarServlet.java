@@ -37,7 +37,7 @@ public class ValidarServlet extends HttpServlet {
 			//req.getRequestDispatcher("error.jsp").forward(req, resp);
 			 RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.jsp");
 	            PrintWriter out= resp.getWriter();
-	            out.println("<font color=red>Either user name or password is wrong.</font>");
+	            out.println("<div class=\"alert alert-danger\"  style=\"text-align: center;\"><strong>Error! </strong>Usuario y/o contraseña incorrectos</div>	");
 	            rd.include(req, resp);
 			
 		}

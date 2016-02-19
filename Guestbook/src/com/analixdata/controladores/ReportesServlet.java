@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.mail.Session;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -34,6 +35,11 @@ public class ReportesServlet extends HttpServlet
 		String confirmacion=null;
 		
 		resp.setContentType("text/html;charset=UTF-8");
+		HttpSession session = req.getSession();
+        session = req.getSession();
+        Usuario u = (Usuario)session.getAttribute("usuario"); 
+        if (u!=null)
+        {
 		
 		 try {
 		      if (SystemProperty.environment.value() ==
@@ -100,7 +106,7 @@ public class ReportesServlet extends HttpServlet
 			        	
 		        	}
 			        
-			        HttpSession session=req.getSession(true);
+			        
 			        session.setAttribute("empresa", empresa);
 			        //session.setAttribute("usu", usu);
 			        session.setAttribute("fDesde", fechaDesde);
@@ -158,7 +164,7 @@ public class ReportesServlet extends HttpServlet
 				    	  }
 			    	  }
 			    	  
-			    	  	HttpSession session=req.getSession(true);
+			    	  	
 			    	  	session.setAttribute("empresa", empresa);
 			    	  	//session.setAttribute("usu", usu);
 				        session.setAttribute("fDesde", fechaDesde);
@@ -177,6 +183,24 @@ public class ReportesServlet extends HttpServlet
 			    } catch (SQLException e) {
 			      e.printStackTrace();
 			    }
+		 
+        }
+        else
+	    {
+	    	
+	    	session.invalidate();
+	    	RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.jsp");
+            PrintWriter out= resp.getWriter();
+            out.println("<div class=\"alert alert-warning\" style=\"text-align: center;\"><strong>Lo sentimos! </strong>Su sesión a caducado. Por favor, vuelva a ingresar</div>	");
+            try 
+            {
+				rd.include(req, resp);
+			} catch (ServletException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	
+	    }
 		
 	}
 	@Override

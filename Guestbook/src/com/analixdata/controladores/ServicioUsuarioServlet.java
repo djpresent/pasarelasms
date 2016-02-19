@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +31,11 @@ public class ServicioUsuarioServlet extends HttpServlet {
 		String confirmacion=null;
 		
 		resp.setContentType("text/html;charset=UTF-8");
+		HttpSession session = req.getSession();
+        session = req.getSession();
+        Usuario u = (Usuario)session.getAttribute("usuario"); 
+        if (u!=null)
+        {
 		
 		 try {
 		      if (SystemProperty.environment.value() ==
@@ -81,7 +87,7 @@ public class ServicioUsuarioServlet extends HttpServlet {
 			        	
 			        }
 			        	
-			        	HttpSession session=req.getSession(true);
+			        	//HttpSession session=req.getSession(true);
 				        session.setAttribute("empresa", empresa);
 				        session.setAttribute("listaUsuarios", listaUsuarios);
 				        session.setAttribute("confirmacion", null); 
@@ -114,7 +120,7 @@ public class ServicioUsuarioServlet extends HttpServlet {
 				        	listaServicios.add(servicio);
 				        	
 			        	}
-				        HttpSession session=req.getSession(true);
+				       // HttpSession session=req.getSession(true);
 				        session.setAttribute("empresa", empresa);
 				        session.setAttribute("idusuario", usu);
 				       // session.setAttribute("listaUsuarios", listaUsuarios);
@@ -137,7 +143,7 @@ public class ServicioUsuarioServlet extends HttpServlet {
 			        		 
 			        	}
 			    	  
-			    	  HttpSession session=req.getSession(true);
+			    	 // HttpSession session=req.getSession(true);
 			    	  List<Servicio> listaS=(List<Servicio>)session.getAttribute("listaServicios");
 			    	  
 			    	  for(Servicio serv:listaS)
@@ -203,7 +209,7 @@ public class ServicioUsuarioServlet extends HttpServlet {
 			          
 			          resp.sendRedirect("servicioUsuarios.jsp");
 			      }else if(inputCancelar!=null){
-			    	  HttpSession session=req.getSession(true);
+			    	 // HttpSession session=req.getSession(true);
 			    	  session.setAttribute("listaUsuarios", null);
 			          session.setAttribute("listaServicios", null);
 			          session.setAttribute("empresa",null);
@@ -220,6 +226,23 @@ public class ServicioUsuarioServlet extends HttpServlet {
 			    } catch (SQLException e) {
 			      e.printStackTrace();
 			    }
+        }
+        else
+	    {
+	    	
+	    	session.invalidate();
+	    	RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.jsp");
+            PrintWriter out= resp.getWriter();
+            out.println("<div class=\"alert alert-warning\" style=\"text-align: center;\"><strong>Lo sentimos! </strong>Su sesión a caducado. Por favor, vuelva a ingresar</div>	");
+            try 
+            {
+				rd.include(req, resp);
+			} catch (ServletException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	
+	    }
 		
 	}
 	@Override

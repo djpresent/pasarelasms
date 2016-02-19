@@ -21,6 +21,14 @@ public class ActualizarContrasena extends HttpServlet {
 	@Override
 	  public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 	    String url = null;
+	    
+	    HttpSession session = req.getSession();
+        session = req.getSession();
+        Usuario u = (Usuario)session.getAttribute("usuario"); 
+        if (u!=null)
+        {
+	    
+	    
 	    try {
 	      if (SystemProperty.environment.value() ==
 	          SystemProperty.Environment.Value.Production) {
@@ -41,8 +49,7 @@ public class ActualizarContrasena extends HttpServlet {
 	      return;
 	    }
 	    
-	    HttpSession session = req.getSession();
-        session = req.getSession();
+	    
 
 	    PrintWriter out = resp.getWriter();
 	    try {
@@ -54,7 +61,7 @@ public class ActualizarContrasena extends HttpServlet {
 
 	        
 	        
-	    	Usuario u = (Usuario)session.getAttribute("usuario");
+	    	 u = (Usuario)session.getAttribute("usuario");
 	        
 	        if (u != null ) {
 	        	
@@ -97,5 +104,14 @@ public class ActualizarContrasena extends HttpServlet {
 	    }
 	    resp.sendRedirect("/usuario.jsp");
 	  }
+        
+        else
+    	{
+        	session.invalidate();
+    		resp.sendRedirect("/login.jsp");
+    	}
+        
+	}
+	
 
 }

@@ -3,15 +3,25 @@ package com.analixdata.controladores;
 import java.io.*;
 import java.sql.*;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
+import com.analixdata.modelos.Usuario;
 import com.google.appengine.api.utils.SystemProperty;
 
 public class EmpresasServlet extends HttpServlet {
 	
 	@Override
 	  public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-	    String url = null;
+		resp.setContentType("text/html;charset=UTF-8");
+		String url = null;
+	    HttpSession session = req.getSession();
+        session = req.getSession();
+        Usuario u = (Usuario)session.getAttribute("usuario"); 
+        if (u!=null)
+        {
+	    
 	    try {
 	      if (SystemProperty.environment.value() ==
 	          SystemProperty.Environment.Value.Production) {
@@ -31,8 +41,7 @@ public class EmpresasServlet extends HttpServlet {
 	      return;
 	    }
 
-	    HttpSession session = req.getSession();
-        session = req.getSession();
+	   
 	    
 	    PrintWriter out = resp.getWriter();
 	    try {
@@ -89,6 +98,22 @@ public class EmpresasServlet extends HttpServlet {
 	      e.printStackTrace();
 	    }
 	    resp.sendRedirect("/empresas.jsp");
+        }
+        else
+        {
+        	session.invalidate();
+        	RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.jsp");
+            PrintWriter out= resp.getWriter();
+            out.println("<div class=\"alert alert-warning\" style=\"text-align: center;\"><strong>Lo sentimos! </strong>Su sesion a caducado. Por favor, vuelva a ingresar</div>	");
+            try 
+            {
+				rd.include(req, resp);
+			} catch (ServletException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        	
+        }
 	  }
 
 }

@@ -10,6 +10,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +31,12 @@ public class ServicioUEmpresaServlet extends HttpServlet {
 		
 		
 		resp.setContentType("text/html;charset=UTF-8");
+		HttpSession session = req.getSession();
+        session = req.getSession();
+        Usuario u = (Usuario)session.getAttribute("usuario"); 
+        if (u!=null)
+        {
+		
 		
 		 try {
 		      if (SystemProperty.environment.value() ==
@@ -61,8 +68,8 @@ public class ServicioUEmpresaServlet extends HttpServlet {
 		    	  String inputGuardar=req.getParameter("btnGuardar");
 		    	  String inputCancelar=req.getParameter("btnCancelar");
 		    	  
-		    	  HttpSession session = req.getSession();
-			    	Usuario u = (Usuario)session.getAttribute("usuario");
+		    	 // HttpSession session = req.getSession();
+			    	 u = (Usuario)session.getAttribute("usuario");
 		    	  
 		    	  ResultSet rs;
 		    	  
@@ -188,6 +195,23 @@ public class ServicioUEmpresaServlet extends HttpServlet {
 			    } catch (SQLException e) {
 			      e.printStackTrace();
 			    }
+        }
+        else
+	    {
+	    	
+	    	session.invalidate();
+	    	RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.jsp");
+            PrintWriter out= resp.getWriter();
+            out.println("<div class=\"alert alert-warning\" style=\"text-align: center;\"><strong>Lo sentimos! </strong>Su sesión a caducado. Por favor, vuelva a ingresar</div>	");
+            try 
+            {
+				rd.include(req, resp);
+			} catch (ServletException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	
+	    }
 		
 	}
 	@Override

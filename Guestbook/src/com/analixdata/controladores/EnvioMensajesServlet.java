@@ -6,6 +6,7 @@ import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -55,6 +56,8 @@ public class EnvioMensajesServlet extends HttpServlet {
 		HttpSession session=req.getSession(true); //Se obtiene la session actual
 		session = req.getSession();
 		Usuario u = (Usuario)session.getAttribute("usuario"); 
+		if (u!=null)
+        {
 		String disp =  (String) session.getAttribute("disponibles");
 		int env = Integer.parseInt(disp);
 		List <Transaccion> mensajes = new ArrayList<Transaccion>();
@@ -348,6 +351,23 @@ public class EnvioMensajesServlet extends HttpServlet {
 			resp.sendRedirect("mensajeria.jsp");
 		
 		}
+        }
+		else
+	    {
+	    	
+	    	session.invalidate();
+	    	RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.jsp");
+            PrintWriter out= resp.getWriter();
+            out.println("<div class=\"alert alert-warning\" style=\"text-align: center;\"><strong>Lo sentimos! </strong>Su sesión a caducado. Por favor, vuelva a ingresar</div>	");
+            try 
+            {
+				rd.include(req, resp);
+			} catch (ServletException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	    	
+	    }
 	
 		
 	//	resp.sendRedirect("mensajeria.jsp");
