@@ -52,6 +52,7 @@
 							}else{
 								document.getElementById('divContrasena').style.display = 'block';
 								document.getElementById('divContrasenaC').style.display = 'block';
+								document.getElementById('divEmpresa').style.display = 'block';
 								document.getElementById('passwordUsuario').value = hex_md5(document.getElementById('password').value);
 								
 								return true;
@@ -80,11 +81,13 @@
 			
 			document.getElementById("tipoUsuario").value = el.parentNode.parentNode.cells[8].textContent;
 			
+			document.getElementById('divEmpresa').style.display = 'none';
 			document.getElementById('divContrasena').style.display = 'none';
 			document.getElementById('divContrasenaC').style.display = 'none';
 			document.getElementById('divServicios').style.display = 'none';
 			
-			document.getElementById("empresaUsuario").value = el.parentNode.parentNode.cells[9].textContent; 
+			
+		
 			
 			
 		
@@ -94,6 +97,7 @@
 			
 			document.getElementById('divContrasena').style.display = 'block';
 			document.getElementById('divContrasenaC').style.display = 'block';
+			document.getElementById('divEmpresa').style.display = 'block';
 		}
 		
 
@@ -386,7 +390,7 @@ if(u.getTipo().getId() == 2){
 					</div>
 					</div>
 					
-					<div class="form-group">
+					
 					<%
 					
 					rs = conn.createStatement().executeQuery("SELECT * FROM empresa where estado=1");
@@ -395,24 +399,26 @@ if(u.getTipo().getId() == 2){
 					
 					if(u.getTipo().getId() == 1){
 					%>
-					<label class="col-sm-2 control-label"> Empresa:</label> 
-						 <div class="col-sm-10">
-					
-					
-					<select name=empresaUsuario id="empresaUsuario" class="form-control">
-					<option value="noempresa">Seleccionar...</option>
-					<% 
-					
-					
-					
-					
-					while (rs.next()) {
-					String empresa = rs.getString("nombre");%>
-						<option value=<%= empresa %>><%= empresa %></option>
-					<%}	
-					%>
-						</select>
-						</div>
+					<div class="form-group" id="divEmpresa">
+						<label class="col-sm-2 control-label"> Empresa:</label> 
+							 <div class="col-sm-10">
+						
+						
+								<select name=empresaUsuario id="empresaUsuario" class="form-control">
+								<option value="noempresa">Seleccionar...</option>
+								<% 
+								
+								
+								
+								
+								while (rs.next()) {
+								String empresa = rs.getString("nombre");%>
+									<option value=<%= empresa %>><%= empresa %></option>
+								<%}	
+								%>
+									</select>
+							</div>
+					</div>
 					<%					
 					}else{%>
 						<input name="empresa" type="hidden" value="<%= u.getEmpresa().getNombre() %>"/>
@@ -438,7 +444,7 @@ if(u.getTipo().getId() == 2){
 					<%}
 					conn.close();
 					%>
-					</div>
+					
 				    <div class="col-sm-offset-2" >
 				    <input type="submit" class="btn btn-primary" value="Guardar" name="btnGuardar"/>
 				    <input type="reset" value="Cancelar" class="btn btn-default btnCancelar" onclick="habilitarC()"/></div>

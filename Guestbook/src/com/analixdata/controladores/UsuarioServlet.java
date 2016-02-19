@@ -67,7 +67,7 @@ public class UsuarioServlet extends HttpServlet {
 		   
 	        
 	        
-	        System.out.println("clave md5 "+password );
+	        
 	        
 	        rs = conn.createStatement().executeQuery("SELECT idtipo FROM tipo where descripcion ='"+tipo+"';");
         	
@@ -77,20 +77,20 @@ public class UsuarioServlet extends HttpServlet {
         		 
         	}
         	
-            rs = conn.createStatement().executeQuery("SELECT idempresa FROM empresa where nombre ='"+empresa+"';");
-        	
-        	if(rs.next()){
-        		
-        		 idempresa=Integer.toString(rs.getInt("idempresa"));
-        		 
-        	}
-        	
-        	System.out.println(idtipo+" "+idempresa );
+            
 	  
 	        
 	        if (id == "" || id == null ) {
 	        	
+	        	rs = conn.createStatement().executeQuery("SELECT idempresa FROM empresa where nombre ='"+empresa+"';");
 	        	
+	        	if(rs.next()){
+	        		
+	        		 idempresa=Integer.toString(rs.getInt("idempresa"));
+	        		 
+	        	}
+	        	
+	        	System.out.println(idtipo+" "+idempresa );
 	        	
 	        	String statement = "INSERT INTO usuario (cedula,nombres,apellidos,cargo,telefono,email,password,estado,idtipo,idempresa) VALUES( ? , ? , ? , ? , ? , ? , ? , ? , ? , ? )";
 		          PreparedStatement stmt = conn.prepareStatement(statement);
@@ -152,13 +152,13 @@ public class UsuarioServlet extends HttpServlet {
 		        		
 		        	  session.setAttribute("updateUsuario", 1);
 		            
-		          } else if (success == 0) {
+		          } else {
 		        	  session.setAttribute("updateUsuario", 3);
 		          }
 	          
 	        } else {
 	        	
-	        	String statement = "UPDATE usuario SET cedula=?, nombres=?, apellidos=? ,cargo=? ,telefono=? ,email=? , estado=?, idtipo=?, idempresa=? WHERE idusuario=? ";
+	        	String statement = "UPDATE usuario SET cedula=?, nombres=?, apellidos=? ,cargo=? ,telefono=? ,email=? , estado=?, idtipo=? WHERE idusuario=? ";
 		          PreparedStatement stmt = conn.prepareStatement(statement);
 		          stmt.setString(1, cedula);
 		          stmt.setString(2, nombres);
@@ -168,17 +168,15 @@ public class UsuarioServlet extends HttpServlet {
 		          stmt.setString(6, email);
 		          stmt.setString(7, estado);
 		          stmt.setString(8, idtipo);
-		          stmt.setString(9, idempresa);
-		          stmt.setString(10, id);
+		          stmt.setString(9, id);
 		          int success = 2;
 		          
-		          System.out.println(cedula+" "+nombres+" "+apellidos+" "+cargo+" "+telefono+" "+email+" "+estado+" "+id );
-		          System.out.println(statement);
+		          
 		          
 		          success = stmt.executeUpdate();
 		          if (success == 1) {
 		        	  session.setAttribute("updateUsuario", 2);
-		          } else if (success == 0) {
+		          } else {
 		        	  session.setAttribute("updateUsuario", 3);
 		          }
 	          
