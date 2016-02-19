@@ -32,6 +32,9 @@ public class EmpresaServlet extends HttpServlet {
 	      return;
 	    }
 
+	    HttpSession session = req.getSession();
+        session = req.getSession();
+        
 	    PrintWriter out = resp.getWriter();
 	    try {
 	      Connection conn = DriverManager.getConnection(url);
@@ -41,8 +44,7 @@ public class EmpresaServlet extends HttpServlet {
 	        String contacto = req.getParameter("contacto");
 
 	        
-	        HttpSession session = req.getSession();
-	        session = req.getSession();
+	       
 	    	Usuario u = (Usuario)session.getAttribute("usuario");
 	        
 	        if (u != null ) {
@@ -74,6 +76,7 @@ public class EmpresaServlet extends HttpServlet {
 	      }
 	    } catch (SQLException e) {
 	      e.printStackTrace();
+	      session.setAttribute("updateEmpresa", 2);
 	    }
 	    resp.sendRedirect("/empresa.jsp");
 	  }

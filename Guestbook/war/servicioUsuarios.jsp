@@ -176,31 +176,35 @@ ResultSet rs = conn.createStatement().executeQuery(
 				</div>
 		
 			<div class="col-sm-9 col-md-9 main">
-				<h1 class="page-header">Asignación de Servicios a Usuarios</h1>
-				<form  action="/asignarServicioUsuario" onsubmit="validar()">
+				<h1 class="page-header">Asignación de Servicios a Usuarios<img style="padding-left:10px;" class="icoheader" src="imagenes/icoreloj.png"/><img class="icoheader" src="imagenes/icopastel.png"/><img class="icoheader" src="imagenes/icoaudifonos.png"/><img class="icoheader" src="imagenes/icodescarga.png"/></h1>
+				<form  action="/asignarServicioUsuario" onsubmit="validar()" class="form-horizontal">
 
-				<div>Seleccione una empresa:
-					<select name=empresa id="empresa" > 
-					<option value="noempresa">Seleccionar...</option>
-					<% 
-					while (rs.next()) {
-					String empresa = rs.getString("nombre");
-					
-					System.out.println(session.getAttribute("empresa"));
-					
-					if(!(session.getAttribute("empresa") == null)){
-							
-							if(empresa.equals(session.getAttribute("empresa"))){%>
-								<option value=<%= empresa %> selected ><%= empresa %></option>
-							<%}else{%>
+				<div class="form-group">
+						<label for="empresa" class="col-sm-2 control-label"> Seleccione una empresa:</label> 
+						<div class="col-sm-10">
+						<select name=empresa id="empresa" class="form-control"> 
+						<option value="noempresa">Seleccionar...</option>
+						<% 
+						while (rs.next()) {
+						String empresa = rs.getString("nombre");
+						
+						System.out.println(session.getAttribute("empresa"));
+						
+						if(!(session.getAttribute("empresa") == null)){
+								
+								if(empresa.equals(session.getAttribute("empresa"))){%>
+									<option value=<%= empresa %> selected ><%= empresa %></option>
+								<%}else{%>
+								<option value=<%= empresa %>><%= empresa %></option>
+						<%	
+								}
+							}else{%>
 							<option value=<%= empresa %>><%= empresa %></option>
-					<%	
-							}
-						}else{%>
-						<option value=<%= empresa %>><%= empresa %></option>
-					<%}}
-					%>
-					</select><input type="submit" class="oculto" value="Continuar" name="btnContinuar" id="btnContinuar"/>
+						<%}}
+						%>
+						</select>
+					</div>
+						<input type="submit" class="oculto" value="Continuar" name="btnContinuar" id="btnContinuar"/>
 					</div>
 				
 					<%
@@ -211,35 +215,40 @@ ResultSet rs = conn.createStatement().executeQuery(
 						List<Usuario> lista= (List<Usuario>)session.getAttribute("listaUsuarios");
 						
 					%>
-							<div>Seleccione un usuario:
-							<select name=usuario id="usuario">
-							<option value="nousuario">Seleccionar...</option>
-								<% 
-								for( Usuario usuario:lista) {
-							
-					
-					if(!(session.getAttribute("idusuario") == null)){
-							
-							String id=session.getAttribute("idusuario").toString();
+						<div class="form-group">
+						<label for="usuario" class="col-sm-2 control-label">Seleccione un usuario:</label> 
+						<div class="col-sm-10">
 						
-							if(usuario.getId()==Integer.parseInt(id)){%>
-								<option value=<%= usuario.getId() %> selected ><%= usuario.getNombres() %></option>
-								<%}else{%>
-							<option value=<%= usuario.getId() %>><%= usuario.getNombres() %></option>
-							<%	
-							}
-						}else{%>
-						<option value=<%= usuario.getId() %>><%= usuario.getNombres() %></option>
-						<%}
-								}	
-									
-								%>
-				    		</select> <input type="submit" class="oculto" value="Continuar" name="verServicios" id="verServicios"/>
+								<select name=usuario id="usuario" class="form-control">
+								<option value="nousuario">Seleccionar...</option>
+									<% 
+									for( Usuario usuario:lista) {
+								
+						
+						if(!(session.getAttribute("idusuario") == null)){
+								
+								String id=session.getAttribute("idusuario").toString();
 							
+								if(usuario.getId()==Integer.parseInt(id)){%>
+									<option value=<%= usuario.getId() %> selected ><%= usuario.getNombres() %></option>
+									<%}else{%>
+								<option value=<%= usuario.getId() %>><%= usuario.getNombres() %></option>
+								<%	
+								}
+							}else{%>
+							<option value=<%= usuario.getId() %>><%= usuario.getNombres() %></option>
+							<%}
+									}	
+										
+									%>
+					    		</select> 
+					    	</div>
+				    		<input type="submit" class="oculto" value="Continuar" name="verServicios" id="verServicios"/>
+							</div>
 					<% 	
 						}
 					%>	
-					</div>
+					
 					
 					<%
 						if(!(session.getAttribute("listaServicios") == null) && !(session.getAttribute("idusuario") == null)){
@@ -248,7 +257,10 @@ ResultSet rs = conn.createStatement().executeQuery(
 						
 					%>
 					   
-							<div>Seleccione un servicio:
+						<div class="form-group">
+						<label for="usuario" class="col-sm-2 control-label">Seleccione un servicio:</label> 
+						<div class="col-sm-10">
+						
 														<% 
 								for( Servicio ser:listaS) {
 									
@@ -270,32 +282,59 @@ ResultSet rs = conn.createStatement().executeQuery(
 									}
 									}
 								%>
-				  
-							
+								
+								
+								
+				  			</div>
+				  			
+				  			
+							</div>
+				  			
+				  			<div class="col-sm-offset-2">
+								<input type="submit" value="Guardar" class="btn btn-primary" name="btnGuardar"/>
+								<input type="submit" value="Cancelar" class="btn btn-default btnCancelar" name="btnCancelar"/> 
+							</div>
+				  			
 					<% 	
+						}else{%>
+							<div class="col-sm-offset-2">
+								<input type="submit" value="Cancelar" class="btn btn-default btnCancelar" name="btnCancelar"/> 
+							</div>
+						<%
 						}
 					%>	
-					</div>
+					
 				    
 				    
 				
-				<div><input type="submit" value="Guardar" name="btnGuardar"/><input type="submit" value="Cancelar" name="btnCancelar"/> </div>
-					<%
+				
+				
+				
+				
+				  </form>
+				  
+				  	<%
 				
 						
 						
 						if(!(session.getAttribute("confirmacion") == null)){
 							if(session.getAttribute("confirmacion").equals("1")){
 							%>
-								<div><h3 id="msgConfirmacion">Operación realizada exitosamente.</h3></div>
+								<div class="alert alert-success">Operación realizada exitosamente.</div>
 							<%
 							}
+							
+							if(session.getAttribute("confirmacion").equals("0")){
+								%>
+									<div class="alert alert-danger msgConfirmacion">No se pudo completar la acción. Por favor intentar nuevamente o comunicarse con Analixdata.</div>
+								<%
+								}
+							
+							session.setAttribute("confirmacion",null);
+							
 							}
 					conn.close();
 					%>
-				
-				
-				  </form>
 			</div>	
 	
 		</div>

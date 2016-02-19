@@ -189,7 +189,7 @@ public class ServicioUsuarioServlet extends HttpServlet {
 			    			  
 			    		  }
 			    		  
-			    		  session.setAttribute("confirmacion", "1"); 
+			    		  session.setAttribute("confirmacion", confirmacion); 
 			    		  
 			    	  }
 			    	  session.setAttribute("listaUsuarios", null);

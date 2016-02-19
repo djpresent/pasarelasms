@@ -31,6 +31,9 @@ public class EmpresasServlet extends HttpServlet {
 	      return;
 	    }
 
+	    HttpSession session = req.getSession();
+        session = req.getSession();
+	    
 	    PrintWriter out = resp.getWriter();
 	    try {
 	      Connection conn = DriverManager.getConnection(url);
@@ -55,12 +58,9 @@ public class EmpresasServlet extends HttpServlet {
 		          int success = 2;
 		          success = stmt.executeUpdate();
 		          if (success == 1) {
-		            out.println(
-		                "<html><head></head><body>Success! Redirecting in 3 seconds...</body></html>");
+		            session.setAttribute("updateEmpresa", 1);
 		          } else if (success == 0) {
-		            out.println(
-		                "<html><head></head><body>Failure! Please try again! " +
-		                "Redirecting in 3 seconds...</body></html>");
+		        	  session.setAttribute("updateEmpresa", 3);
 		          }
 	          
 	        } else {
@@ -76,12 +76,9 @@ public class EmpresasServlet extends HttpServlet {
 		          int success = 2;
 		          success = stmt.executeUpdate();
 		          if (success == 1) {
-		            out.println(
-		                "<html><head></head><body>Success! Redirecting in 3 seconds...</body></html>");
+		        	  session.setAttribute("updateEmpresa", 2);
 		          } else if (success == 0) {
-		            out.println(
-		                "<html><head></head><body>Failure! Please try again! " +
-		                "Redirecting in 3 seconds...</body></html>");
+		        	  session.setAttribute("updateEmpresa", 3);
 		          }
 	          
 	        }

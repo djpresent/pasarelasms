@@ -132,7 +132,7 @@ public class ServicioUEmpresaServlet extends HttpServlet {
 							        
 					          
 					          } else if (success == 0) {
-					        	  session.setAttribute("confServU", 0);
+					        	  session.setAttribute("confServU", 2);
 					        	  
 					          }
 					          
@@ -152,7 +152,7 @@ public class ServicioUEmpresaServlet extends HttpServlet {
 							        
 					          
 					          } else if (success == 0) {
-					        	  session.setAttribute("confServU", 0);
+					        	  session.setAttribute("confServU", 2);
 					        	  
 					          }
 			    			  

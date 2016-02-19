@@ -36,11 +36,13 @@ public class ActualizarContrasena extends HttpServlet {
 	        // jdbc:mysql://ip-address-of-google-cloud-sql-instance:3306/guestbook?user=root
 	      }
 	    } catch (Exception e) {
+	    	
 	      e.printStackTrace();
 	      return;
 	    }
 	    
-	    
+	    HttpSession session = req.getSession();
+        session = req.getSession();
 
 	    PrintWriter out = resp.getWriter();
 	    try {
@@ -51,8 +53,7 @@ public class ActualizarContrasena extends HttpServlet {
 	
 
 	        
-	        HttpSession session = req.getSession();
-	        session = req.getSession();
+	        
 	    	Usuario u = (Usuario)session.getAttribute("usuario");
 	        
 	        if (u != null ) {
@@ -92,6 +93,7 @@ public class ActualizarContrasena extends HttpServlet {
 	      }
 	    } catch (SQLException e) {
 	      e.printStackTrace();
+	      session.setAttribute("confCambioC", 3);
 	    }
 	    resp.sendRedirect("/usuario.jsp");
 	  }

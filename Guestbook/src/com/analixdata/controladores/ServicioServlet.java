@@ -30,6 +30,9 @@ public class ServicioServlet extends HttpServlet {
 	      e.printStackTrace();
 	      return;
 	    }
+	    
+	    HttpSession session = req.getSession();
+        session = req.getSession();
 
 	    PrintWriter out = resp.getWriter();
 	    try {
@@ -49,12 +52,9 @@ public class ServicioServlet extends HttpServlet {
 		          int success = 2;
 		          success = stmt.executeUpdate();
 		          if (success == 1) {
-		            out.println(
-		                "<html><head></head><body>Success! Redirecting in 3 seconds...</body></html>");
+		            session.setAttribute("updateServicio", 1);
 		          } else if (success == 0) {
-		            out.println(
-		                "<html><head></head><body>Failure! Please try again! " +
-		                "Redirecting in 3 seconds...</body></html>");
+		        	  session.setAttribute("updateServicio", 3);
 		          }
 	          
 	        } else {
@@ -66,12 +66,9 @@ public class ServicioServlet extends HttpServlet {
 		          int success = 2;
 		          success = stmt.executeUpdate();
 		          if (success == 1) {
-		            out.println(
-		                "<html><head></head><body>Success! Redirecting in 3 seconds...</body></html>");
+		        	  session.setAttribute("updateServicio", 2);
 		          } else if (success == 0) {
-		            out.println(
-		                "<html><head></head><body>Failure! Please try again! " +
-		                "Redirecting in 3 seconds...</body></html>");
+		        	  session.setAttribute("updateServicio", 3);
 		          }
 	          
 	        }

@@ -149,13 +149,13 @@ ResultSet rs = conn.createStatement().executeQuery(
 				</div>
 		
 			<div class="col-sm-9 col-md-9 main">
-				<h1 class="page-header">Servicios</h1>
+				<h1 class="page-header">Servicios <img style="padding-left:10px;" class="icoheader" src="imagenes/icoreloj.png"/><img class="icoheader" src="imagenes/icopastel.png"/><img class="icoheader" src="imagenes/icoaudifonos.png"/><img class="icoheader" src="imagenes/icodescarga.png"/></h1>
 				
-					<table style="border: 1px solid black" id="datosSeervicios">
+					<table class="table table-bordered" id="datosSeervicios">
 					<tbody>
 					<tr>
-					<th width="35%" style="background-color: #CCFFCC; margin: 5px">ID</th>
-					<th style="background-color: #CCFFCC; margin: 5px">Descripcion</th>
+					<th>ID</th>
+					<th>Descripcion</th>
 					
 					</tr>
 					
@@ -178,13 +178,53 @@ ResultSet rs = conn.createStatement().executeQuery(
 					</tbody>
 					</table>
 					
-					<p><strong>DATOS DEL SERVICIO</strong></p>
-					<form  action="/servicio" method="post">
+					<h4>Datos del Servicio</h4>
+					<form  action="/servicio" method="post" class="form-horizontal">
 						<div><input type="hidden" name="identificador" id="idServicio" ></input></div>
-					    <div>Descripción: <input type="text" name="descripcion" id="descServicio" required="required"></input></div>
-					
-					    <div><input type="submit" value="Guardar"/><input type="reset" value="Cancelar"/></div>
+					    <div class="form-group">
+								 <label for="descServicio" class="col-sm-2 control-label">Descripción:</label> 
+								 <div class="col-sm-10">
+								 	<input type="text" name="descripcion" id="descServicio" class="form-control" required="required"></input>
+								 </div>
+						</div>
+					    <div class="col-sm-offset-2">
+					    	<input type="submit" class="btn btn-primary" value="Guardar"/>
+					    	<input type="reset" class="btn btn-default btnCancelar" value="Cancelar"/>
+					    </div>
 					  </form>
+					  
+					     <%
+				  if(session.getAttribute("updateServicio") != null){ 
+							
+							  
+							  if(session.getAttribute("updateServicio").toString().equals("1")){
+								  %>
+									<div class="alert alert-success">
+									  Servicio almacenado exitosamente.
+									</div>
+								<%
+							  }
+							  
+							  if(session.getAttribute("updateServicio").toString().equals("2")){
+								  %>
+									<div class="alert alert-success">
+										Datos actualizados exitosamente.
+									</div>
+								<%
+							  }
+							  
+							  if(session.getAttribute("updateServicio").toString().equals("3")){
+								  %>
+									<div class="alert alert-danger">
+									    No fue posible completar la acción. Por favor intentar nuevamente o comunicarse con Analixdata.
+									</div>
+								<%
+							  }
+							  
+							  session.setAttribute("updateServicio", null);
+							  
+						  } %>
+					  
 								</div>	
 						
 							</div>

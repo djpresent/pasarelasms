@@ -178,16 +178,16 @@ ResultSet rs = conn.createStatement().executeQuery(
 				</div>
 		
 			<div class="col-sm-9 col-md-9 main">
-				<h1 class="page-header">Empresas</h1>
-				<table style="border: 1px solid black" id="datosEmpresas">
+				<h1 class="page-header">Empresas<img style="padding-left:10px;" class="icoheader" src="imagenes/icoreloj.png"/><img class="icoheader" src="imagenes/icopastel.png"/><img class="icoheader" src="imagenes/icoaudifonos.png"/><img class="icoheader" src="imagenes/icodescarga.png"/></h1>
+				<table class="table table-bordered" id="datosEmpresas">
 						<tbody>
 						<tr>
-						<th width="35%" style="background-color: #CCFFCC; margin: 5px">ID</th>
-						<th style="background-color: #CCFFCC; margin: 5px">Nombre</th>
-						<th style="background-color: #CCFFCC; margin: 5px">Direccion</th>
-						<th style="background-color: #CCFFCC; margin: 5px">Teléfono</th>
-						<th style="background-color: #CCFFCC; margin: 5px">Contácto</th>
-						<th style="background-color: #CCFFCC; margin: 5px">Estado</th>
+						<th>ID</th>
+						<th>Nombre</th>
+						<th>Direccion</th>
+						<th>Teléfono</th>
+						<th>Contácto</th>
+						<th>Estado</th>
 						</tr>
 						
 						<%
@@ -218,21 +218,79 @@ ResultSet rs = conn.createStatement().executeQuery(
 						</tbody>
 						</table>
 						
-						<p><strong>DATOS DE LA EMPRESA</strong></p>
-						<form  onsubmit="return validar(this);" action="/empresas" method="post">
+						<h4>Datos de la empresa</h4>
+						<form  onsubmit="return validar(this);" action="/empresas" method="post" class="form-horizontal">
 							<div><input type="hidden" name="identificador" id="idEmpresa" ></input></div>
-						    <div>Nombre: <input type="text" name="nombre" id="nombreEmpresa" required="required"></input></div>
-						    <div>Dirección: <input type="text" name="direccion" id="direccionEmpresa" required="required"></input></div>
-						    <div>Teléfono: <input type="tel" name="telefono" id="telefonoEmpresa" required="required"></input></div>
-						    <div>Contacto: <input type="text" name="contacto" id="contactoEmpresa" required="required"></input></div>
-						    <div>Estado:
-						    	<select name=estado id="estadoEmpresa">
-						    		<option seleted value=1>Activo</option>
-						    		<option value=0>Inactivo</option>
-						    		</select> 
+						    <div class="form-group">
+								 <label for="nombreEmpresa" class="col-sm-2 control-label">Nombre:</label> 
+								 <div class="col-sm-10">
+								 	<input type="text" name="nombre" class="form-control" id="nombreEmpresa" required="required"></input>
+								 </div>
 							</div>
-						    <div><input type="submit" value="Guardar"/><input type="reset" value="Cancelar"/></div>
+						    <div class="form-group">
+								 <label for="direccionEmpresa" class="col-sm-2 control-label">Dirección:</label> 
+								 <div class="col-sm-10">
+								 	<input type="text" name="direccion" class="form-control" id="direccionEmpresa" required="required"></input>
+								 </div>
+							</div>
+						    <div class="form-group">
+								 <label for="telefonoEmpresa" class="col-sm-2 control-label">Teléfono:</label> 
+								 <div class="col-sm-10">
+								 	<input type="tel" name="telefono" class="form-control" id="telefonoEmpresa" required="required"></input>
+								 </div>
+							</div>
+						    <div class="form-group">
+								 <label for="contactoEmpresa" class="col-sm-2 control-label">Contacto: </label> 
+								 <div class="col-sm-10">
+								 	<input type="text" name="contacto" class="form-control" id="contactoEmpresa" required="required"></input>
+								 </div>
+							</div>
+						    <div class="form-group">
+								 <label for="estadoEmpresa" class="col-sm-2 control-label">Estado: </label> 
+								 <div class="col-sm-10">
+							    	<select name=estado id="estadoEmpresa" class="form-control">
+							    		<option seleted value=1>Activo</option>
+							    		<option value=0>Inactivo</option>
+							    		</select> 
+						    	</div>
+							</div>
+						    <div class="col-sm-offset-2" >
+						    	<input type="submit" class="btn btn-primary" value="Guardar"/>
+						    	<input type="reset" class="btn btn-default btnCancelar" value="Cancelar"/>
+						    </div>
 						  </form>
+						  
+						   <%
+				  if(session.getAttribute("updateEmpresa") != null){ 
+							
+							  
+							  if(session.getAttribute("updateEmpresa").toString().equals("1")){
+								  %>
+									<div class="alert alert-success">
+									  Empresa almacenada exitosamente.
+									</div>
+								<%
+							  }
+							  
+							  if(session.getAttribute("updateEmpresa").toString().equals("2")){
+								  %>
+									<div class="alert alert-success">
+										Datos actualizados exitosamente.
+									</div>
+								<%
+							  }
+							  
+							  if(session.getAttribute("updateEmpresa").toString().equals("3")){
+								  %>
+									<div class="alert alert-danger">
+									    No fue posible completar la acción. Por favor intentar nuevamente o comunicarse con Analixdata.
+									</div>
+								<%
+							  }
+							  
+							  session.setAttribute("updateEmpresa", null);
+							  
+						  } %>
 			</div>	
 	
 		</div>

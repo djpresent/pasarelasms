@@ -173,7 +173,7 @@ if(u.getTipo().getId() == 3){
 			<div class="col-sm-9 col-md-9 main contenido">
 			
 			
-				<h1 class="page-header">Servicios Contratados<img class="icoheader" src="imagenes/icoreloj.png"/><img class="icoheader" src="imagenes/icopastel.png"/><img class="icoheader" src="imagenes/icoaudifonos.png"/><img class="icoheader" src="imagenes/icodescarga.png"/> </h1>
+				<h1 class="page-header">Servicios Contratados<img style="padding-left:10px;" class="icoheader" src="imagenes/icoreloj.png"/><img class="icoheader" src="imagenes/icopastel.png"/><img class="icoheader" src="imagenes/icoaudifonos.png"/><img class="icoheader" src="imagenes/icodescarga.png"/></h1>
 				<%if (rs.first()){ %>
 				<table id="datosServiciosC" class="table table-bordered">
 				<tbody>

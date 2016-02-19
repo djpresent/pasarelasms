@@ -164,7 +164,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 				</div>
 		
 			<div class="col-sm-9 col-md-9 main">
-				<h1 class="page-header">Asignación de Servicios a Usuarios</h1>
+				<h1 class="page-header">Asignación de Servicios a Usuarios<img style="padding-left:10px;" class="icoheader" src="imagenes/icoreloj.png"/><img class="icoheader" src="imagenes/icopastel.png"/><img class="icoheader" src="imagenes/icoaudifonos.png"/><img class="icoheader" src="imagenes/icodescarga.png"/></h1>
 				<form  action="/asignarServicioUEmpresa" onsubmit="validar()" class="form-horizontal">
 
 				<div class="form-group">
@@ -269,7 +269,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 							<%
 							}
 							
-							if(session.getAttribute("confServU").toString().equals("0")){
+							if(session.getAttribute("confServU").toString().equals("2")){
 								%>
 								
 									<div class="alert alert-danger">

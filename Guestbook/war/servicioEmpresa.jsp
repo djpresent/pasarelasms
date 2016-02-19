@@ -165,16 +165,16 @@ ResultSet rs = conn.createStatement().executeQuery(
 				</div>
 		
 			<div class="col-sm-9 col-md-9 main">
-				<h1 class="page-header">Asignación de Servicios a Empresas</h1>
-				<table style="border: 1px solid black" id="datosUsuarios">
+				<h1 class="page-header">Asignación de Servicios a Empresas <img style="padding-left:10px;" class="icoheader" src="imagenes/icoreloj.png"/><img class="icoheader" src="imagenes/icopastel.png"/><img class="icoheader" src="imagenes/icoaudifonos.png"/><img class="icoheader" src="imagenes/icodescarga.png"/></h1>
+				<table class="table table-bordered" id="datosUsuarios">
 				<tbody>
 				<tr>
-				<th style="background-color: #CCFFCC; margin: 5px">ID Servicio</th>
-				<th style="background-color: #CCFFCC; margin: 5px">Descripción</th>
-				<th style="background-color: #CCFFCC; margin: 5px">Empresa</th>
-				<th style="background-color: #CCFFCC; margin: 5px">Límite mensual</th>
-				<th style="background-color: #CCFFCC; margin: 5px">Costo / Transacción</th>
-				<th style="background-color: #CCFFCC; margin: 5px">Estado</th>
+				<th>ID Servicio</th>
+				<th>Descripción</th>
+				<th>Empresa</th>
+				<th>Límite mensual</th>
+				<th>Costo / Transacción</th>
+				<th>Estado</th>
 				</tr>
 				
 				<%
@@ -208,43 +208,64 @@ ResultSet rs = conn.createStatement().executeQuery(
 				</tbody>
 				</table>
 				
-				<p><strong>ASGINAR NUEVO SERVICIO A EMPRESAS</strong></p>
-				<form action="/asignarServicio" method="post" onsubmit="validar()">
+				<h4>Asignación de Servicio a Empresas</h4>
+				<form action="/asignarServicio" method="post" onsubmit="validar()" class="form-horizontal">
 					 <div><input type="hidden" name="idServicio" id="idServicio" required="required"></input></div>
 				   
 										
 					<%ResultSet rs1 = conn.createStatement().executeQuery("SELECT * FROM empresa where estado=1");%>
 					
 					
-					<div>Empresa:
-					<select name=empresa id="empresa">
-					<option value="noempresa">Seleccionar...</option>
-					<% 
-					while (rs1.next()) {
-					String empresa = rs1.getString("nombre");%>
-						<option value=<%= empresa %>><%= empresa %></option>
-					<%}%>
-					</select>
+					<div class="form-group">
+						<label for="empresa" class="col-sm-2 control-label"> Empresa:</label> 
+						<div class="col-sm-10">
+								
+							<select name=empresa id="empresa" class="form-control">
+							<option value="noempresa">Seleccionar...</option>
+							<% 
+							while (rs1.next()) {
+							String empresa = rs1.getString("nombre");%>
+								<option value=<%= empresa %>><%= empresa %></option>
+							<%}%>
+							</select>
+							</div>
 					</div>
 					
-					<div>Servicio:
-				    	<select name=servicio id="servicio">
-				    	<option value="noservicio">Seleccionar...</option>
-				    		<% 
-					while (rs.next()) {
-					String descServicio = rs.getString("descripcion");%>
-						<option value=<%= descServicio %>><%= descServicio %></option>
-					<%}%>
-				    		</select> 
+					<div class="form-group">
+						<label for="servicio" class="col-sm-2 control-label"> Servicio:</label> 
+						<div class="col-sm-10">
+					    	<select name=servicio id="servicio" class="form-control">
+					    	<option value="noservicio">Seleccionar...</option>
+					    		<% 
+						while (rs.next()) {
+						String descServicio = rs.getString("descripcion");%>
+							<option value=<%= descServicio %>><%= descServicio %></option>
+						<%}%>
+					    		</select> 
+					    </div>
 					</div>
 					
-				    <div>Límite mensual: <input type="number" name="limite" id="limite" required="required"></input></div>
-				    <div>Precio por Transacción: <input type="text" name="costo" id="costo" required="required"></input></div>
-				    <div>Estado:
-				    	<select name=estado id="estado">
+				    <div class="form-group">
+						<label for="limite" class="col-sm-2 control-label"> Límite mensual: </label> 
+						<div class="col-sm-10">
+						<input type="number" name="limite" id="limite" class="form-control" required="required"></input>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="costo" class="col-sm-2 control-label"> Precio por Transacción: </label> 
+						<div class="col-sm-10">
+						<input type="text" name="costo" id="costo" class="form-control" required="required"></input>
+						</div>
+					</div>
+				    <div class="form-group">
+						<label for="estado" class="col-sm-2 control-label"> 	Estado:</label> 
+						<div class="col-sm-10">
+					
+				    	<select name=estado id="estado" class="form-control">
 				    		<option seleted value=1>Activo</option>
 				    		<option value=0>Inactivo</option>
 				    		</select> 
+				    	</div>
 					</div>
 					
 				    
@@ -252,9 +273,35 @@ ResultSet rs = conn.createStatement().executeQuery(
 					conn.close();
 					%>
 					
-				    <div><input type="submit" value="Guardar"/>
-				    <input type="reset" value="Cancelar"/></div>
+				    <div class="col-sm-offset-2">
+				    	<input type="submit" class="btn btn-primary"  value="Guardar"/>
+				    	<input type="reset" class="btn btn-default btnCancelar" value="Cancelar"/>
+				    </div>
 				  </form>
+				  
+				  <%
+				  if(session.getAttribute("updateServEmp") != null){ 
+							
+							  
+							  if(session.getAttribute("updateServEmp").toString().equals("1")){
+								  %>
+									<div class="alert alert-success">
+									  Acción completada exitosamente.
+									</div>
+								<%
+							  }
+							  
+							  if(session.getAttribute("updateServEmp").toString().equals("2")){
+								  %>
+									<div class="alert alert-danger">
+									    No fue posible completar la acción. Por favor intentar nuevamente o comunicarse con Analixdata.
+									</div>
+								<%
+							  }
+							  
+							  session.setAttribute("updateServEmp", null);
+							  
+						  } %>
 			</div>	
 	
 		</div>
