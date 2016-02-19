@@ -155,11 +155,12 @@ ResultSet rs = conn.createStatement().executeQuery(
 						
 						
 						%>
-						
-						
-						
+					</ul>
+					
+					<hr>
+					<ul class="menuCuenta nav">
+						<li><a href="usuario.jsp"><h5><img class="icomenu" src="imagenes/icousuarios.png"/>Mis Datos</h5></a></li>
 						<li><a href="/cerrarSesion"><img class="icomenu" src="imagenes/icocerrar.png"/>Cerrar Sesión</a></li>
-				
 					</ul>
 				</div>
 		

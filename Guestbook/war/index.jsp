@@ -99,7 +99,7 @@
 								%>
 									<li><a href="empresa.jsp"><h5><img class="icomenu" src="imagenes/icoempresa.png"/>Empresa</h5></a></li>
 									<li ><a href="serviciosContratados.jsp"><h5><img class="icomenu" src="imagenes/icoservicios.png"/>Servicios</h5></a></li>
-									<li><a href="usuario.jsp"><h5><img class="icomenu" src="imagenes/icousuarios.png"/>Usuario</h5></a></li>
+									
 							
 								<%
 								
@@ -116,12 +116,14 @@
 						
 						
 						%>
-						
-						
-						
+						</ul>
+					<hr>
+					<ul class="menuCuenta nav">
+						<li><a href="usuario.jsp"><h5><img class="icomenu" src="imagenes/icousuarios.png"/>Mis Datos</h5></a></li>
 						<li><a href="/cerrarSesion"><img class="icomenu" src="imagenes/icocerrar.png"/>Cerrar Sesión</a></li>
-				
 					</ul>
+					
+					
 				</div>
 		
 			<div class="col-sm-9 col-md-9 main contenido">
@@ -130,7 +132,7 @@
 	
 		</div>
 	</div>
-	<footer class="footer">
+	<footer class="footer ">
       <div class="container" style="margin-left:25px;margin-right:-25px;">
       	 <div class="footizquierda">Analixdata, 2015 | Copyright © 2016. Todos los derechos reservados.</div>
        	  <div class="footderecha">Teléfono: 593 07 3701919   Email: lalvarez@analixdata.com<img class="icoheader" style="margin-left:10px;" src="imagenes/icogoogle.png"/> <img class="icoheader" src="imagenes/icotwitter.png"/> <a href="https://www.facebook.com/AnalixData-Cia-Ltda-1053799024633059/?fref=ts" target="_blank"><img class="icoheader" src="imagenes/icofacebook.png"/></a></div>

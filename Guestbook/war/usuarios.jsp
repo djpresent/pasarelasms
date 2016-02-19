@@ -228,8 +228,7 @@ if(u.getTipo().getId() == 2){
 								%>
 									<li><a href="empresa.jsp"><h5><img class="icomenu" src="imagenes/icoempresa.png"/>Empresa</h5></a></li>
 									<li ><a href="serviciosContratados.jsp"><h5><img class="icomenu" src="imagenes/icoservicios.png"/>Servicios</h5></a></li>
-									<li><a href="usuario.jsp"><h5><img class="icomenu" src="imagenes/icousuarios.png"/>Usuario</h5></a></li>
-							
+									
 								<%
 								
 								if( u.tieneServicio(1)){
@@ -246,11 +245,12 @@ if(u.getTipo().getId() == 2){
 						
 						%>
 						
-						
-						
+					</ul>
+					
+					<hr>
+					<ul class="menuCuenta nav">
+						<li><a href="usuario.jsp"><h5><img class="icomenu" src="imagenes/icousuarios.png"/>Mis Datos</h5></a></li>
 						<li><a href="/cerrarSesion"><img class="icomenu" src="imagenes/icocerrar.png"/>Cerrar Sesión</a></li>
-				
-				
 					</ul>
 				</div>
 		

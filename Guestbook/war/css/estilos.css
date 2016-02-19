@@ -25,6 +25,11 @@ img.logologin {
 	background-image: url("/imagenes/fondoBarra.png");
 }
 
+ul.menuCuenta.nav.nav-sidebar {
+    padding-top: 0px!important;
+}
+
+
 .msgbienvenida {
     padding-right: 45px;
     margin-top: 8.5%;
