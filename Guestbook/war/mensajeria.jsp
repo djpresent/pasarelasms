@@ -15,7 +15,8 @@
 	var csv;
 		function cuenta()
 		{
-			document.getElementById("caracteres").value=160-document.getElementById("idTexto").value.length;
+			var car = "Caracteres: ";
+			document.getElementById("caracteres").value=car.concat(160-document.getElementById("idTexto").value.length);
 			
 		}
 		
@@ -289,7 +290,9 @@ session.setAttribute("disponibles",disponible );
         				
         				<div class="col-xs-4">
         					<div class="form-group">
-        						<textarea class="form-control" cols="40" rows="5" name="mensaje" id="idTexto" required="required" onKeyDown="cuenta()" onKeyUp="cuenta()"></textarea>
+        						<textarea class="form-control" cols="40" rows="6" name="mensaje" id="idTexto" required="required" onKeyDown="cuenta()" onKeyUp="cuenta()"></textarea>
+        						<input class="form-control"  type="text" name=caracteres id="caracteres" size=4 value="160" disabled="disabled" >
+
         					</div>
         				</div>
         				
@@ -304,41 +307,46 @@ session.setAttribute("disponibles",disponible );
         				</div>
         			</div>
         			
-        			
-        			
-			  		<table>
-			  		
-			  		
-				
-			  			<tr>
-			  			<td>Archivo:</td>
-						
-			  			<td><input type="file" name="archivo" onchange="handleFiles(this.files)" accept=".csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain" required="required"  /></td>
-					</tr>
-			  			<tr>
-			  				<td>Caracteres:</td>
-			  				<td><input type="text" name=caracteres id="caracteres" size=4 value="160"></td>
-			  			</tr>
-			  		
-			  			<tr>
-			  				
-			  				<td><input type="hidden" id="mensaje" name="txtmensaje" ></input></td>
-			  				<td>
-			  				<input type="hidden" id="cantDisponibles" value="<%= disponible %>"/>
-			  				<input type="hidden" id="cantSMS" />
-			  				<input onclick="return confirm('¿Está seguro que desea enviar los mensajes?')"  type="submit" value="Enviar" /></td>
-			  			</tr>
-			  		</table>
+        			<div class="row">
+        				<div class="col-xs-1">
+        					<div class="form-group">
+        						<label for="archivo">Archivo:</label>
+        					</div>
+        				</div>
+        				<div class="col-xs-6">
+        					<div class="form-group">
+        						<input  type="file" name="archivo" onchange="handleFiles(this.files)" accept=".csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain" required="required"  />
+        					</div>
+        				</div>
+        			</div>
+
+        			<div class="row">
+        				<div class="col-xs-1">
+        					<div class="form-group">
+        						
+        					</div>
+        				</div>
+        				<div class="col-xs-4">
+        					<div class="form-group">
+        						<input type="hidden" id="mensaje" name="txtmensaje" >
+        						<input type="hidden" id="cantDisponibles" value="<%= disponible %>"/>
+			  					<input type="hidden" id="cantSMS" />
+			  					<input class="form-control"  onclick="return confirm('¿Está seguro que desea enviar los mensajes?')"  type="submit" value="Enviar" /></td>
+        					</div>
+        				</div>
+        			</div>
+
 			  	</form>
 			  	
 			  	<%
 					if(!(session.getAttribute("codigo") == null))
 					{
-						String codigo = session.getAttribute("codigo").toString();
+						int codigo = Integer.parseInt(session.getAttribute("codigo").toString());
+						
 						String cod;
 						switch (codigo)
 						{
-							case "ERRORBASE":
+							case 1:
 												cod= "ERROR AL CONECTARSE CON LA BASE DE DATOS!";
 												%>
 													<div class="alert alert-danger">
@@ -346,7 +354,7 @@ session.setAttribute("disponibles",disponible );
 													</div>	
 												<%
 												break;
-							case "ERRORTEXTO":
+							case 2:
 												cod= "EL ARCHIVO DE TEXTO O CSV CONTIENE ERRORES!";
 												%>
 													<div class="alert alert-danger">
@@ -354,7 +362,7 @@ session.setAttribute("disponibles",disponible );
 													</div>	
 												<%
 												break;
-							case "ERRORGRABARBASE":
+							case 3:
 												cod= "ALGUNOS MENSAJES NO FUERON ENVIADOS. POR FAVOR, COMUNIQUESE CON ANALIXDATA";
 												%>
 													<div class="alert alert-danger">
@@ -362,7 +370,7 @@ session.setAttribute("disponibles",disponible );
 													</div>	
 												<%
 												break;
-							case "ENVIADOS":
+							case 4:
 												cod= "MENSAJES ENVIADOS SATISFACTORIAMENTE!";
 												%>
 													<div class="alert alert-success">
@@ -370,7 +378,7 @@ session.setAttribute("disponibles",disponible );
 													</div>	
 												<%
 												break;
-							case "NOENVIADOS":
+							case 5:
 												cod= "LOS MENSAJES NO HAN SIDO ENVIADOS. El NUMERO DE MENSAJES ES SUPERIOR A LOS MENSAJES DISPONIBLES. POR FAVOR CONTACTARSE CON ANALIXDATA";
 												%>
 													<div class="alert alert-danger">
@@ -378,7 +386,7 @@ session.setAttribute("disponibles",disponible );
 													</div>	
 												<%
 												break;
-							case "ERRORSUBIRARCHIVO":
+							case 6:
 												cod= "ERROR AL SUBIR EL ARCHIVO!";
 												%>
 													<div class="alert alert-danger">
@@ -386,7 +394,7 @@ session.setAttribute("disponibles",disponible );
 													</div>	
 												<%
 												break;
-							case "ERRORGENERAL":
+							case 7:
 												cod= "ERROR EN LA PLATAFORMA DE ENVIO. POR FAVOR, COMUNICARSE CON ANALIXDATA URGENTEMENTE";
 												%>
 													<div class="alert alert-danger">

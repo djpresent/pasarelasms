@@ -76,7 +76,7 @@ public class EnvioMensajesServlet extends HttpServlet {
   	      }
   	    } catch (Exception e) 
 		{
-  	    	session.setAttribute("codigo", "ERRORBASE");
+  	    	session.setAttribute("codigo", 1);
 			resp.sendRedirect("mensajeria.jsp");
   	    }
 
@@ -195,7 +195,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 								}
 
 							} catch (IOException e) {
-								session.setAttribute("codigo", "ERRORTEXTO");
+								session.setAttribute("codigo", 2);
 								resp.sendRedirect("mensajeria.jsp");
 							} finally {
 								if (br != null) {
@@ -322,14 +322,14 @@ public class EnvioMensajesServlet extends HttpServlet {
 				conn.close();
 				
 				
-				session.setAttribute("codigo", "ENVIADOS");
+				session.setAttribute("codigo", 4);
 				resp.sendRedirect("mensajeria.jsp");
 				
 			}
 			else
 			{
 				//System.out.println(mensajes.size());
-				session.setAttribute("codigo", "NOENVIADOS");
+				session.setAttribute("codigo", 5);
 				resp.sendRedirect("mensajeria.jsp");
 			}
 			
@@ -338,13 +338,13 @@ public class EnvioMensajesServlet extends HttpServlet {
 		
 		} catch (FileUploadException e) {
 			
-			session.setAttribute("codigo", "ERRORSUBIRARCHIVO");
+			session.setAttribute("codigo", 6);
 			resp.sendRedirect("mensajeria.jsp");
 			
 			///e.printStackTrace();
 		} catch (Exception e) {
 
-			session.setAttribute("codigo", "ERRORGENERAL");
+			session.setAttribute("codigo", 7);
 			resp.sendRedirect("mensajeria.jsp");
 		
 		}
