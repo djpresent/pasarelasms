@@ -39,7 +39,7 @@ public class SMSServlet extends HttpServlet {
 	  public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 		
 		String charset = "UTF-8";
-		String mensajecod=URLEncoder.encode("Ahora si amigo.",charset); 
+		String mensajecod=URLEncoder.encode("Mensaje de prueba.",charset); 
 		
 		
 		String urlEnvio = "http://serviciosms.analixdata.com/APIAnalix?numero=593992831273&mensaje="+mensajecod;

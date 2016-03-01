@@ -175,7 +175,7 @@ if(u.getTipo().getId() == 3){
 			
 			
 				<h1 class="page-header">Servicios Contratados<img style="padding-left:10px;" class="icoheader" src="imagenes/icoreloj.png"/><img class="icoheader" src="imagenes/icopastel.png"/><img class="icoheader" src="imagenes/icoaudifonos.png"/><img class="icoheader" src="imagenes/icodescarga.png"/></h1>
-				<%if (rs.first()){ %>
+				<%if (rs.isBeforeFirst()){ %>
 				<table id="datosServiciosC" class="table table-bordered">
 				<tbody>
 				<tr>
@@ -186,7 +186,7 @@ if(u.getTipo().getId() == 3){
 				
 				<%if (u.getTipo().getId()<3){ %>
 				
-				<th >Costo / Transacción</th>
+				<th >Precio / Transacción</th>
 				
 				<% }%>
 				
@@ -194,6 +194,7 @@ if(u.getTipo().getId() == 3){
 				</tr>
 				
 				<%
+				
 				}else{
 					
 					%>
@@ -239,6 +240,9 @@ if(u.getTipo().getId() == 3){
 				</tbody>
 				</table>
 				
+				<div class="alert alert-info">
+				  <strong>Info!</strong> Para contratar servicios o ampliar su cupo comunicarse con Analixdata.
+				</div>
 				
 					
 
