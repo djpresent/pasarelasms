@@ -45,7 +45,7 @@ session = request.getSession();
 			
 			<input type="submit" class="btn btn-lg btn-primary btn-block btnlogin" value="Iniciar Sesión"/>
 		</form>
-		<a href="#">¿Olvidaste tu contraseña?</a> 
+		<a href="mailRestablecer.jsp">¿Olvidaste tu contraseña?</a> 
 		</div>
 		<% 
 		

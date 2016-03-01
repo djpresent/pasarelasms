@@ -5,6 +5,8 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.*;
 
 import com.analixdata.modelos.Servicio;
@@ -16,6 +18,12 @@ public class UsuarioServlet extends HttpServlet {
 	@Override
 	  public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
 	    String url = null;
+	    resp.setContentType("text/html;charset=UTF-8");
+	    HttpSession session = req.getSession();
+        session = req.getSession();
+        Usuario u = (Usuario)session.getAttribute("usuario"); 
+        if (u!=null)
+        {
 	    try {
 	      if (SystemProperty.environment.value() ==
 	          SystemProperty.Environment.Value.Production) {
@@ -35,8 +43,8 @@ public class UsuarioServlet extends HttpServlet {
 	      return;
 	    }
 
-	    HttpSession session = req.getSession();
-        session = req.getSession();
+	   // HttpSession session = req.getSession();
+        //session = req.getSession();
 	    
 	    PrintWriter out = resp.getWriter();
 	    try {
@@ -110,7 +118,7 @@ public class UsuarioServlet extends HttpServlet {
 		        	  
 		        	  	
 		        	     
-		        		Usuario u = (Usuario)req.getSession().getAttribute("usuario");
+		        		 u = (Usuario)req.getSession().getAttribute("usuario");
 		        		
 		        		int idnuevo=0;
 		        		
@@ -189,6 +197,21 @@ public class UsuarioServlet extends HttpServlet {
 	      e.printStackTrace();
 	    }
 	    resp.sendRedirect("/usuarios.jsp");
+        }
+        else
+        {
+        	session.invalidate();
+        	RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.jsp");
+            PrintWriter out= resp.getWriter();
+            out.println("<div class=\"alert alert-warning\" style=\"text-align: center;\"><strong>Lo sentimos! </strong>Su sesion a caducado. Por favor, vuelva a ingresar</div>	");
+            try 
+            {
+				rd.include(req, resp);
+			} catch (ServletException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+        }
 	  }
 
 }

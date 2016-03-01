@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -62,7 +63,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 		int env = Integer.parseInt(disp);
 		List <Transaccion> mensajes = new ArrayList<Transaccion>();
 		String url = null;
-		
+		String mensaje = null;
 		//conexion a la 
 		
 		try {
@@ -90,7 +91,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 		try {
 		
 			FileItemIterator iterator = upload.getItemIterator(req);
-			String mensaje = null;
+			
 			FileItemStream uploadedFile = null;
 			while (iterator.hasNext()) 
 			{
@@ -229,96 +230,169 @@ public class EnvioMensajesServlet extends HttpServlet {
 			if (Integer.parseInt(disp)>=mensajes.size())
 			{	
 				
+				
+				
 				Connection conn = DriverManager.getConnection(url);
 				int enviados=0;
 				PrintWriter out = resp.getWriter();
-				String charset = "UTF-8";
+				String cadenaJSON = "{\"Mensaje\":\""+mensaje+"\",";
+				String destinatarios="\"Destinatarios\": [\"";
+				String mensajesp= "\"Mensajes\": [\"";
 				for (int i = 0; i<mensajes.size();i++)
 				{
+					if (i==0)
+					{	
+						destinatarios = destinatarios.concat(mensajes.get(i).getCelular()+"\"");
+						mensajesp = mensajesp.concat(mensajes.get(i).getMensaje()+"\"");
+					}
+					else
+					{
+						destinatarios = destinatarios.concat(",\""+mensajes.get(i).getCelular()+"\"");
+						mensajesp = mensajesp.concat(",\""+mensajes.get(i).getMensaje()+"\"");
+					}
 					
+					
+					
+					
+					try
+	        		{
+	        			
+	        			Calendar cal = Calendar.getInstance(); // creates calendar
+	    	    		
+	    		        cal.add(Calendar.HOUR_OF_DAY, -5); // adds one hour
+
+	    		         		        
+	    		        String fecha= new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()).toString();
+	    		        String hora=new SimpleDateFormat("HH:mm:ss").format(cal.getTime()).toString();
+	        			
+	    		       
+	    		        String respuesta="PROCESADO";
+	        			
+	        			/*if(response.toString().equals("\"Mensaje enviado\"")){
+	        				respuesta="MENSAJE ENVIADO";
+	        				
+	        				
+
+	        			}
+	        			
+	        			if(response.toString().equals("\"Error al enviar mensaje\"")){
+	        				respuesta="MENSAJE NO ENVIADO";
+	        			
+	        			}*/
+	    		        
+	    		        enviados++;
+	    		        
+	        			String statement = "INSERT INTO transaccion (fecha,hora,retorno,plataforma,celular,mensaje,idservicio,idusuario,idempresa) VALUES( ? , ? , ? , ? , ? , ? , ? , ? , ? )";
+	    		          PreparedStatement stmt = conn.prepareStatement(statement);
+	    		          stmt.setString(1, fecha);
+	    		          stmt.setString(2,  hora);
+	    		          stmt.setString(3, respuesta);
+	    		          stmt.setString(4, "FRONTEND");
+	    		          stmt.setString(5, mensajes.get(i).getCelular());
+	    		          stmt.setString(6, mensajes.get(i).getMensaje());
+	    		          stmt.setInt(7, 1);
+	    		          stmt.setInt(8, u.getId() );
+	    		          stmt.setInt(9, u.getEmpresa().getIdEmpresa());
+	    		          
+	    		          stmt.executeUpdate();
+  		            
+	        		}catch (Error e){
+	        			session.setAttribute("codigo", "ERRORGRABARBASE");
+	    				resp.sendRedirect("mensajeria.jsp");
+	        		}
+					
+				}
+				
+				destinatarios = destinatarios.concat("],");
+				mensajesp = mensajesp.concat("]}");
+				
+				cadenaJSON = cadenaJSON.concat(destinatarios).concat(mensajesp);
+				
+				System.out.println(cadenaJSON);
+				
+					/*
 					String decmensaje = URLEncoder.encode(mensajes.get(i).getMensaje(), charset);
-					String urlEnvio ="http://envia-movil.com/Api/Envios?mensaje="+decmensaje+"&numero="+mensajes.get(i).getCelular() ;
-					URL obj = new URL(urlEnvio);
+					String urlEnvio ="http://envia-movil.com/Api/Envios?mensaje="+decmensaje+"&numero="+mensajes.get(i).getCelular() ;*/
+					URL obj = new URL("http://envia-movil.com/Api/Envios");
 	        		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 	        		con.setReadTimeout(60 * 5000);
 	                con.setConnectTimeout(60 * 5000);
-	
-	        		con.setRequestMethod("GET");
-	
-	        		con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0");
-	        		con.setRequestProperty ("Authorization", "Basic REM1NjIzMTVCM0NCOUVGOjA2MzZFM0FGMTQ=");
+	                con.setRequestProperty ("Authorization", "Basic REM1NjIzMTVCM0NCOUVGOjA2MzZFM0FGMTQ=");
+	        		con.setRequestMethod("POST");
+	        		con.setRequestProperty("content-type", "application/json");
+	                con.setRequestProperty("accept", "application/json");
+
+	                con.setUseCaches(false);
+	                con.setDoInput(true);
+	                con.setDoOutput(true);
+	                
+	                OutputStreamWriter writer = new OutputStreamWriter(con.getOutputStream());
+	                    writer.write(cadenaJSON);
+	                    writer.close();
+	        		//con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0");
+	        		
 	        		int responseCode = con.getResponseCode();
-	        		//System.out.println("\nSending 'GET' request to URL : " + urlEnvio);
-	        		//System.out.println("Response Code : " + responseCode);
 	        		
 	        		
 	        		
 	        		if(responseCode==200)
 	        		{
-	
-		        		BufferedReader in = new BufferedReader(
+	        			/*BufferedReader in = new BufferedReader(
 		        		        new InputStreamReader(con.getInputStream()));
 		        		String inputLine;
 		        		StringBuffer response = new StringBuffer();
-	
+		        		
 		        		while ((inputLine = in.readLine()) != null)
 		        		{
 		        			response.append(inputLine);
 		        		}
-		        		in.close();
+		        		System.out.println(response);
+		        		in.close();*/
+	        			
+	        			/*String urlEnvio = "http://envia-movil.com/Api/Envios";
+	        			
+
+	        			URL obj1 = new URL(urlEnvio);
+	        			HttpURLConnection con1 = (HttpURLConnection) obj1.openConnection();
+	        			con1.setReadTimeout(60 * 1000);
+	        	        con1.setConnectTimeout(60 * 1000);
+	        			
+	        			con1.setRequestMethod("GET");
+
+	        			
+	        			con1.setRequestProperty ("Authorization", "Basic Z2VvY2FtcG9fMTRAaG90bWFpbC5jb206ZmNlYTkyMGY3NDEyYjVkYTdiZTBjZjQyYjhjOTM3NTk=");
+	        			int responseCode1 = con1.getResponseCode();
+	        			System.out.println("\nSending 'GET' request to URL : " + urlEnvio);
+	        			System.out.println("Response Code : " + responseCode1);
+	        			
+	        			PrintWriter out1 = resp.getWriter();
+
+	        			BufferedReader in = new BufferedReader(new InputStreamReader(con1.getInputStream()));
+
+
+	        	        if (responseCode == 200){ 	
+	        	        	out1.println( in.readLine());
+	        	        }else{
+	        	        	out1.println("ERROR DE CONEXION");
+	        	        	
+	        	        }
+	        	        
+	        	        in.close();
+
+	        		  	}
+	        			
+	        		
+						*/
 		        		
-		        		try
-		        		{
-		        			
-		        			Calendar cal = Calendar.getInstance(); // creates calendar
-		    	    		
-		    		        cal.add(Calendar.HOUR_OF_DAY, -5); // adds one hour
-
-		    		         		        
-		    		        String fecha= new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()).toString();
-		    		        String hora=new SimpleDateFormat("HH:mm:ss").format(cal.getTime()).toString();
-		        			
-		    		       
-		    		        String respuesta=response.toString();
-		        			
-		        			if(response.toString().equals("\"Mensaje enviado\"")){
-		        				respuesta="MENSAJE ENVIADO";
-		        				
-		        				enviados++;
-
-		        			}
-		        			
-		        			if(response.toString().equals("\"Error al enviar mensaje\"")){
-		        				respuesta="MENSAJE NO ENVIADO";
-		        			
-		        			}
-		    		        
-		        			String statement = "INSERT INTO transaccion (fecha,hora,retorno,plataforma,celular,mensaje,idservicio,idusuario,idempresa) VALUES( ? , ? , ? , ? , ? , ? , ? , ? , ? )";
-		    		          PreparedStatement stmt = conn.prepareStatement(statement);
-		    		          stmt.setString(1, fecha);
-		    		          stmt.setString(2,  hora);
-		    		          stmt.setString(3, respuesta);
-		    		          stmt.setString(4, "FRONTEND");
-		    		          stmt.setString(5, mensajes.get(i).getCelular());
-		    		          stmt.setString(6, URLDecoder.decode(decmensaje,"UTF-8"));
-		    		          stmt.setInt(7, 1);
-		    		          stmt.setInt(8, u.getId() );
-		    		          stmt.setInt(9, u.getEmpresa().getIdEmpresa());
-		    		          
-		    		          stmt.executeUpdate();
-	  		            
-		        		}catch (Error e){
-		        			session.setAttribute("codigo", "ERRORGRABARBASE");
-		    				resp.sendRedirect("mensajeria.jsp");
-		        		}
+		        		
 			
 	        		}
 	        		
 	        		con.disconnect();
-
-				}
+	        		
 				
-				String stmt1 = "UPDATE servicio_empresa SET disponible="+(env-enviados)+" WHERE idempresa="+u.getEmpresa().getIdEmpresa();
+				
+	        		String stmt1 = "UPDATE servicio_empresa SET disponible="+(env-enviados)+" WHERE idempresa="+u.getEmpresa().getIdEmpresa();
 				PreparedStatement stmt = conn.prepareStatement(stmt1);
 				stmt.executeUpdate();
 				
