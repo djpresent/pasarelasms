@@ -19,10 +19,21 @@
 			document.getElementById("limite").value = el.parentNode.parentNode.cells[3].textContent;
 			document.getElementById("costo").value = el.parentNode.parentNode.cells[4].textContent;
 
+			document.getElementById("divempresa").style.display = 'none';
+			document.getElementById("divservicio").style.display = 'none';
+			
 			if(el.parentNode.parentNode.cells[8].textContent == "Activo")
 			 	document.getElementById("estado").value = 1 ;
 			else
 				document.getElementById("estado").value = 0 ;
+			
+			
+			}
+			
+			function liberar(){
+				
+				document.getElementById("divempresa").style.display = 'block';
+				document.getElementById("divservicio").style.display = 'block';
 			}
 			
 			function validar(){
@@ -77,7 +88,7 @@ if (SystemProperty.environment.value() ==
 
 Connection conn = DriverManager.getConnection(url);
 ResultSet rs = conn.createStatement().executeQuery(
-    "SELECT servicio_empresa.idservicio,descripcion,nombre,limite,costotransaccion,servicio_empresa.estado FROM pasarelasms.servicio_empresa,pasarelasms.servicio,pasarelasms.empresa WHERE servicio_empresa.idservicio=servicio.idservicio and servicio_empresa.idempresa=empresa.idempresa and empresa.estado=1;");
+    "SELECT servicio_empresa.idservicio,descripcion,nombre,limite,disponible,costotransaccion,servicio_empresa.estado FROM pasarelasms.servicio_empresa,pasarelasms.servicio,pasarelasms.empresa WHERE servicio_empresa.idservicio=servicio.idservicio and servicio_empresa.idempresa=empresa.idempresa and empresa.estado=1;");
 %>
 
 
@@ -174,7 +185,8 @@ ResultSet rs = conn.createStatement().executeQuery(
 				<th>Descripción</th>
 				<th>Empresa</th>
 				<th>Límite mensual</th>
-				<th>Costo / Transacción</th>
+				<th>Disponible</th>
+				<th>Precio / Transacción</th>
 				<th>Estado</th>
 				</tr>
 				
@@ -184,6 +196,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 					String servicio = rs.getString("descripcion");
 				    String empresa = rs.getString("nombre");
 				    int limite = rs.getInt("limite");
+				    int disponible = rs.getInt("disponible");
 				    float costo = rs.getFloat("costotransaccion");
 				    int estado = rs.getInt("estado"); 
 				    String est="";
@@ -195,6 +208,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 					<td><%= servicio %></td>
 					<td><%= empresa %></td>
 					<td><%= limite %></td>
+					<td><%= disponible %></td>
 					<td><%= costo %></td>
 					<td><%= est %></td>
 					<td><button class="btnEditar" type="button" onclick="obtenerDatos(this);" >Editar</button></td>
@@ -217,7 +231,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 					<%ResultSet rs1 = conn.createStatement().executeQuery("SELECT * FROM empresa where estado=1");%>
 					
 					
-					<div class="form-group">
+					<div class="form-group" id="divempresa">
 						<label for="empresa" class="col-sm-2 control-label"> Empresa:</label> 
 						<div class="col-sm-10">
 								
@@ -232,7 +246,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 							</div>
 					</div>
 					
-					<div class="form-group">
+					<div class="form-group" id="divservicio">
 						<label for="servicio" class="col-sm-2 control-label"> Servicio:</label> 
 						<div class="col-sm-10">
 					    	<select name=servicio id="servicio" class="form-control">
@@ -276,7 +290,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 					
 				    <div class="col-sm-offset-2">
 				    	<input type="submit" class="btn btn-primary"  value="Guardar"/>
-				    	<input type="reset" class="btn btn-default btnCancelar" value="Cancelar"/>
+				    	<input type="reset" class="btn btn-default btnCancelar" value="Cancelar" onclick="liberar()"/>
 				    </div>
 				  </form>
 				  
@@ -289,7 +303,10 @@ ResultSet rs = conn.createStatement().executeQuery(
 									<div class="alert alert-success">
 									  Acción completada exitosamente.
 									</div>
+						
 								<%
+								
+								session.setAttribute("idServicio", null);
 							  }
 							  
 							  if(session.getAttribute("updateServEmp").toString().equals("2")){

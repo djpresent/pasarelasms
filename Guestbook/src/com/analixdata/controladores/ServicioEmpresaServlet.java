@@ -96,16 +96,19 @@ public class ServicioEmpresaServlet extends HttpServlet {
 	          
 	        } else {
 	        	
-	        	rs = conn.createStatement().executeQuery("SELECT limite,disponible FROM servicio_empresa where idservicio ="+idServicio+";");
+	        	ResultSet rs3 = conn.createStatement().executeQuery("SELECT limite,disponible FROM servicio_empresa where idservicio ="+idServicio+";");
+	        	
+	        	System.out.println("idServicio "+idServicio);
+	        	
 	        	
 	        	int limiteact=0;
 	        	
 	        	int disponible=0;
 	        	
-	        	if(rs.next()){
+	        	if(rs3.first()){
 	        		
-	        		 limiteact=rs.getInt("limite");
-	        		 disponible=rs.getInt("dispponible");
+	        		 limiteact=rs3.getInt("limite");
+	        		 disponible=rs3.getInt("disponible");
 	        		 
 	        	}
 	        	
@@ -126,17 +129,20 @@ public class ServicioEmpresaServlet extends HttpServlet {
 	        	}
 
 	        	
-	        	String statement = "UPDATE servicio_empresa SET idservicio=?, idempresa=?, limite=? ,costotransaccion=? ,estado=?, disponible=? ";
+	        	String statement = "UPDATE servicio_empresa SET limite=? ,costotransaccion=? ,estado=?, disponible=? where idservicio=? and idempresa=?";
 		          PreparedStatement stmt = conn.prepareStatement(statement);
-		          stmt.setString(1, idServicio);
-		          stmt.setString(2, idEmpresa);
-		          stmt.setString(3, limite);
-		          stmt.setString(4, costo);
-		          stmt.setString(5, estado);
-		          stmt.setInt(6, disponible);
+		      
+		          stmt.setString(1, limite);
+		          stmt.setString(2, costo);
+		          stmt.setString(3, estado);
+		          stmt.setInt(4, disponible);
+		          stmt.setString(5, idServicio);
+		          stmt.setString(6, idEmpresa);
 		          int success = 2;
 		          
 		         
+		          System.out.println("Consulta "+stmt.toString());
+		          
 		          
 		          success = stmt.executeUpdate();
 		          if (success == 1) {
@@ -160,7 +166,7 @@ public class ServicioEmpresaServlet extends HttpServlet {
 	    	session.invalidate();
 	    	RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.jsp");
             PrintWriter out= resp.getWriter();
-            out.println("<div class=\"alert alert-warning\" style=\"text-align: center;\"><strong>Lo sentimos! </strong>Su sesión a caducado. Por favor, vuelva a ingresar</div>	");
+            out.println("<div class=\"alert alert-warning\" style=\"text-align: center;\"><strong>Lo sentimos! </strong>Su sesión ha caducado. Por favor, vuelva a ingresar</div>	");
             try 
             {
 				rd.include(req, resp);
