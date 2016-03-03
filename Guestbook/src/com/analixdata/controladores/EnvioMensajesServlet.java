@@ -232,7 +232,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 			if (Integer.parseInt(disp)>=mensajes.size())
 			{	
 				
-				
+				Pattern pat = Pattern.compile("^5939.*");
 				
 				Connection conn = DriverManager.getConnection(url);
 				int enviados=0;
@@ -245,7 +245,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 				for (int i = 0; i<mensajes.size();i++)
 				{
 					
-					Pattern pat = Pattern.compile("^593.*");
+					
 					String cel=mensajes.get(i).getCelular();
 				     Matcher mat = pat.matcher(cel);
 				     if (mat.matches() && cel.length()==12) {
@@ -265,15 +265,9 @@ public class EnvioMensajesServlet extends HttpServlet {
 				         enviados++;
 				     } else {
 				         System.out.println("NO");
-				         respuesta="NO ENVIADO";
+				         respuesta="NUMERO INCORRECTO";
 				     }
-					
-					
-					
-					
-					
-					
-					
+
 					try
 	        		{
 	        			
