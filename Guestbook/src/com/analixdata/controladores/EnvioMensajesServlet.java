@@ -248,7 +248,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 					Pattern pat = Pattern.compile("^593.*");
 					String cel=mensajes.get(i).getCelular();
 				     Matcher mat = pat.matcher(cel);
-				     if (mat.matches()&& cel.length()==12) {
+				     if (mat.matches() && cel.length()==12) {
 				         
 				         if (i==0)
 							{	
