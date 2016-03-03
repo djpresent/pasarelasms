@@ -313,7 +313,7 @@ if(u.getTipo().getId() == 2){
 				</table>
 				
 				<h4>Datos del Usuario</h4>
-				<form onSubmit="validarPass();" action="/usuario" class="form-horizontal" method="post" name="datosUsuario">
+				<form onSubmit="return validarPass();" action="/usuario" class="form-horizontal" method="post" name="datosUsuario">
 					<div><input type="hidden" name="identificador" id="idUsuario" ></input></div>
 				    <div class="form-group">
 						 <label for="cedulaUsuario" class="col-sm-2 control-label">Cédula:</label> 

@@ -279,7 +279,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 	        				respuesta="MENSAJE NO ENVIADO";
 	        			
 	        			}*/
-	    		        
+	    		        System.out.println("Ingreso antes de la base");
 	    		        enviados++;
 	    		        
 	        			String statement = "INSERT INTO transaccion (fecha,hora,retorno,plataforma,celular,mensaje,idservicio,idusuario,idempresa) VALUES( ? , ? , ? , ? , ? , ? , ? , ? , ? )";
@@ -295,7 +295,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 	    		          stmt.setInt(9, u.getEmpresa().getIdEmpresa());
 	    		          
 	    		          stmt.executeUpdate();
-  		            
+	    		          System.out.println(statement);
 	        		}catch (Error e){
 	        			session.setAttribute("codigo", "ERRORGRABARBASE");
 	    				resp.sendRedirect("mensajeria.jsp");

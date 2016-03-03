@@ -25,7 +25,7 @@
 		
 		<img class="logologin" src="imagenes/logotipo.png" />
 		
-		<h2 class="form-signin-heading">Escriba su email para restablecer su contraseña</h2>
+		<h2 class="form-signin-heading">Escriba su email</h2>
 	    <form action="/olvidar" method="post" class="form-signin" >
 	    	<label for="txtEmail" class="sr-only">E-mail</label>
 			<input type="email" class="form-control" id="txtEmail" name="txtEmail" placeholder="E-mail" required="required" autofocus/>

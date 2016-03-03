@@ -167,6 +167,26 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     </servlet-mapping>
     
     
+    <servlet>
+        <servlet-name>restablecer</servlet-name>
+        <servlet-class>com.analixdata.controladores.restablecer</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>restablecer</servlet-name>
+        <url-pattern>/restablecer</url-pattern>
+    </servlet-mapping>
+    
+    
+    <servlet>
+        <servlet-name>recuperarPassword</servlet-name>
+        <servlet-class>com.analixdata.controladores.RestablecerPasswordServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>recuperarPassword</servlet-name>
+        <url-pattern>/recuperarPassword</url-pattern>
+    </servlet-mapping>
+    
+    
     <welcome-file-list>
         <welcome-file>login.jsp</welcome-file>
     </welcome-file-list>
