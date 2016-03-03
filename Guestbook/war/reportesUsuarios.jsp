@@ -23,6 +23,19 @@
 		    $( "#fechaHasta" ).datepicker({ dateFormat: 'yy-mm-dd' }).val();
 		  });
 		  
+		  function CreateExcelSheet ()
+			{
+					
+					$(".table2excel").table2excel({
+						exclude: ".noExl",
+						name: "Excel Document Name",
+						filename: "reportes",
+						exclude_img: true,
+						exclude_links: true,
+						exclude_inputs: true
+					});
+				
+			}
 		  
 		  
 	  </script>
@@ -214,6 +227,7 @@
 				%>
 						
 						<h4>Los resultados son:</h4>
+						<input type="button" onclick="CreateExcelSheet()" value="Exportar a Excel"></input>
 						<table class="table table-bordered">
 						<tr>
 							<td>ID</td>
