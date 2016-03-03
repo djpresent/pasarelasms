@@ -29,6 +29,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.http.HttpSession;
 
@@ -238,18 +240,36 @@ public class EnvioMensajesServlet extends HttpServlet {
 				String cadenaJSON = "{\"Mensaje\":\""+mensaje+"\",";
 				String destinatarios="\"Destinatarios\": [\"";
 				String mensajesp= "\"Mensajes\": [\"";
+				
+				String respuesta="";
 				for (int i = 0; i<mensajes.size();i++)
 				{
-					if (i==0)
-					{	
-						destinatarios = destinatarios.concat(mensajes.get(i).getCelular()+"\"");
-						mensajesp = mensajesp.concat(mensajes.get(i).getMensaje()+"\"");
-					}
-					else
-					{
-						destinatarios = destinatarios.concat(",\""+mensajes.get(i).getCelular()+"\"");
-						mensajesp = mensajesp.concat(",\""+mensajes.get(i).getMensaje()+"\"");
-					}
+					
+					Pattern pat = Pattern.compile("^593.*");
+					String cel=mensajes.get(i).getCelular();
+				     Matcher mat = pat.matcher(cel);
+				     if (mat.matches()&& cel.length()==12) {
+				         
+				         if (i==0)
+							{	
+								destinatarios = destinatarios.concat(mensajes.get(i).getCelular()+"\"");
+								mensajesp = mensajesp.concat(mensajes.get(i).getMensaje()+"\"");
+							}
+							else
+							{
+								destinatarios = destinatarios.concat(",\""+mensajes.get(i).getCelular()+"\"");
+								mensajesp = mensajesp.concat(",\""+mensajes.get(i).getMensaje()+"\"");
+							}
+				         
+				         respuesta="PROCESADO";
+				         enviados++;
+				     } else {
+				         System.out.println("NO");
+				         respuesta="NO ENVIADO";
+				     }
+					
+					
+					
 					
 					
 					
@@ -266,7 +286,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 	    		        String hora=new SimpleDateFormat("HH:mm:ss").format(cal.getTime()).toString();
 	        			
 	    		       
-	    		        String respuesta="PROCESADO";
+	    		        
 	        			
 	        			/*if(response.toString().equals("\"Mensaje enviado\"")){
 	        				respuesta="MENSAJE ENVIADO";
@@ -280,7 +300,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 	        			
 	        			}*/
 	    		        System.out.println("Ingreso antes de la base");
-	    		        enviados++;
+	    		        
 	    		        
 	        			String statement = "INSERT INTO transaccion (fecha,hora,retorno,plataforma,celular,mensaje,idservicio,idusuario,idempresa) VALUES( ? , ? , ? , ? , ? , ? , ? , ? , ? )";
 	    		          PreparedStatement stmt = conn.prepareStatement(statement);
