@@ -351,6 +351,7 @@ if(cookie.getName().equals("usuario"))
 				%>
 						
 						<h4>Los resultados son:</h4>
+						<input type="button" onclick="CreateExcelSheet()" value="Exportar a Excel"></input>
 						<table class="table table-bordered table2excel" id="table2excel">
 						<tr>
 							<td>ID</td>
@@ -383,7 +384,7 @@ if(cookie.getName().equals("usuario"))
 							<% 
 						}
 						%>
-						 <input type="button" onclick="CreateExcelSheet()" value="Exportar a Excel"></input>
+						 
 						 
 						</table>
 						<%
