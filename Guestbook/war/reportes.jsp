@@ -352,22 +352,20 @@ if(cookie.getName().equals("usuario"))
 						
 						<h4>Los resultados son:</h4>
 						<input type="button" onclick="CreateExcelSheet()" value="Exportar a Excel"></input>
-						<table class="table table-bordered table-condensed table2excel " id="table2excel">
-						<thead>
-							<tr>
-								<td>ID</td>
-								<td>Fecha</td>
-								<td>Hora</td>
-								<td>Código de retorno</td>
-								<td>Plataforma</td>
-								<td>Celular</td>
-								<td>Mensaje</td>
-								<td>Empresa</td>
-								<td>Usuario</td>
-								<td>Servicio</td>
-							</tr>
-						</thead>
-						<tbody>
+						<table class="table table-bordered table-condensed  table2excel" id="table2excel" style="table-layout: fixed; font-size: 85%; word-wrap: break-word;">
+						<tr>
+							<td style="width: 6%;">ID</td>
+							<td style="width: 8%;">Fecha</td>
+							<td style="width: 7%;">Hora</td>
+							<td style="width: 10%;">Código de retorno</td>
+							<td style="width: 9%;">Plataforma</td>
+							<td style="width: 10%;">Celular</td>
+							<td>Mensaje</td>
+							<td style="width: 10%;">Empresa</td>
+							<td style="width: 9%;">Usuario</td>
+							<td style="width: 8%;">Servicio</td>
+
+						</tr>
 					<% 
 						for (int i =0;i< transacciones.size();i++)
 						{
@@ -388,7 +386,7 @@ if(cookie.getName().equals("usuario"))
 						}
 						%>
 						 
-						 </tbody>
+						 
 						</table>
 						<%
 						}
