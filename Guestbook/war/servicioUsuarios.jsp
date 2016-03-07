@@ -194,13 +194,13 @@ ResultSet rs = conn.createStatement().executeQuery(
 						if(!(session.getAttribute("empresa") == null)){
 								
 								if(empresa.equals(session.getAttribute("empresa"))){%>
-									<option value=<%= empresa %> selected ><%= empresa %></option>
+									<option value="<%= empresa %>" selected ><%= empresa %></option>
 								<%}else{%>
-								<option value=<%= empresa %>><%= empresa %></option>
+								<option value="<%= empresa %>"><%= empresa %></option>
 						<%	
 								}
 							}else{%>
-							<option value=<%= empresa %>><%= empresa %></option>
+							<option value="<%= empresa %>"><%= empresa %></option>
 						<%}}
 						%>
 						</select>

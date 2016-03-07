@@ -240,7 +240,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 							<% 
 							while (rs1.next()) {
 							String empresa = rs1.getString("nombre");%>
-								<option value=<%= empresa %>><%= empresa %></option>
+								<option value="<%= empresa %>"><%= empresa %></option>
 							<%}%>
 							</select>
 							</div>
@@ -254,7 +254,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 					    		<% 
 						while (rs.next()) {
 						String descServicio = rs.getString("descripcion");%>
-							<option value=<%= descServicio %>><%= descServicio %></option>
+							<option value="<%= descServicio %>"><%= descServicio %></option>
 						<%}%>
 					    		</select> 
 					    </div>

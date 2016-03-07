@@ -384,7 +384,7 @@ if(u.getTipo().getId() == 2){
 							int idtipo = rs.getInt("idtipo");	
 							if(idtipo >= u.getTipo().getId()){
 							String tipoU = rs.getString("descripcion");%>
-								<option value=<%= tipoU %>><%= tipoU %></option>
+								<option value="<%= tipoU %>"><%= tipoU %></option>
 							<%}}%>
 						    		</select> 
 					</div>
@@ -413,7 +413,7 @@ if(u.getTipo().getId() == 2){
 								
 								while (rs.next()) {
 								String empresa = rs.getString("nombre");%>
-									<option value=<%= empresa %>><%= empresa %></option>
+									<option value="<%= empresa %>"><%= empresa %></option>
 								<%}	
 								%>
 									</select>

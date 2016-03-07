@@ -90,6 +90,8 @@ public class UsuarioServlet extends HttpServlet {
 	        
 	        if (id == "" || id == null ) {
 	        	
+	        	System.out.println("SELECT idempresa FROM empresa where nombre ='"+empresa+"';");
+	        	
 	        	rs = conn.createStatement().executeQuery("SELECT idempresa FROM empresa where nombre ='"+empresa+"';");
 	        	
 	        	if(rs.next()){
@@ -113,6 +115,10 @@ public class UsuarioServlet extends HttpServlet {
 		          stmt.setString(9, idtipo);
 		          stmt.setString(10, idempresa);
 		          int success = 2;
+		          
+		          System.out.println(stmt.toString());
+		          
+		          
 		          success = stmt.executeUpdate();
 		          if (success == 1) {
 		        	  
