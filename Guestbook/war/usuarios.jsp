@@ -256,7 +256,7 @@ if(u.getTipo().getId() == 2){
 		
 			<div class="col-sm-9 col-md-9 main">
 				<h1 class="page-header">Usuarios<img style="padding-left:10px;" class="icoheader" src="imagenes/icoreloj.png"/><img class="icoheader" src="imagenes/icopastel.png"/><img class="icoheader" src="imagenes/icoaudifonos.png"/><img class="icoheader" src="imagenes/icodescarga.png"/></h1>
-				<table class="table table-bordered" id="datosUsuarios">
+				<table class="table table-bordered" id="datosUsuarios" style="font-size: 100%; width: 100%;">
 				<tbody>
 				<tr>
 				<th>ID</th>

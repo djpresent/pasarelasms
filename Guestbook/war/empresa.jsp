@@ -185,7 +185,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 			<div class="col-sm-9 col-md-9 main contenido">
 				<h1 class="page-header">Datos Empresariales<img style="padding-left:10px;" class="icoheader" src="imagenes/icoreloj.png"/><img class="icoheader" src="imagenes/icopastel.png"/><img class="icoheader" src="imagenes/icoaudifonos.png"/><img class="icoheader" src="imagenes/icodescarga.png"/> </h1>
 				
-				<table class="datosEmpresa">
+				<table class="datosEmpresa" style="font-size: 100%; width: 100%;">
 				<tbody>
 				<tr><th><h4>Nombre: </h4></th> <th><h5><%= u.getEmpresa().getNombre() %></h5></th></tr>
 				<tr><th><h4>Dirección: </h4></th> <th><h5 id="valorDireccion"><%= u.getEmpresa().getDireccion() %></h5></th></tr>
