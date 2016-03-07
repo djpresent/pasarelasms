@@ -13,16 +13,36 @@
 	<SCRIPT type=text/javascript>
 	
 			function obtenerDatos(el) {
-				document.getElementById("idServicio").value= el.parentNode.parentNode.cells[0].textContent;
+			
+				document.getElementById("divCarga").style.display = 'none';
+				document.getElementById("divFormS").style.display = 'block';
+				
+				
+				
+			document.getElementById("divEmpresaS").style.display = 'block';
+			document.getElementById("divServicioS").style.display = 'block';
+				
+			document.getElementById("idServicio").value= el.parentNode.parentNode.cells[0].textContent;
 			document.getElementById("servicio").value= el.parentNode.parentNode.cells[1].textContent;
+			document.getElementById("serviciotexto").value= el.parentNode.parentNode.cells[1].textContent;
 			document.getElementById("empresa").value = el.parentNode.parentNode.cells[2].textContent;
+			document.getElementById("empresatexto").value = el.parentNode.parentNode.cells[2].textContent;
 			document.getElementById("limite").value = el.parentNode.parentNode.cells[3].textContent;
 			document.getElementById("costo").value = el.parentNode.parentNode.cells[4].textContent;
-
-			document.getElementById("divempresa").style.display = 'none';
-			document.getElementById("divservicio").style.display = 'none';
 			
-			if(el.parentNode.parentNode.cells[8].textContent == "Activo")
+			document.getElementById("divempresa").style.display = 'none';
+			document.getElementById("divservicio").style.display = 'none';	
+			
+			try {
+				document.getElementById("divlimite").style.display = 'none';
+			}
+			catch(err) {
+			   
+			}
+			
+			
+			
+			if(el.parentNode.parentNode.cells[5].textContent == "Activo")
 			 	document.getElementById("estado").value = 1 ;
 			else
 				document.getElementById("estado").value = 0 ;
@@ -30,10 +50,36 @@
 			
 			}
 			
+			function obtenerDCarga(el) {
+				document.getElementById("divCarga").style.display = 'block';
+				document.getElementById("divFormS").style.display = 'none';
+				
+				document.getElementById("idServicio").value= el.parentNode.parentNode.cells[0].textContent;
+				document.getElementById("servicioCarga").value= el.parentNode.parentNode.cells[1].textContent;
+				document.getElementById("empresaCarga").value = el.parentNode.parentNode.cells[2].textContent;
+
+				
+				
+				
+				}
+			
 			function liberar(){
+				
 				
 				document.getElementById("divempresa").style.display = 'block';
 				document.getElementById("divservicio").style.display = 'block';
+				document.getElementById("divEmpresaS").style.display = 'none';
+				document.getElementById("divServicioS").style.display = 'none';
+			}
+			
+			function liberarC(){
+				document.getElementById("divFormS").style.display = 'block';
+				document.getElementById("divempresa").style.display = 'block';
+				document.getElementById("divservicio").style.display = 'block';
+				
+				document.getElementById("divEmpresaS").style.display = 'none';
+				document.getElementById("divServicioS").style.display = 'none';
+				document.getElementById("divCarga").style.display = 'none';
 			}
 			
 			function validar(){
@@ -41,6 +87,22 @@
 				if(document.getElementById("empresa").value =="noempresa" && document.getElementById("servicio").value =="noservicio" ){
 					
 					alert("No hay información suficiente para continuar. Revise sus selecciones.");
+				}
+				
+			}
+			
+			function validarC(){
+				
+				if(document.getElementById("empresaCarga").value.lenght>0 && document.getElementById("servicioCarga").value.lenght>0){
+					alert("No hay información suficiente para continuar. Revise sus selecciones.");
+					return false;
+				}else{
+					if(document.getElementById("cupoCarga").value>0){
+						return true;
+					}else{
+						return false;
+						alert("No hay información suficiente para continuar. Revise sus selecciones.");
+					}
 				}
 				
 			}
@@ -184,7 +246,6 @@ ResultSet rs = conn.createStatement().executeQuery(
 				<th>ID Servicio</th>
 				<th>Descripción</th>
 				<th>Empresa</th>
-				<th>Límite mensual</th>
 				<th>Disponible</th>
 				<th>Precio / Transacción</th>
 				<th>Estado</th>
@@ -207,11 +268,11 @@ ResultSet rs = conn.createStatement().executeQuery(
 					<td><%= id %></td>
 					<td><%= servicio %></td>
 					<td><%= empresa %></td>
-					<td><%= limite %></td>
 					<td><%= disponible %></td>
 					<td><%= costo %></td>
 					<td><%= est %></td>
 					<td><button class="btnEditar" type="button" onclick="obtenerDatos(this);" >Editar</button></td>
+					<td><button class="btnCargar" type="button" onclick="obtenerDCarga(this);" >Cargar</button></td>
 				</tr>
 				<%
 				}
@@ -223,10 +284,23 @@ ResultSet rs = conn.createStatement().executeQuery(
 				</tbody>
 				</table>
 				
-				<h4>Asignación de Servicio a Empresas</h4>
+				<h4>Servicios a Empresas</h4>
+				<div id="divFormS">
 				<form action="/asignarServicio" method="post" onsubmit="validar()" class="form-horizontal">
 					 <div><input type="hidden" name="idServicio" id="idServicio" required="required"></input></div>
-				   
+				   	 <div class="form-group" id="divEmpresaS" style="display:none;">
+						<label for="empresatexto" class="col-sm-2 control-label"> Empresa: </label> 
+						<div class="col-sm-10">
+					 		<input type="text" id="empresatexto" name="empresatexto"  required="required" disabled ></input>
+					 	</div>
+					 </div>
+					 
+					 <div class="form-group" id="divServicioS" style="display:none;" >
+						<label for="serviciotexto" class="col-sm-2 control-label"> Servicio: </label> 
+						<div class="col-sm-10">
+					  		<input type="text" id="serviciotexto" name="serviciotexto" required="required" disabled></input>
+					  	</div>
+					</div>
 										
 					<%ResultSet rs1 = conn.createStatement().executeQuery("SELECT * FROM empresa where estado=1");%>
 					
@@ -260,8 +334,8 @@ ResultSet rs = conn.createStatement().executeQuery(
 					    </div>
 					</div>
 					
-				    <div class="form-group">
-						<label for="limite" class="col-sm-2 control-label"> Límite mensual: </label> 
+				    <div class="form-group divlimite">
+						<label for="limite" class="col-sm-2 control-label"> Cupo disponible: </label> 
 						<div class="col-sm-10">
 						<input type="number" name="limite" id="limite" class="form-control" required="required"></input>
 						</div>
@@ -293,6 +367,41 @@ ResultSet rs = conn.createStatement().executeQuery(
 				    	<input type="reset" class="btn btn-default btnCancelar" value="Cancelar" onclick="liberar()"/>
 				    </div>
 				  </form>
+				  
+				  </div>
+				  
+				  <div id="divCarga" style="display:none;">
+				  <form action="/cargarServicio" method="post" onsubmit="validarC()" class="form-horizontal">
+					 <div><input type="hidden" name="idServicio" id="idServicio" required="required"></input></div>
+					 
+					 <div class="form-group">
+						<label for="empresaCarga" class="col-sm-2 control-label"> Empresa: </label> 
+						<div class="col-sm-10">
+					 		<input type="text" id="empresaCarga" name="empresaCarga"  required="required" disabled ></input>
+					 	</div>
+					 </div>
+					 
+					 <div class="form-group">
+						<label for="servicioCarga" class="col-sm-2 control-label"> Servicio: </label> 
+						<div class="col-sm-10">
+					  		<input type="text" id="servicioCarga" name="servicioCarga" required="required" disabled></input>
+					  	</div>
+					</div>
+						
+				    <div class="form-group">
+						<label for="agregar" class="col-sm-2 control-label"> Cupo a agregar: </label> 
+						<div class="col-sm-10">
+						<input type="number" name="cupoCarga" id="cupoCarga" class="form-control" required="required" ></input>
+						</div>
+					</div>
+					
+					
+				    <div class="col-sm-offset-2">
+				    	<input type="submit" class="btn btn-primary"  value="Guardar"/>
+				    	<input type="reset" class="btn btn-default btnCancelar" value="Cancelar" onclick="liberarC()"/>
+				    </div>
+				  </form>
+				  </div>
 				  
 				  <%
 				  if(session.getAttribute("updateServEmp") != null){ 

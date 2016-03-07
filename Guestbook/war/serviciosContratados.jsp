@@ -181,8 +181,7 @@ if(u.getTipo().getId() == 3){
 				<tr>
 				<th >ID Servicio</th>
 				<th >Descripción</th>
-				<th >Límite mensual</th>
-				<th >Disponible</th>
+				<th >Cupo Disponible</th>
 				
 				<%if (u.getTipo().getId()<3){ %>
 				
@@ -223,7 +222,6 @@ if(u.getTipo().getId() == 3){
 				<tr>
 					<td><%= id %></td>
 					<td><%= servicio %></td>
-					<td><%= limite %></td>
 					<td><%= disponible %></td>
 					
 					<%if (u.getTipo().getId() < 3){ %>
