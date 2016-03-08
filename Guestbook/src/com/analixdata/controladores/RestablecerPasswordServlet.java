@@ -22,7 +22,8 @@ public class RestablecerPasswordServlet extends HttpServlet {
 	
 	@Override
 	  public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-	    String url = null;
+		resp.setContentType("text/html;charset=UTF-8");
+		String url = null;
 	    
 	    //HttpSession session = req.getSession();
         //session = req.getSession();
@@ -92,7 +93,7 @@ public class RestablecerPasswordServlet extends HttpServlet {
 		        	  //session.setAttribute("confCambioC", 2);
 		        	  RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.jsp");
 			            
-			            out.println("<div class=\"alert alert-danger\"  style=\"text-align: center;\"><strong>Fallo al actualizar su contraseña. Comuniquese con ANALIXDATA</div>	");
+			            out.println("<div class=\"alert alert-danger\"  style=\"text-align: center;\"><strong>Fallo al actualizar su contraseña. Comuniquese con ANALIXDATA "+stmt+"  "+email+" </div>	");
 	       		
 						try {
 							rd.include(req, resp);

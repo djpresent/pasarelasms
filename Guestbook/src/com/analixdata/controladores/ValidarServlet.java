@@ -43,14 +43,24 @@ public class ValidarServlet extends HttpServlet {
 		}
 		else
 		{
-			HttpSession session = req.getSession();
-			session.setAttribute("usuario", u2);
-			
-			session.setMaxInactiveInterval(30*60);
-            Cookie userName = new Cookie ("usuario",u2.getNombres()+" "+u2.getApellidos());
-            userName.setMaxAge(30*60);
-            resp.addCookie(userName);			
-			resp.sendRedirect("index.jsp");
+			if (u2.getEstado()!=0)
+			{
+				HttpSession session = req.getSession();
+				session.setAttribute("usuario", u2);
+				
+				session.setMaxInactiveInterval(30*60);
+	            Cookie userName = new Cookie ("usuario",u2.getNombres()+" "+u2.getApellidos());
+	            userName.setMaxAge(30*60);
+	            resp.addCookie(userName);			
+				resp.sendRedirect("index.jsp");
+			}
+			else
+			{
+				RequestDispatcher rd = getServletContext().getRequestDispatcher("/login.jsp");
+	            PrintWriter out= resp.getWriter();
+	            out.println("<div class=\"alert alert-danger\"  style=\"text-align: center;\"><strong>Error! </strong>Su usuario se encuentra inactivo. Por favor, comuniquese con su Administrador</div>	");
+	            rd.include(req, resp);
+			}
 		}	
 		
 		
