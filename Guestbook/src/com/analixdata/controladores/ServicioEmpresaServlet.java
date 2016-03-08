@@ -59,7 +59,7 @@ public class ServicioEmpresaServlet extends HttpServlet {
 	        
 	        ResultSet rs = conn.createStatement().executeQuery("SELECT idempresa FROM empresa where nombre ='"+empresa+"';");
         	
-        	if(rs.next()){
+        	if(rs.first()){
         		
         		 idEmpresa=Integer.toString(rs.getInt("idempresa"));
         		 
@@ -96,7 +96,7 @@ public class ServicioEmpresaServlet extends HttpServlet {
 	          
 	        } else {
 	        	
-	        	ResultSet rs3 = conn.createStatement().executeQuery("SELECT limite,disponible FROM servicio_empresa where idservicio ="+idServicio+";");
+	        	ResultSet rs3 = conn.createStatement().executeQuery("SELECT limite,disponible FROM servicio_empresa where idservicio ="+idServicio+" and idempresa="+idEmpresa+";");
 	        	
 	        	System.out.println("idServicio "+idServicio);
 	        	

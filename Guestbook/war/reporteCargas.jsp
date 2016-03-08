@@ -4,17 +4,25 @@
 <%@ page import="com.google.appengine.api.utils.SystemProperty" %>
 <%@ page import="com.analixdata.modelos.Usuario" %>
 <%@ page import="com.analixdata.modelos.Servicio" %>
-<%@ page import="com.analixdata.modelos.Transaccion" %>
+<%@ page import="com.analixdata.modelos.Carga" %>
 
 
 <html>
 <head>
 	  	<link rel="stylesheet" type="text/css" href="css/bootstrap.css">
 	  	<link rel="stylesheet" type="text/css" href="css/estilos.css">
+	  	
 	    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
 	    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
 	  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
 	  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+	  <script src="js/jquery.table2excel.js"></script>
+	  
+	  <script type="text/javascript" src="js/tableExport.js"></script>
+	  <script type="text/javascript" src="js/jquery.base64.js"></script>
+	  <script type="text/javascript" src="js/sprintf.js"></script>
+	  <script type="text/javascript" src="js/jspdf.js"></script>
+	  <script type="text/javascript" src="js/base64.js"></script>
 	  
 	  <script>
 		  $(function() {
@@ -22,35 +30,54 @@
 		    
 		    $( "#fechaHasta" ).datepicker({ dateFormat: 'yy-mm-dd' }).val();
 		  });
-		  
-		  function CreateExcelSheet ()
-			{
-					
-					$(".table2excel").table2excel({
-						exclude: ".noExl",
-						name: "Excel Document Name",
-						filename: "reportes",
-						exclude_img: true,
-						exclude_links: true,
-						exclude_inputs: true
-					});
-				
-			}
-		  
-		  
-		  
+
 	  </script>
 	  
 	  <SCRIPT type=text/javascript>
 	
 	
 		$(function() {
-		    $('#usuario').on('change', function(event) {
+		    $('#rEmpresa').on('change', function(event) {
 		    	document.getElementById("btnContinuarReportes").click();
 		    });
 		});
+	
+		$(function() {
+		    $('#rUsuario').on('change', function(event) {
+		    	document.getElementById("btnContinuarUusuario").click();
+		    });
+		});
+		
+		$("#tablaResultados").table2excel({
+		    exclude: ".excludeThisClass",
+		    name: "Worksheet Name",
+		    filename: "SomeFile" //do not include extension
+		});
+		
+		function CreateExcelSheet ()
+		{
+				
+				$(".table2excel").table2excel({
+					exclude: ".noExl",
+					name: "Excel Document Name",
+					filename: "reporteCargas",
+					exclude_img: true,
+					exclude_links: true,
+					exclude_inputs: true
+				});
+			
+		}
+		
+		function CreatePDF ()
+		{
+			$('#table2excel').tableExport({type:'pdf',escape:'false'});
+				
+			
+		}
 
 	</SCRIPT> 
+	
+	
 	  
     <title>Analixdata Servicios en Línea</title>
   </head>
@@ -62,23 +89,23 @@
 	
   session = request.getSession();
 	Usuario u = (Usuario)session.getAttribute("usuario");
-		
+	
 	if (u==null)
 	{
-			
-	session.setAttribute("error", "error");
-	response.sendRedirect("/login.jsp");
+		
+		session.setAttribute("error", "error");
+		response.sendRedirect("/login.jsp");
+	}
+String userName = null;
+String sessionID = null;
+Cookie[] cookies = request.getCookies();
+if(cookies !=null){
+for(Cookie cookie : cookies){
+if(cookie.getName().equals("usuario")) 
+	userName = cookie.getValue();
+}
+}
 	
-	}
-	String userName = null;
-	String sessionID = null;
-	Cookie[] cookies = request.getCookies();
-	if(cookies !=null){
-	for(Cookie cookie : cookies){
-	if(cookie.getName().equals("usuario")) 
-		userName = cookie.getValue();
-	}
-	}
 	
 	String url = null;
 	if (SystemProperty.environment.value() ==
@@ -93,9 +120,8 @@
 	}
 
 	Connection conn = DriverManager.getConnection(url);
-	//session.setAttribute("idEmpresa", u.getEmpresa().getIdEmpresa());
 	ResultSet rs = conn.createStatement().executeQuery(
-	    "SELECT * FROM usuario where idempresa="+u.getEmpresa().getIdEmpresa()+" and estado =1");
+	    "SELECT * FROM empresa WHERE estado=1");
   	%>
   	
   	<nav class="navbar" >
@@ -117,7 +143,6 @@
   	<div class="container-fluid">
 	  	<div class="row">
 			  	<div class="col-sm-3 col-md-2 sidebar"> 
-			  	<img class="imgpestana" src="imagenes/imgpestana.png"/>
 				    <ul class="nav nav-sidebar">
 							<%  
 						if(u != null){
@@ -132,7 +157,6 @@
 								<li ><a href="servicioEmpresa.jsp"><h5>Servicios a empresas</h5></a></li>
 								<li><a href="servicioUsuarios.jsp"><h5>Servicios a Usuarios</h5></a></li>
 									
-										
 									<li><a href="mensajeria.jsp"><h5><img class="icomenu" src="imagenes/icomensajeria.png"/>Mensajería</h5></a></li>
 								<li><a href="reportes.jsp"><h5><img class="icomenu" src="imagenes/icoreportes.png"/>Reporte SMS</h5></a></li>
 									<li><a href="reporteCargas.jsp"><h5><img class="icomenu" src="imagenes/icoreportes.png"/>Reporte Cargas </h5></a></li>
@@ -188,10 +212,9 @@
 				</div>
 		
 			<div class="col-sm-9 col-md-9 main">
-				<h1 class="page-header">Reportes <img style="padding-left:10px;" class="icoheader" src="imagenes/icoreloj.png"/><img class="icoheader" src="imagenes/icopastel.png"/><img class="icoheader" src="imagenes/icoaudifonos.png"/><img class="icoheader" src="imagenes/icodescarga.png"/></h1>
+				<h1 class="page-header">Reportes<img style="padding-left:10px;" class="icoheader" src="imagenes/icoreloj.png"/><img class="icoheader" src="imagenes/icopastel.png"/><img class="icoheader" src="imagenes/icoaudifonos.png"/><img class="icoheader" src="imagenes/icodescarga.png"/></h1>
 				
-				<form action="/reporteEmpresasTransacciones">
-					
+				<form action="/reporteCargas">
 					<div class="row">
         				<div class="col-xs-3">
         					<div class="form-group">
@@ -237,52 +260,94 @@
 							%>		
 							</div>
         				</div>
-        				
-        				<div class="col-xs-3">
-        					<div class="form-group">
-        					<label for="usuario">Usuarios</label> 
-								<select class="form-control" name=usuario id="usuario" >
-								<option value="nousuario" >Seleccione un usuario...</option>
-									<% 
-										while (rs.next()) {
-										String usuario = rs.getString("nombres")+" "+rs.getString("apellidos");
-										String userid= rs.getString("idusuario") ;
-										
-										//System.out.println(session.getAttribute("idusuario"));
-										if(!(session.getAttribute("idusuario") == null)){
-												
-												if( userid.equals(session.getAttribute("idusuario"))){%>
-													<option value=<%= rs.getInt("idusuario") %> selected ><%= usuario %></option>
-												<%}else{%>
-												<option value=<%= rs.getInt("idusuario") %>><%= usuario %></option>
-										<%	
-												}
-											}else{%>
-											<option value=<%= rs.getInt("idusuario") %>><%= usuario %></option>
-										<%}}
-										%>
-									</select>
-									<input type="submit" class="oculto" value="Continuar" name="btnContinuarReportes" id="btnContinuarReportes"/>
-        					</div>
-        				</div>
         				<div class="col-xs-3 vert-offset-top-1-8">
         					<div class="form-group">
         						<label for="btnConsultar"></label> 
         						<input class="btn btn-default" type="submit" value="Consultar" name="btnConsultar"/>
         					</div>
         				</div>
+        			</div>
+	
+        			<div class="row">
+        				<div class="col-xs-3">
+        					<div class="form-group">
+        						<label for="rEmpresa">Empresa</label>
+        						<select class="form-control" name="reporteEmpresa" id="rEmpresa" >
+									<option value="noempresa" >Seleccione una empresa....</option>	
+									
+									<% 
+										while (rs.next()) {
+										String empresa = rs.getString("nombre");
+										
+										if(!(session.getAttribute("empresa") == null)){
+												
+												if(empresa.equals(session.getAttribute("empresa"))){%>
+													<option value="<%= empresa %>" selected ><%= empresa %></option>
+												<%}else{%>
+												<option value="<%= empresa %>"><%= empresa %></option>
+										<%	
+												}
+											}else{%>
+											<option value="<%= empresa %>"><%= empresa %></option>
+										<%}}
+										%>
+								</select>
+								<input type="submit" class="oculto" value="Continuar" name="btnContinuarReportes" id="btnContinuarReportes"/>
+        					</div>
+        				</div>
         				
+        				<div class="col-xs-3">
+        					<div class="form-group">
+        						<label for="rUsuario">Usuarios</label>
+        							<%
+
+									if(!(session.getAttribute("listaUsuarios") == null))
+									{
+										
+									List<Usuario> lista= (List<Usuario>)session.getAttribute("listaUsuarios");
+							
+									%>
+									
+									<select class="form-control" name="reporteUsuario" id="rUsuario" >
+									<option value="nousuario" >Seleccione un usuario....</option>	
+									<% 
+									
+									/*if (session.getAttribute("usu").equals("nousuario"))
+									{
+										System.out.println(session.getAttribute("entroooo"));
+										session.setAttribute("usu", null);
+									}*/
+									for( Usuario usuario:lista) 
+									{
+										//System.out.println("Dentro del for "+session.getAttribute("usu"));
+										//if(!(session.getAttribute("usu") == null) )
+										//{
+									%>
+											
+									<option value=<%= usuario.getId() %>><%= usuario.getNombres() %></option>
+										
+										
+									<%
+									}
+									%>
+									
+									</select>
+									<input type="submit" class="oculto" value="ContinuarUs" name="btnContinuarUsuarios" id="btnContinuarUsuarios"/>
+									<% 	
+									}
+									%>	
+        					</div>
+        				</div>
         			</div>
 				</form>
-				
-				
+	
 			<div class="table-responsive">
 
 				<%
-					if(!(session.getAttribute("transacciones") == null))
+					if(!(session.getAttribute("cargas") == null))
 					{
-						List <Transaccion> transacciones = (List <Transaccion>)session.getAttribute("transacciones");
-						if (transacciones.size()>0)
+						List <Carga> cargas = (List <Carga>)session.getAttribute("cargas");
+						if (cargas.size()>0)
 						{
 				%>
 						
@@ -291,36 +356,32 @@
 						<table class="table table-bordered table-condensed  table2excel" id="table2excel" style="table-layout: fixed; font-size: 85%; word-wrap: break-word;">
 						<tr>
 							<td style="width: 6%;">ID</td>
+							<td style="width: 8%;">Empresa</td>
+							<td style="width: 8%;">Servicio</td>
+							<td style="width: 8%;">Usuario</td>
+							<td style="width: 6%;">Cantidad</td>
 							<td style="width: 8%;">Fecha</td>
 							<td style="width: 7%;">Hora</td>
-							<td style="width: 10%;">Código de retorno</td>
-							<td style="width: 9%;">Plataforma</td>
-							<td style="width: 10%;">Celular</td>
-							<td>Mensaje</td>
-							<td style="width: 10%;">Empresa</td>
-							<td style="width: 9%;">Usuario</td>
-							<td style="width: 8%;">Servicio</td>
 
 						</tr>
 					<% 
-						for (int i =0;i< transacciones.size();i++)
+						for (int i =0;i< cargas.size();i++)
 						{
 							%>
 							<tr>
-								<td><%= transacciones.get(i).getId() %></td>
-								<td><%= transacciones.get(i).getFecha() %></td>
-								<td><%= transacciones.get(i).getHora() %></td>
-								<td> <%= transacciones.get(i).getCodRetorno() %></td>
-								<td></td>
-								<td><%= transacciones.get(i).getCelular() %></td>
-								<td><%= transacciones.get(i).getMensaje() %></td>
-								<td><%= transacciones.get(i).getNombreEmpresa() %></td>
-								<td><%= transacciones.get(i).getNombreUsuario() %></td>
-								<td><%= transacciones.get(i).getNombreServicio() %></td>
+								<td><%= cargas.get(i).getId() %></td>
+								<td><%= cargas.get(i).getEmpresa() %></td>
+								<td> <%= cargas.get(i).getServicio() %></td>
+								<td><%= cargas.get(i).getUsuario() %></td>
+								<td><%= cargas.get(i).getCantidad() %></td>
+								<td><%= cargas.get(i).getFecha() %></td>
+								<td><%= cargas.get(i).getHora() %></td>
 							</tr>
 							<% 
 						}
 						%>
+						 
+						 
 						</table>
 						<%
 						}
@@ -340,7 +401,6 @@
 				%>
 				
 			</div>
-			
 			
 			</div>	
 	

@@ -32,15 +32,8 @@
 			
 			document.getElementById("divempresa").style.display = 'none';
 			document.getElementById("divservicio").style.display = 'none';	
-			
-			try {
-				document.getElementById("divlimite").style.display = 'none';
-			}
-			catch(err) {
-			   
-			}
-			
-			
+			document.getElementById("divlimite").style.display = 'none';
+				
 			
 			if(el.parentNode.parentNode.cells[5].textContent == "Activo")
 			 	document.getElementById("estado").value = 1 ;
@@ -54,9 +47,9 @@
 				document.getElementById("divCarga").style.display = 'block';
 				document.getElementById("divFormS").style.display = 'none';
 				
-				document.getElementById("idServicio").value= el.parentNode.parentNode.cells[0].textContent;
+				document.getElementById("idServicioCarga").value= el.parentNode.parentNode.cells[0].textContent;
 				document.getElementById("servicioCarga").value= el.parentNode.parentNode.cells[1].textContent;
-				document.getElementById("empresaCarga").value = el.parentNode.parentNode.cells[2].textContent;
+				document.getElementById("empresaC").value = el.parentNode.parentNode.cells[2].textContent;
 
 				
 				
@@ -93,19 +86,21 @@
 			
 			function validarC(){
 				
-				if(document.getElementById("empresaCarga").value.lenght>0 && document.getElementById("servicioCarga").value.lenght>0){
+				if(document.getElementById("empresaC").value.lenght>0 && document.getElementById("servicioCarga").value.lenght>0){
 					alert("No hay información suficiente para continuar. Revise sus selecciones.");
 					return false;
 				}else{
 					if(document.getElementById("cupoCarga").value>0){
 						return true;
 					}else{
+						alert("No hay información suficiente para continuar.");
 						return false;
-						alert("No hay información suficiente para continuar. Revise sus selecciones.");
+						
 					}
 				}
 				
 			}
+			
 		
 		
 	</SCRIPT> 
@@ -188,8 +183,10 @@ ResultSet rs = conn.createStatement().executeQuery(
 								<li ><a href="servicioEmpresa.jsp"><h5>Servicios a empresas</h5></a></li>
 								<li><a href="servicioUsuarios.jsp"><h5>Servicios a Usuarios</h5></a></li>
 									
+									
 									<li><a href="mensajeria.jsp"><h5><img class="icomenu" src="imagenes/icomensajeria.png"/>Mensajería</h5></a></li>
-									<li><a href="reportes.jsp"><h5><img class="icomenu" src="imagenes/icoreportes.png"/>Reportes</h5></a></li>
+								<li><a href="reportes.jsp"><h5><img class="icomenu" src="imagenes/icoreportes.png"/>Reporte SMS</h5></a></li>
+									<li><a href="reporteCargas.jsp"><h5><img class="icomenu" src="imagenes/icoreportes.png"/>Reporte Cargas </h5></a></li>
 									
 								<%}
 							
@@ -291,14 +288,14 @@ ResultSet rs = conn.createStatement().executeQuery(
 				   	 <div class="form-group" id="divEmpresaS" style="display:none;">
 						<label for="empresatexto" class="col-sm-2 control-label"> Empresa: </label> 
 						<div class="col-sm-10">
-					 		<input type="text" id="empresatexto" name="empresatexto"  required="required" disabled ></input>
+					 		<input type="text" id="empresatexto" name="empresatexto"  required="required" readonly ></input>
 					 	</div>
 					 </div>
 					 
 					 <div class="form-group" id="divServicioS" style="display:none;" >
 						<label for="serviciotexto" class="col-sm-2 control-label"> Servicio: </label> 
 						<div class="col-sm-10">
-					  		<input type="text" id="serviciotexto" name="serviciotexto" required="required" disabled></input>
+					  		<input type="text" id="serviciotexto" name="serviciotexto" required="required" readonly></input>
 					  	</div>
 					</div>
 										
@@ -334,7 +331,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 					    </div>
 					</div>
 					
-				    <div class="form-group divlimite">
+				    <div class="form-group" id="divlimite">
 						<label for="limite" class="col-sm-2 control-label"> Cupo disponible: </label> 
 						<div class="col-sm-10">
 						<input type="number" name="limite" id="limite" class="form-control" required="required"></input>
@@ -372,19 +369,19 @@ ResultSet rs = conn.createStatement().executeQuery(
 				  
 				  <div id="divCarga" style="display:none;">
 				  <form action="/cargarServicio" method="post" onsubmit="validarC()" class="form-horizontal">
-					 <div><input type="hidden" name="idServicio" id="idServicio" required="required"></input></div>
+					 <div><input type="hidden" name="idServicioCarga" id="idServicioCarga" required="required"></input></div>
 					 
 					 <div class="form-group">
-						<label for="empresaCarga" class="col-sm-2 control-label"> Empresa: </label> 
+						<label for="empresaC" class="col-sm-2 control-label"> Empresa: </label> 
 						<div class="col-sm-10">
-					 		<input type="text" id="empresaCarga" name="empresaCarga"  required="required" disabled ></input>
+					 		<input type="text" id="empresaC" name="empresaC"  required="required" readonly ></input>
 					 	</div>
 					 </div>
 					 
 					 <div class="form-group">
 						<label for="servicioCarga" class="col-sm-2 control-label"> Servicio: </label> 
 						<div class="col-sm-10">
-					  		<input type="text" id="servicioCarga" name="servicioCarga" required="required" disabled></input>
+					  		<input type="text" id="servicioCarga" name="servicioCarga" required="required" readonly></input>
 					  	</div>
 					</div>
 						
@@ -412,7 +409,7 @@ ResultSet rs = conn.createStatement().executeQuery(
 									<div class="alert alert-success">
 									  Acción completada exitosamente.
 									</div>
-						
+							
 								<%
 								
 								session.setAttribute("idServicio", null);
@@ -423,10 +420,12 @@ ResultSet rs = conn.createStatement().executeQuery(
 									<div class="alert alert-danger">
 									    No fue posible completar la acción. Por favor intentar nuevamente o comunicarse con Analixdata.
 									</div>
+									liberarV();
 								<%
 							  }
 							  
 							  session.setAttribute("updateServEmp", null);
+							  
 							  
 						  } %>
 			</div>	

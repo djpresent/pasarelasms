@@ -157,8 +157,10 @@ if(cookie.getName().equals("usuario"))
 								<li ><a href="servicioEmpresa.jsp"><h5>Servicios a empresas</h5></a></li>
 								<li><a href="servicioUsuarios.jsp"><h5>Servicios a Usuarios</h5></a></li>
 									
+										
 									<li><a href="mensajeria.jsp"><h5><img class="icomenu" src="imagenes/icomensajeria.png"/>Mensajería</h5></a></li>
-									<li><a href="reportes.jsp"><h5><img class="icomenu" src="imagenes/icoreportes.png"/>Reportes</h5></a></li>
+								<li><a href="reportes.jsp"><h5><img class="icomenu" src="imagenes/icoreportes.png"/>Reporte SMS</h5></a></li>
+									<li><a href="reporteCargas.jsp"><h5><img class="icomenu" src="imagenes/icoreportes.png"/>Reporte Cargas </h5></a></li>
 									
 								<%}
 							
@@ -271,7 +273,7 @@ if(cookie.getName().equals("usuario"))
         				<div class="col-xs-3">
         					<div class="form-group">
         						<label for="rEmpresa">Empresa</label>
-        						<select class="form-control" name=reporteEmpresa id="rEmpresa" >
+        						<select class="form-control" name="reporteEmpresa" id="rEmpresa" >
 									<option value="noempresa" >Seleccione una empresa....</option>	
 									
 									<% 
@@ -281,13 +283,13 @@ if(cookie.getName().equals("usuario"))
 										if(!(session.getAttribute("empresa") == null)){
 												
 												if(empresa.equals(session.getAttribute("empresa"))){%>
-													<option value=<%= empresa %> selected ><%= empresa %></option>
+													<option value="<%= empresa %>" selected ><%= empresa %></option>
 												<%}else{%>
-												<option value=<%= empresa %>><%= empresa %></option>
+												<option value="<%= empresa %>"><%= empresa %></option>
 										<%	
 												}
 											}else{%>
-											<option value=<%= empresa %>><%= empresa %></option>
+											<option value="<%= empresa %>"><%= empresa %></option>
 										<%}}
 										%>
 								</select>
@@ -307,7 +309,7 @@ if(cookie.getName().equals("usuario"))
 							
 									%>
 									
-									<select class="form-control" name=reporteUsuario id="rUsuario" >
+									<select class="form-control" name="reporteUsuario" id="rUsuario" >
 									<option value="nousuario" >Seleccione un usuario....</option>	
 									<% 
 									
