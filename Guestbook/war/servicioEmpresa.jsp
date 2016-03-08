@@ -420,7 +420,16 @@ ResultSet rs = conn.createStatement().executeQuery(
 									<div class="alert alert-danger">
 									    No fue posible completar la acción. Por favor intentar nuevamente o comunicarse con Analixdata.
 									</div>
-									liberarV();
+									
+								<%
+							  }
+							  
+							  if(session.getAttribute("updateServEmp").toString().equals("3")){
+								  %>
+									<div class="alert alert-danger">
+									   Analixdata no posee cupo suficiente para completar la acción.
+									</div>
+									
 								<%
 							  }
 							  

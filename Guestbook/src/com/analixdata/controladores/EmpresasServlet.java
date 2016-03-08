@@ -85,6 +85,16 @@ public class EmpresasServlet extends HttpServlet {
 		          int success = 2;
 		          success = stmt.executeUpdate();
 		          if (success == 1) {
+		        	  
+		        	  if(Integer.parseInt(estado)==0){
+		        		  String statement1 = "UPDATE usuario SET estado=0 WHERE idempresa=?";
+				          PreparedStatement stmt1 = conn.prepareStatement(statement1);
+
+				          stmt1.setInt(1, Integer.parseInt(id));
+				          stmt1.executeUpdate();
+		        		  
+		        	  }
+		        	  
 		        	  session.setAttribute("updateEmpresa", 2);
 		          } else if (success == 0) {
 		        	  session.setAttribute("updateEmpresa", 3);

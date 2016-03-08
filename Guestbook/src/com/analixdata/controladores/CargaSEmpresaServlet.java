@@ -93,21 +93,37 @@ public class CargaSEmpresaServlet extends HttpServlet {
 	        		 
 	        	}
 	        	
+	        	
+	        	ResultSet rs4 = conn.createStatement().executeQuery("SELECT disponible FROM servicio_empresa where idservicio ="+idServicio+" and idempresa=1;");
+
+	        	
+	        	int dispAnalix=0;
+	        	
+	        	if(rs4.first()){
+	        		
+	        		dispAnalix=rs4.getInt("disponible");
+	        		 
+	        	}
+	        	
+	        	
 	        
-	        	System.out.println("limite anterior "+limiteact);
+	       
 	        		disponible=Integer.parseInt(cupo)+disponible;
 	        		limiteact=disponible;
 	        	
-	        		System.out.println("limite "+limiteact);
+	        	if(dispAnalix>=Integer.parseInt(cupo)){
+	        			
+	        		
+	        		
 	        		
 	        		Calendar cal = Calendar.getInstance(); // creates calendar
     	    		
     		        cal.add(Calendar.HOUR_OF_DAY, -5); // adds one hour
 
     		         		        
-    		       
+    		     
 	        		
-	        	String statement = "UPDATE servicio_empresa SET limite=? , disponible=? where idservicio=? and idempresa=?";
+	        	String statement = "UPDATE servicio_empresa SET limite=? , disponible=? where idservicio=? and idempresa=?;";
 		          PreparedStatement stmt = conn.prepareStatement(statement);
 		      
 		          stmt.setInt(1, limiteact);
@@ -122,7 +138,17 @@ public class CargaSEmpresaServlet extends HttpServlet {
 		          
 		          success = stmt.executeUpdate();
 		          
-		         System.out.println("success "+success);
+		          int nuevoCupo=dispAnalix-Integer.parseInt(cupo);
+		          
+		          statement = "UPDATE servicio_empresa SET limite=? , disponible=? where idservicio=? and idempresa=1;";
+		          stmt = conn.prepareStatement(statement);
+		      
+		          stmt.setInt(1, nuevoCupo);
+		          stmt.setInt(2, nuevoCupo);
+		          stmt.setInt(3, Integer.parseInt(idServicio));
+
+		          success = stmt.executeUpdate();
+		          
 		          
 		          if (success == 1) {
 		        	  	  String fecha= new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()).toString();
@@ -154,6 +180,13 @@ public class CargaSEmpresaServlet extends HttpServlet {
 		        	  
 		          } else if (success == 0) {
 		        	  session.setAttribute("updateServEmp", 2);
+		          }
+		          
+		         
+		          } else{
+		        	  
+		        	  System.out.println("No hay cupo");
+		        	  session.setAttribute("updateServEmp", 3);
 		          }
 	          
 	        }
