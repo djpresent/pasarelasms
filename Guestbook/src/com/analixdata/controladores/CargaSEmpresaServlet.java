@@ -19,7 +19,7 @@ public class CargaSEmpresaServlet extends HttpServlet {
 	    String url = null;
 	    
 	    resp.setContentType("text/html;charset=UTF-8");
-		HttpSession session = req.getSession();
+		HttpSession session = req.getSession();  
         session = req.getSession();
         Usuario u = (Usuario)session.getAttribute("usuario");   
         if (u!=null)
