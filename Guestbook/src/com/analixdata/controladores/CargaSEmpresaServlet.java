@@ -110,8 +110,16 @@ public class CargaSEmpresaServlet extends HttpServlet {
 	       
 	        		disponible=Integer.parseInt(cupo)+disponible;
 	        		limiteact=disponible;
+	        		
+	        		int esAnalix=0;
+		        	
+		        	if(Integer.parseInt(idEmpresa)==1){
+		        		esAnalix=1;
+		        		System.out.println("Es analix");
+		        	}
+		        	
 	        	
-	        	if(dispAnalix>=Integer.parseInt(cupo)){
+	        	if(dispAnalix>=Integer.parseInt(cupo) || esAnalix==1){
 	        			
 	        		
 	        		
@@ -136,8 +144,10 @@ public class CargaSEmpresaServlet extends HttpServlet {
 		          System.out.println("Consulta "+stmt.toString());
 		          
 		          
+		          
 		          success = stmt.executeUpdate();
 		          
+		          if(esAnalix==0){
 		          int nuevoCupo=dispAnalix-Integer.parseInt(cupo);
 		          
 		          statement = "UPDATE servicio_empresa SET limite=? , disponible=? where idservicio=? and idempresa=1;";
@@ -148,7 +158,7 @@ public class CargaSEmpresaServlet extends HttpServlet {
 		          stmt.setInt(3, Integer.parseInt(idServicio));
 
 		          success = stmt.executeUpdate();
-		          
+		          }
 		          
 		          if (success == 1) {
 		        	  	  String fecha= new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()).toString();

@@ -2,6 +2,8 @@ package com.analixdata.controladores;
 
 import java.io.*;
 import java.sql.*;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -76,7 +78,24 @@ public class ServicioEmpresaServlet extends HttpServlet {
 	        		 
 	        	}
 	        	
-	        
+	        	ResultSet rs4 = conn.createStatement().executeQuery("SELECT disponible FROM servicio_empresa where idservicio ="+idServicio+" and idempresa=1;");
+
+	        	
+	        	int dispAnalix=0;
+	        	
+	        	if(rs4.first()){
+	        		
+	        		dispAnalix=rs4.getInt("disponible");
+	        		 
+	        	}
+	        	
+	        	int esAnalix=0;
+	        	
+	        	if(Integer.parseInt(idEmpresa)==1){
+	        		esAnalix=1;
+	        	}
+	        	
+	        	if(dispAnalix>=Integer.parseInt(limite) || esAnalix==1){
 	        	
 	        	String statement = "INSERT INTO servicio_empresa (idservicio,idempresa,limite,costotransaccion,estado,disponible) VALUES( ? , ? , ? , ? , ? ,?)";
 		          PreparedStatement stmt = conn.prepareStatement(statement);
@@ -88,11 +107,55 @@ public class ServicioEmpresaServlet extends HttpServlet {
 		          stmt.setString(6, limite);
 		          int success = 2;
 		          success = stmt.executeUpdate();
+		          
+		          if(esAnalix==0){
+		          int nuevoCupo=dispAnalix-Integer.parseInt(limite);
+		          
+		          statement = "UPDATE servicio_empresa SET limite=? , disponible=? where idservicio=? and idempresa=1;";
+		          stmt = conn.prepareStatement(statement);
+		      
+		          stmt.setInt(1, nuevoCupo);
+		          stmt.setInt(2, nuevoCupo);
+		          stmt.setInt(3, Integer.parseInt(idServicio));
+
+		          success = stmt.executeUpdate();
+		          }
+		          
 		          if (success == 1) {
-		            session.setAttribute("updateServEmp", 1);
+		        		Calendar cal = Calendar.getInstance(); // creates calendar
+	    	    		
+	    		        cal.add(Calendar.HOUR_OF_DAY, -5); // adds one hour
+		        	  
+		        	  String fecha= new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()).toString();
+	        	  	  String hora=new SimpleDateFormat("HH:mm:ss").format(cal.getTime()).toString();
+	        	  
+	        	  	  System.out.println("Antes de consulta");
+	        	  	  
+		        	  String statement1 = "INSERT INTO carga_servicio (idempresa,idservicio,idusuario,cantidad,fecha,hora) VALUES( ? , ? , ? , ? , ?, ?)";
+		        	  System.out.println("Luego de consulta");
+		        	  PreparedStatement stmt1 = conn.prepareStatement(statement1);
+		        	  System.out.println("luego de stmt1");
+			          stmt1.setInt(1, Integer.parseInt(idEmpresa));
+			          stmt1.setInt(2, Integer.parseInt(idServicio));
+			          stmt1.setInt(3, u.getId());
+			          stmt1.setInt(4, Integer.parseInt(limite));
+			          stmt1.setString(5, fecha);
+			          stmt1.setString(6, hora);
+			    
+			          	System.out.println(stmt1.toString());
+			          success = stmt1.executeUpdate();
+			          if (success == 1) {
+			            session.setAttribute("updateServEmp", 1);
+			          } else if (success == 0) {
+			        	  session.setAttribute("updateServEmp", 2);
+			          }
+		        	 
 		          } else if (success == 0) {
 		        	  session.setAttribute("updateServEmp", 2);
 		          }
+	        	}else{
+	        		 session.setAttribute("updateServEmp", 3);
+	        	}
 	          
 	        } else {
 	        	
