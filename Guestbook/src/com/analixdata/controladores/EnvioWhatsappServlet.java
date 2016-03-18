@@ -46,7 +46,7 @@ import com.google.appengine.api.utils.SystemProperty;
 
 
 
-public class EnvioMensajesServlet extends HttpServlet {
+public class EnvioWhatsappServlet extends HttpServlet {
 
 	protected void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException,IOException
 	{
@@ -238,37 +238,34 @@ public class EnvioMensajesServlet extends HttpServlet {
 				Connection conn = DriverManager.getConnection(url);
 				int enviados=0;
 				PrintWriter out = resp.getWriter();
-				String cadenaJSON = "{\"Mensaje\":\""+mensaje+"\",";
-				String destinatarios="\"Destinatarios\": [\"";
-				String mensajesp= "\"Mensajes\": [\"";
+				
+				String cadena = "usuario=WAC28572&clave=851663&bloque=";
+				String bloque="";
+				//String destinatarios="\"Destinatarios\": [\"";
+				//String mensajesp= "\"Mensajes\": [\"";
 				
 				String respuesta="";
 				int contador=0;
 				for (int i = 0; i<mensajes.size();i++)
 				{
 					contador++;
-					
+					String idsms="";
 					if (contador<=1000 )
 					{
 						String cel=mensajes.get(i).getCelular();
 					     Matcher mat = pat.matcher(cel);
 					     if (mat.matches() && cel.length()==12) {
-					         
-					         if (i==0)
-								{	
-									destinatarios = destinatarios.concat(mensajes.get(i).getCelular()+"\"");
-									mensajesp = mensajesp.concat(mensajes.get(i).getMensaje()+"\"");
-								}
-								else
-								{
-									destinatarios = destinatarios.concat(",\""+mensajes.get(i).getCelular()+"\"");
-									mensajesp = mensajesp.concat(",\""+mensajes.get(i).getMensaje()+"\"");
-								}
-					         
-					         respuesta="PROCESADO";
+					    	 Calendar cal = Calendar.getInstance(); // creates calendar
+					    	 cal.add(Calendar.HOUR_OF_DAY, -5); // adds one hour
+			    		     String fecha= new SimpleDateFormat("yyyyMMdd").format(cal.getTime()).toString();
+			    		     String hora=new SimpleDateFormat("HHmmss").format(cal.getTime()).toString();
+			    		      idsms = fecha+hora+i;
+					         bloque+=idsms+","+cel+","+mensajes.get(i).getMensaje()+"\r\n";
+					        // System.out.println(cal.toString());
+					        respuesta="PROCESADO";
 					         enviados++;
 					     } else {
-					         System.out.println("NO");
+					         //System.out.println("NO");
 					         respuesta="NUMERO INCORRECTO";
 					     }
 	
@@ -283,32 +280,19 @@ public class EnvioMensajesServlet extends HttpServlet {
 		    		        String fecha= new SimpleDateFormat("yyyy-MM-dd").format(cal.getTime()).toString();
 		    		        String hora=new SimpleDateFormat("HH:mm:ss").format(cal.getTime()).toString();
 		        			
-		    		       
-		    		        
-		        			
-		        			/*if(response.toString().equals("\"Mensaje enviado\"")){
-		        				respuesta="MENSAJE ENVIADO";
-		        				
-		        				
-	
-		        			}
-		        			
-		        			if(response.toString().equals("\"Error al enviar mensaje\"")){
-		        				respuesta="MENSAJE NO ENVIADO";
-		        			
-		        			}*/
+
 		    		        System.out.println("Ingreso antes de la base");
 		    		        
 		    		        
-		        			String statement = "INSERT INTO transaccion (fecha,hora,retorno,plataforma,celular,mensaje,idservicio,idusuario,idempresa) VALUES( ? , ? , ? , ? , ? , ? , ? , ? , ? )";
+		        			String statement = "INSERT INTO twhatsapp (fecha,hora,retorno,idinterno,celular,mensaje,idservicio,idusuario,idempresa) VALUES( ? , ? , ? , ? , ? , ? , ? , ? , ? )";
 		    		          PreparedStatement stmt = conn.prepareStatement(statement);
 		    		          stmt.setString(1, fecha);
 		    		          stmt.setString(2,  hora);
 		    		          stmt.setString(3, respuesta);
-		    		          stmt.setString(4, "FRONTEND");
+		    		          stmt.setString(4, idsms);
 		    		          stmt.setString(5, mensajes.get(i).getCelular());
 		    		          stmt.setString(6, mensajes.get(i).getMensaje());
-		    		          stmt.setInt(7, 1);
+		    		          stmt.setInt(7, 3);
 		    		          stmt.setInt(8, u.getId() );
 		    		          stmt.setInt(9, u.getEmpresa().getIdEmpresa());
 		    		          
@@ -320,35 +304,30 @@ public class EnvioMensajesServlet extends HttpServlet {
 		        		}
 						
 					}
-					System.out.println(contador);
+					//System.out.println(contador);
 					if (contador==mensajes.size() || contador==1000)
 					{
 						
-						destinatarios = destinatarios.concat("],");
-						mensajesp = mensajesp.concat("]}");
-						
-						cadenaJSON = cadenaJSON.concat(destinatarios).concat(mensajesp);
-						
-						System.out.println(cadenaJSON);
-						
-							/*
-							String decmensaje = URLEncoder.encode(mensajes.get(i).getMensaje(), charset);
-							String urlEnvio ="http://envia-movil.com/Api/Envios?mensaje="+decmensaje+"&numero="+mensajes.get(i).getCelular() ;*/
-							URL obj = new URL("http://envia-movil.com/Api/Envios");
+
+							String mensajeCod = URLEncoder.encode(bloque, "utf-8");
+							System.out.println(cadena+mensajeCod);
+							
+							URL obj = new URL("http://private.whappend.com/wa_send_bulk.asp");
 			        		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 			        		con.setReadTimeout(60 * 5000);
 			                con.setConnectTimeout(60 * 5000);
-			                con.setRequestProperty ("Authorization", "Basic REM1NjIzMTVCM0NCOUVGOjA2MzZFM0FGMTQ=");
+			                
+			                //con.setRequestProperty ("Authorization", "Basic REM1NjIzMTVCM0NCOUVGOjA2MzZFM0FGMTQ=");
 			        		con.setRequestMethod("POST");
-			        		con.setRequestProperty("content-type", "application/json");
-			                con.setRequestProperty("accept", "application/json");
+			        		con.setRequestProperty("content-type", "application/x-www-form-urlencoded");
+			                con.setRequestProperty("accept", "application/text");
 
 			                con.setUseCaches(false);
 			                con.setDoInput(true);
 			                con.setDoOutput(true);
 			                
 			                OutputStreamWriter writer = new OutputStreamWriter(con.getOutputStream());
-			                    writer.write(cadenaJSON);
+			                    writer.write(cadena+mensajeCod);
 			                    writer.close();
 			        		//con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0");
 			        		
@@ -358,7 +337,7 @@ public class EnvioMensajesServlet extends HttpServlet {
 			        		
 			        		if(responseCode==200)
 			        		{
-			        			/*BufferedReader in = new BufferedReader(
+			        			BufferedReader in = new BufferedReader(
 				        		        new InputStreamReader(con.getInputStream()));
 				        		String inputLine;
 				        		StringBuffer response = new StringBuffer();
@@ -368,55 +347,18 @@ public class EnvioMensajesServlet extends HttpServlet {
 				        			response.append(inputLine);
 				        		}
 				        		System.out.println(response);
-				        		in.close();*/
+				        		in.close();
 			        			
-			        			/*String urlEnvio = "http://envia-movil.com/Api/Envios";
-			        			
-
-			        			URL obj1 = new URL(urlEnvio);
-			        			HttpURLConnection con1 = (HttpURLConnection) obj1.openConnection();
-			        			con1.setReadTimeout(60 * 1000);
-			        	        con1.setConnectTimeout(60 * 1000);
-			        			
-			        			con1.setRequestMethod("GET");
-
-			        			
-			        			con1.setRequestProperty ("Authorization", "Basic Z2VvY2FtcG9fMTRAaG90bWFpbC5jb206ZmNlYTkyMGY3NDEyYjVkYTdiZTBjZjQyYjhjOTM3NTk=");
-			        			int responseCode1 = con1.getResponseCode();
-			        			System.out.println("\nSending 'GET' request to URL : " + urlEnvio);
-			        			System.out.println("Response Code : " + responseCode1);
-			        			
-			        			PrintWriter out1 = resp.getWriter();
-
-			        			BufferedReader in = new BufferedReader(new InputStreamReader(con1.getInputStream()));
-
-
-			        	        if (responseCode == 200){ 	
-			        	        	out1.println( in.readLine());
-			        	        }else{
-			        	        	out1.println("ERROR DE CONEXION");
-			        	        	
-			        	        }
-			        	        
-			        	        in.close();
-
-			        		  	}
-			        			
-			        		
-								*/
-				        		
-				        		
-					
 			        		}
 			        		
 			        		con.disconnect();
 			        		
 						
 						
-			        		String stmt1 = "UPDATE servicio_empresa SET disponible="+(env-enviados)+" WHERE idempresa="+u.getEmpresa().getIdEmpresa() +" AND idservicio=1";
+			        	String stmt1 = "UPDATE servicio_empresa SET disponible="+(env-enviados)+" WHERE idempresa="+u.getEmpresa().getIdEmpresa()+" AND idservicio=3";
 							PreparedStatement stmt = conn.prepareStatement(stmt1);
 							stmt.executeUpdate();
-							String stmt2= "UPDATE servicio_empresa SET disponible="+(env-enviados)+" WHERE idempresa=1 AND idservicio=1";
+							String stmt2= "UPDATE servicio_empresa SET disponible="+(env-enviados)+" WHERE idempresa=1 AND idservicio=3";
 							stmt= conn.prepareStatement(stmt2);
 							stmt.executeUpdate();
 							conn.close();
@@ -425,14 +367,14 @@ public class EnvioMensajesServlet extends HttpServlet {
 					}
 				}
 				session.setAttribute("codigo", 4);
-				resp.sendRedirect("mensajeria.jsp");
+				resp.sendRedirect("whatsapp.jsp");
 
 			}
 			else
 			{
 				
 					session.setAttribute("codigo", 5);
-					resp.sendRedirect("mensajeria.jsp");
+					resp.sendRedirect("whatsapp.jsp");
 			}
 			
 			
@@ -441,13 +383,13 @@ public class EnvioMensajesServlet extends HttpServlet {
 		} catch (FileUploadException e) {
 			
 			session.setAttribute("codigo", 6);
-			resp.sendRedirect("mensajeria.jsp");
+			resp.sendRedirect("whatsapp.jsp");
 			
 			///e.printStackTrace();
 		} catch (Exception e) {
 
 			session.setAttribute("codigo", 7);
-			resp.sendRedirect("mensajeria.jsp");
+			resp.sendRedirect("whatsapp.jsp");
 		
 		}
         }
