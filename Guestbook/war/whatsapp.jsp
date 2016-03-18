@@ -296,7 +296,7 @@ session.setAttribute("disponibles",disponible );
         				<div class="col-xs-4">
         					<div class="form-group">
         						<textarea class="form-control" cols="40" rows="6" name="mensaje" id="idTexto" required="required" onKeyDown="cuenta()" onKeyUp="cuenta()"></textarea>
-        						<input class="form-control"  type="text" name=caracteres id="caracteres" size=4 value="160" disabled="disabled" >
+        						<input class="form-control"  type="text" name=caracteres id="caracteres" size=4 value="200" disabled="disabled" >
 
         					</div>
         				</div>
