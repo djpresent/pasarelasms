@@ -304,7 +304,7 @@ session.setAttribute("disponibles",disponible );
 				<h1 class="page-header">Servicio de Mensajería Whatsapp<img style="padding-left:10px;" class="icoheader" src="imagenes/icoreloj.png"/><img class="icoheader" src="imagenes/icopastel.png"/><img class="icoheader" src="imagenes/icoaudifonos.png"/><img class="icoheader" src="imagenes/icodescarga.png"/></h1>
 				<h4>SMS disponibles: <%= disponible %></h4>
 
-			  	<form  action="whatsapp" enctype="multipart/form-data" method="post" >
+			  	<form  action="subir" enctype="multipart/form-data" method="post" >
 			  	
 			  		<div class="row">
 			  			<div class="col-xs-4 col-xs-offset-1">

@@ -27,6 +27,7 @@ import java.sql.PreparedStatement;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.StringTokenizer;
 import java.util.regex.Matcher;
@@ -41,12 +42,18 @@ import org.apache.commons.io.IOUtils;
 
 import com.analixdata.modelos.Transaccion;
 import com.analixdata.modelos.Usuario;
+import com.analixdata.storage.StorageService;
 import com.google.appengine.api.utils.SystemProperty;
 
 
 
 
-public class EnvioWhatsappServlet extends HttpServlet {
+public class SubirServlet extends HttpServlet {
+	
+	
+	private StorageService storage = new StorageService();
+	private static final int BUFFER_SIZE = 1024 * 1024;
+	
 
 	protected void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException,IOException
 	{
@@ -104,7 +111,9 @@ public class EnvioWhatsappServlet extends HttpServlet {
 
 					   uploadedFile =  uploaded;   
 					   
+					   System.out.println(uploadedFile.getName());
 					   System.out.println(uploadedFile.getContentType());
+					  
 
 					   if (uploadedFile.getContentType().equalsIgnoreCase("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"))
 					   {					   
@@ -140,6 +149,32 @@ public class EnvioWhatsappServlet extends HttpServlet {
 							   }
 						   	}
 						   
+					   }
+					   else if(uploadedFile.getContentType().equalsIgnoreCase("image/jpeg"))
+					   {
+						  
+						   System.out.println("Entrooo JPEG");
+					        String fileName = uploadedFile.getName();
+					        String mime = uploadedFile.getContentType();
+					        
+				
+					        
+					        
+					        storage.init(fileName, mime);
+					        
+					        System.out.println("Pasoo INIT");
+					        InputStream is = uploadedFile.openStream();
+
+					        byte[] b = new byte[BUFFER_SIZE];
+					        int readBytes = is.read(b, 0, BUFFER_SIZE);
+					        while (readBytes != -1) {
+					            storage.storeFile(b, BUFFER_SIZE);
+					            readBytes = is.read(b, 0, readBytes);
+					        }
+					        System.out.println("Pasoo storage");
+					        is.close();
+					        storage.destroy();
+					        System.out.println("paso destroy");
 					   }
 					   else
 					   {
@@ -311,7 +346,7 @@ public class EnvioWhatsappServlet extends HttpServlet {
 					{
 							int tipoMensaje = Integer.parseInt(req.getParameter("tipoMensaje"));
 
-							String mensajeCod = URLEncoder.encode(bloque, "utf-8");
+							/*String mensajeCod = URLEncoder.encode(bloque, "utf-8");
 							System.out.println(cadena+mensajeCod);
 							
 							URL obj = new URL("http://private.whappend.com/wa_send_bulk.asp");
@@ -365,18 +400,18 @@ public class EnvioWhatsappServlet extends HttpServlet {
 							stmt.executeUpdate();
 							conn.close();
 							contador=0;
-							
+							*/
 					}
 				}
 				session.setAttribute("codigo", 4);
-				resp.sendRedirect("whatsapp.jsp");
+				resp.sendRedirect("subir.jsp");
 
 			}
 			else
 			{
 				
 					session.setAttribute("codigo", 5);
-					resp.sendRedirect("whatsapp.jsp");
+					resp.sendRedirect("subir.jsp");
 			}
 			
 			
@@ -385,13 +420,13 @@ public class EnvioWhatsappServlet extends HttpServlet {
 		} catch (FileUploadException e) {
 			
 			session.setAttribute("codigo", 6);
-			resp.sendRedirect("whatsapp.jsp");
+			resp.sendRedirect("subir.jsp");
 			
 			///e.printStackTrace();
 		} catch (Exception e) {
 
 			session.setAttribute("codigo", 7);
-			resp.sendRedirect("whatsapp.jsp");
+			resp.sendRedirect("subir.jsp");
 		
 		}
         }
