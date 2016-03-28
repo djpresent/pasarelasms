@@ -38,9 +38,16 @@ public void init(String fileName, String mime) throws Exception {
     
 }
 
-public void storeFile(byte[] b, int readSize) throws Exception {
-    os.write(b, 0, readSize);
-    os.flush();
+public void storeFile(byte[] b, int readSize) throws IOException{
+	System.out.println("Entro storage");
+
+			os.write(b, 0, readSize);
+			System.out.println("Antes de flush");
+			os.flush();
+			System.out.println("Despues de flush");
+
+    
+    System.out.println("PAso stoage");
 }
 
 public void destroy() throws Exception {

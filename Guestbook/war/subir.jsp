@@ -339,53 +339,7 @@ session.setAttribute("disponibles",disponible );
 	        				</div>
 			  		
 			  		</div>
-			  		
-			  		<div class="row">
-			  		
-        				<div class="col-xs-1">
-        					<div class="form-group">
-        						<label for="idTexto">Mensaje:</label>
-        					</div>
-        				</div>
-        				
-        				
-        				<div class="col-xs-4">
-        					<div class="form-group">
-        						<textarea class="form-control" cols="40" rows="6" name="mensaje" id="idTexto" required="required" onKeyDown="cuenta()" onKeyUp="cuenta()"></textarea>
-        						<input class="form-control"  type="text" name=caracteres id="caracteres" size=4 value="200" disabled="disabled" >
-
-        					</div>
-        				</div>
-        				
-        				
-        				<div class="col-xs-2">
-        					<div class="form-group">
-        						<input class="form-control" type="button" onclick="agregarV('[VARIABLE1]')" value="Variable 1"></input></br>
-					  			<input class="form-control" type="button" onclick="agregarV('[VARIABLE2]')" value="Variable 2"></input></br>
-					  			<input class="form-control" type="button" onclick="agregarV('[VARIABLE3]')" value="Variable 3"></input></br>
-					  			<input class="form-control" type="button" onclick="agregarV('[VARIABLE4]')" value="Variable 4"></input></br>
-        					</div>
-        				</div>
-        				
-        				
-        					
-        			
-        				
-        			</div>
-        			
-        			<div class="row">
-        				<div class="col-xs-1">
-        					<div class="form-group">
-        						<label for="archivo">Archivo:</label>
-        					</div>
-        				</div>
-        				<div class="col-xs-6">
-        					<div class="form-group">
-        						<input  type="file" name="archivo" onchange="handleFiles(this.files)" accept=".csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/plain" required="required"  />
-        					</div>
-        				</div>
-        			</div>
-
+			  	
         			<div class="row">
         				<div class="col-xs-1">
         					<div class="form-group">
@@ -394,9 +348,7 @@ session.setAttribute("disponibles",disponible );
         				</div>
         				<div class="col-xs-4">
         					<div class="form-group">
-        						<input type="hidden" id="mensaje" name="txtmensaje" >
-        						<input type="hidden" id="cantDisponibles" value="<%= disponible %>"/>
-			  					<input type="hidden" id="cantSMS" />
+        					
 			  					<input class="form-control"  onclick="return confirm('¿Está seguro que desea enviar los mensajes?')"  type="submit" value="Enviar" /></td>
         					</div>
         				</div>
@@ -405,6 +357,17 @@ session.setAttribute("disponibles",disponible );
 			  	</form>
 			  	
 			  	<%
+			  	
+			  	if(!(session.getAttribute("token") == null))
+				{
+			  		
+			  		%>
+					<div class="alert alert-danger">
+					  <strong>Token!</strong> <%= session.getAttribute("token") %>
+					</div>	
+				<%
+				}
+			  	
 					if(!(session.getAttribute("codigo") == null))
 					{
 						int codigo = Integer.parseInt(session.getAttribute("codigo").toString());

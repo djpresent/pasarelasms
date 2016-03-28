@@ -324,20 +324,12 @@ session.setAttribute("disponibles",disponible );
         			</div>
         					
         			<div class="row">
+        			
         				
-        					<div class="col-xs-1" id="textoTipo" style="display:none">
-	        					<div class="form-group">
-	        						<label for="media" id="textoMedia">Imagen:</label>
-	        						<label id="formatoMedia">(.jpg máx:2MB)</label>
-	        					</div>
-        					</div>
-			  			
-			  				<div class="col-xs-4" id="inputTipoMensaje" style="display:none">
-				  				<div class="form-group">
-		        					<input  type="file" name="media" onchange="handleFiles(this.files)" accept=".jpg,.mp4" />
-		        				</div>
-	        				</div>
-			  		
+        				<div class="col-xs-offset-1">
+        				
+        					<iframe src="http://analixdata.com/upload/" width="550px" height="250px" scrolling="no"></iframe>
+			  			</div>
 			  		</div>
 			  		
 			  		<div class="row">
