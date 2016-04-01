@@ -14,5 +14,9 @@
 	<classpathentry kind="lib" path="war/WEB-INF/lib/poi-ooxml-3.13-20150929.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/poi-ooxml-schemas-3.13-20150929.jar"/>
 	<classpathentry kind="lib" path="war/WEB-INF/lib/xmlbeans-2.6.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/junit-4.10.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/xmlunit-1.3.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/guava-19.0.jar"/>
+	<classpathentry kind="lib" path="war/WEB-INF/lib/appengine-gcs-client-0.5.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>
