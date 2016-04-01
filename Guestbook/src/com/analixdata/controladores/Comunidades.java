@@ -16,7 +16,7 @@ import javax.servlet.http.HttpSession;
 import com.analixdata.modelos.DAO;
 import com.analixdata.modelos.Usuario;
 
-public class Meteordesk extends HttpServlet{
+public class Comunidades extends HttpServlet{
 
 	protected void processRequest(HttpServletRequest req, HttpServletResponse resp) throws ServletException,IOException
 	{
@@ -27,9 +27,6 @@ public class Meteordesk extends HttpServlet{
 		
 		URL obj = new URL("https://data.meteordesk.com/login");
 		HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-		//con.setReadTimeout(60 * 5000);
-        //con.setConnectTimeout(60 * 5000);
-       // con.setRequestProperty ("Authorization", "Basic REM1NjIzMTVCM0NCOUVGOjA2MzZFM0FGMTQ=");
 		con.setRequestMethod("POST");
 		con.setRequestProperty("content-type", "application/json");
         con.setRequestProperty("accept", "application/json");
@@ -41,12 +38,8 @@ public class Meteordesk extends HttpServlet{
         OutputStreamWriter writer = new OutputStreamWriter(con.getOutputStream());
             writer.write(cadenaJSON);
             writer.close();
-		//con.setRequestProperty("User-Agent", "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:43.0) Gecko/20100101 Firefox/43.0");
-		
 		int responseCode = con.getResponseCode();
-		
-		
-		
+	
 		if(responseCode==200)
 		{
 			BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -58,7 +51,7 @@ public class Meteordesk extends HttpServlet{
 				response.append(inputLine);
 			}
 			
-			RequestDispatcher rd = getServletContext().getRequestDispatcher("/meteordesk.jsp");
+			RequestDispatcher rd = getServletContext().getRequestDispatcher("/comunidades.jsp");
 	            PrintWriter out= resp.getWriter();
 	            out.println("<div class=\"alert alert-success\" style=\"text-align: center;\"><strong>Ok ! </strong>Bienvenido "+response+"</div> ");
   	          try 
@@ -81,7 +74,7 @@ public class Meteordesk extends HttpServlet{
 			}
 			
 			
-			RequestDispatcher rd = getServletContext().getRequestDispatcher("/meteordesk.jsp");
+			RequestDispatcher rd = getServletContext().getRequestDispatcher("/comunidades.jsp");
             PrintWriter out= resp.getWriter();
             out.println("<div class=\"alert alert-success\" style=\"text-align: center;\"><strong>Ok ! </strong>Falló"+response+"</div> ");
 	          try 
